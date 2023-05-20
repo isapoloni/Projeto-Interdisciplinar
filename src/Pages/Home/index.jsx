@@ -1,11 +1,10 @@
 import { Container } from "react-bootstrap";
-import Header from "../../Components/Header";
+// import Header from "../../Components/Header/Header";
 import "./styled.css";
 
 const Home = () => {
   return (
     <>
-      <Header />
       <Container id="conteudo">
         <h1>Bora Codar</h1>
       </Container>
