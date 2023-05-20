@@ -23,7 +23,7 @@ function Header() {
                   color: "white",
                 }}
               >
-                <h3>Titulo</h3>
+                <h3>Assembléia de Deus Ministério Belém - Quatá </h3>
               </Link>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
