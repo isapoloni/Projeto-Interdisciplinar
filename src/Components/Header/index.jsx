@@ -51,8 +51,8 @@ function Header() {
                       Nav 1
                     </NavLink>
                     <hr />
-                    <NavLink id="navlink" to="#">
-                      Nav 2
+                    <NavLink id="navlink" to="/CadastroProduto">
+                      Cadastro Produto 
                     </NavLink>
                   </Nav>
                 </Navbar.Collapse>
