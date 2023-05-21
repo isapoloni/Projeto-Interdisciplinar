@@ -4,7 +4,7 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link, NavLink } from "react-router-dom";
 import "./styled.css";
 
-function Header({ titles }) {
+function Header() {
   return (
     <>
       {[false].map((expand) => (
@@ -24,7 +24,7 @@ function Header({ titles }) {
                   cursor: "default",
                 }}
               >
-                <h3>{titles}</h3>
+                <h3>Titulo</h3>
               </Link>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
@@ -52,8 +52,12 @@ function Header({ titles }) {
                       Nav 1
                     </NavLink>
                     <hr />
-                    <NavLink id="navlink" to="/eventos">
+                    <NavLink id="navlink" to="/Eventos">
                       Eventos
+                    </NavLink>
+                    <hr />
+                    <NavLink id="navlink" to="/CadastroProduto">
+                      Cadastro Produto
                     </NavLink>
                   </Nav>
                 </Navbar.Collapse>
