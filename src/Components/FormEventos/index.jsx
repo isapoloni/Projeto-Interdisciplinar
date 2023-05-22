@@ -21,14 +21,16 @@ export const FormEventos = (props) => {
     setEvents({ ...events, [id]: value });
   };
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      props.eventos.push(events);
-      props.alterPage(true);
+  const handleSubmit = (e) => {
+    const form = e.currentTarget;
+    if (form.checkValidity()) {
+      props.eventosBD.push(events);
       setValidated(false);
+      props.alterPage(true);
+    } else {
+      setValidated(true);
     }
-    setValidated(true);
+    e.preventDefault();
   };
 
   return (
