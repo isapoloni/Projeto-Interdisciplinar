@@ -24,9 +24,13 @@ export const FormEventos = (props) => {
   const handleSubmit = (e) => {
     const form = e.currentTarget;
     if (form.checkValidity()) {
-      props.eventosBD.push(events);
-      setValidated(false);
+      let listaEventos = props.eventosBD;
+      listaEventos.push(events);
+      props.setListEvents(listaEventos);
+
       props.alterPage(true);
+
+      setValidated(false);
     } else {
       setValidated(true);
     }

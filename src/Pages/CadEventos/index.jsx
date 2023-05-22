@@ -6,6 +6,7 @@ import { useState } from "react";
 import { TableEvent } from "../../Components/TableEvent";
 
 function CadEventos() {
+  const [listEvents, setListEvents] = useState(eventosBD);
   const [actionPage, setActionPage] = useState(true);
 
   const action = () => {
@@ -16,9 +17,17 @@ function CadEventos() {
     <>
       <Container>
         {actionPage ? (
-          <TableEvent eventosBD={eventosBD} alterPage={action} />
+          <TableEvent
+            eventosBD={listEvents}
+            setListEvents={setListEvents}
+            alterPage={action}
+          />
         ) : (
-          <FormEventos eventosBD={eventosBD} alterPage={action} />
+          <FormEventos
+            eventosBD={listEvents}
+            setListEvents={setListEvents}
+            alterPage={action}
+          />
         )}
       </Container>
     </>
