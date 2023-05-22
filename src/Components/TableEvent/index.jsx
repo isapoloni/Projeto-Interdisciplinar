@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Button,
   Container,
@@ -9,7 +10,7 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { RiSearchLine } from "react-icons/ri";
 
 export const TableEvent = (props) => {
-  // const [eventsL, setEventsL] = useState();
+  const [listEvents, setListEvents] = useState(props.eventosBD);
 
   const deletEvents = (titulo) => {
     console.log("Antes do filter");
@@ -17,17 +18,18 @@ export const TableEvent = (props) => {
       (evento) => evento.titulo !== titulo
     );
     console.log("depois do filter");
-    props.setEventsL(listUpEvents);
-    setEventsL(listUpEvents);
+
+    props.setListEvents(listUpEvents);
+    setListEvents(listUpEvents);
     console.log("Fim");
   };
 
   const filterEvents = (e) => {
     const termSearch = e.currentTarget.value;
     const resultSearch = props.eventosBD.filter((evento) =>
-      produto.titulo.toLowerCase().includes(termSearch.toLowerCase())
+      evento.titulo.toLowerCase().includes(termSearch.toLowerCase())
     );
-    setEventsL(resultSearch);
+    setListEvents(resultSearch);
   };
 
   return (
@@ -57,7 +59,7 @@ export const TableEvent = (props) => {
               </tr>
             </thead>
             <tbody>
-              {props.eventosBD.map((evento) => {
+              {listEvents.map((evento) => {
                 return (
                   <tr key={evento.titulo} style={{ height: "70px" }}>
                     <td
