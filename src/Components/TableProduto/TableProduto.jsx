@@ -1,5 +1,5 @@
 import { Table, Container, Button, InputGroup, FormControl } from 'react-bootstrap';
-import { MdModeEdit } from "react-icons/md";
+// import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi"
 import { RiSearchLine } from 'react-icons/ri';
 import { useState } from 'react';
@@ -22,12 +22,12 @@ export default function TableProduto(props) {
 
     return (
         <Container>
-            <Button
+            <Button size="lg" className='mb-4'
                 onClick={() => {
                     props.exibirTabela(false);
                 }}
             >
-                Cadastrar
+                Cadastrar produto
             </Button>
 
             <InputGroup className="mt-2">
@@ -42,20 +42,20 @@ export default function TableProduto(props) {
                 </InputGroup.Text>
             </InputGroup>
 
-            <Table striped>
+            <Table striped bordered hover size="sm" className="mt-5">
                 <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Doador</th>
-                        <th>Recebedor</th>
-                        <th>Descrição</th>
-                        <th>Data Entrada</th>
-                        <th>Data Saída</th>
-                        <th>Disponibilidade</th>
-                        <th>Funcionário</th>
-                        <th>Data Vencimento</th>
-                        <th>Categoria</th>
-
+                    <tr class="text-center">
+                         <th class="text-center">Nome</th>
+                         <th class="text-center">Doador</th>
+                         <th class="text-center">Recebedor</th>
+                         <th class="text-center">Descrição</th>
+                         <th class="text-center">Data Entrada</th>
+                         <th class="text-center">Data Saída</th>
+                         <th class="text-center">Disponibilidade</th>
+                         <th class="text-center">Funcionário</th>
+                         <th class="text-center">Data Vencimento</th>
+                         <th class="text-center">Categoria</th>
+                         <th class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,19 +74,19 @@ export default function TableProduto(props) {
                                 <td>{produto.dtVencimento}</td>
                                 <td>{produto.categoria}</td>
                                 <td>
-                                    <Button><MdModeEdit /></Button>
+                                    {/* <Button className="ml-2"><MdModeEdit /></Button> */}
                                     <Button onClick={() => {
                                         if (window.confirm("Deseja realmente excluir o produto " + produto.nome + "?")) {
                                             excluirProduto(produto.nome)
                                         }
-                                    }}><HiTrash /></Button>
+                                    }} ><HiTrash /></Button>
                                 </td>
                             </tr>
                         })
                     }
                 </tbody>
             </Table>
-        </Container >
+        </Container>
     )
 }
 

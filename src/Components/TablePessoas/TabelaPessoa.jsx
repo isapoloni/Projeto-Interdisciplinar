@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Container, FormControl, InputGroup, Table } from "react-bootstrap";
 import { RiSearchLine } from "react-icons/ri"
+import { HiTrash } from "react-icons/hi"
 
 export default function TabelaPessoas(props){
     const [pessoas, setPessoas] = useState(props.listaPessoas);
@@ -18,7 +19,7 @@ export default function TabelaPessoas(props){
 
   return(
     <Container>
-    <Button onClick={()=>{
+    <Button variant="primary" size="lg" className='mb-4' onClick={()=>{
       props.exibirTabela(false);
     }}>
       Novo Cadastro
@@ -37,21 +38,20 @@ export default function TabelaPessoas(props){
 
 
 
-  <Table striped bordered hover>
+  <Table striped bordered hover size="sm" className="mt-5">
     <thead>
-      <tr>
-        <th>Nome</th>
-        <th>CPF</th>
-        <th>Data de Nascimento</th>
-        <th>Endereço</th>
-        <th>Cidade</th>
-        <th>Telefone</th>
-        <th>Tipo</th>
-        <th>Disponibilidade</th>
-        <th>Profissão Primária</th>
-        <th>Profissão Secundária</th>    
-        
-
+      <tr class="text-center">
+        <th class="text-center">Nome</th>
+        <th class="text-center">CPF</th>
+        <th class="text-center">Data de Nascimento</th>
+        <th class="text-center">Endereço</th>
+        <th class="text-center">Cidade</th>
+        <th class="text-center">Telefone</th>
+        <th class="text-center">Tipo</th>
+        <th class="text-center">Disponibilidade</th>
+        <th class="text-center">Profissão Primária</th>
+        <th class="text-center">Profissão Secundária</th>    
+        <th class="text-center">Ações</th>    
       </tr>
     </thead>
     <tbody>
@@ -69,11 +69,11 @@ export default function TabelaPessoas(props){
                     <td>{pessoa.profissao1}</td>
                     <td>{pessoa.profissao2}</td>
                     <td>
-                      <Button></Button>{''}
+                      {/* <Button></Button>{''} */}
                       <Button onClick={()=>{
                         if (window.confirm("Confirma a exclusão da Pessoa?")){
                         excluirPessoa(pessoa.nome);}
-                      }}></Button>{''}
+                      }}><HiTrash /></Button>
                     </td>
                   </tr>
         })

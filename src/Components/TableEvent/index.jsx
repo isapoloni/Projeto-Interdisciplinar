@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   Button,
   Container,
@@ -6,8 +7,8 @@ import {
   InputGroup,
   Table,
 } from "react-bootstrap";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { RiSearchLine } from "react-icons/ri";
+import { HiTrash } from "react-icons/hi"
 
 export const TableEvent = (props) => {
   const [listEvents, setListEvents] = useState(props.eventosBD);
@@ -35,6 +36,9 @@ export const TableEvent = (props) => {
   return (
     <>
       <Container>
+        <Button onClick={props.alterPage} variant="primary" size="lg" className='mb-4'>
+          Cadastrar evento
+        </Button>
         <InputGroup className="mt-2">
           <FormControl
             type="text"
@@ -46,58 +50,41 @@ export const TableEvent = (props) => {
             <RiSearchLine />
           </InputGroup.Text>
         </InputGroup>
-        <div style={{ margin: "30px" }}>
-          <Table striped bordered hover variant="dark">
-            <thead>
-              <tr>
-                <td>Ações</td>
-                <td>Titlulo</td>
-                <td>Hora</td>
-                <td>Data Inicial</td>
-                <td>Data Final</td>
-                <td>Descrição</td>
-              </tr>
-            </thead>
-            <tbody>
-              {listEvents.map((evento) => {
-                return (
-                  <tr key={evento.titulo} style={{ height: "70px" }}>
-                    <td
-                      style={{
-                        display: "Flex",
-                        justifyContent: "space-around",
-                        height: "70px",
-                      }}
-                    >
-                      <a>
-                        <FaEdit />
-                      </a>
-                      <a>
-                        <FaTrashAlt
-                          onClick={() => {
-                            if (confirm("Confirma a exclusão do Evento ?"))
-                              deletEvents(evento.titulo);
-                          }}
-                        />
-                      </a>
-                    </td>
-                    <td>{evento.titulo}</td>
-                    <td>{evento.hora}</td>
-                    <td>{evento.dataInicial}</td>
-                    <td>{evento.dataFinal}</td>
-                    <td>{evento.descricao}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-          <hr />
-          <div style={{ margin: "30px" }}>
-            <Button onClick={props.alterPage} variant="primary" size="lg">
-              Cadastrar
-            </Button>
-          </div>
-        </div>
+
+        <Table striped bordered hover size="sm" className="mt-5">
+          <thead>
+            <tr class="text-center">
+              <th class="text-center">Título</th>
+              <th class="text-center">Hora</th>
+              <th class="text-center">Data Inicial</th>
+              <th class="text-center">Data Final</th>
+              <th class="text-center">Descrição</th>
+              <th class="text-center">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listEvents.map((evento) => {
+              return (
+                <tr key={evento.titulo}>
+                  <td>{evento.titulo}</td>
+                  <td>{evento.hora}</td>
+                  <td>{evento.dataInicial}</td>
+                  <td>{evento.dataFinal}</td>
+                  <td>{evento.descricao}</td>
+                  <td>
+                    <Button onClick={() => {
+                          if (confirm("Confirma a exclusão do Evento ?"))
+                            deletEvents(evento.titulo);
+                        }}><HiTrash /></Button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+
+
+
       </Container>
     </>
   );

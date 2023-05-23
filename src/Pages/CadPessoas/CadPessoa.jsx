@@ -11,7 +11,6 @@ export default function TelaCadPessoa(){
   return(
     <>
 
-        <Alert variant={"secondary"}>Cadastro de Pessoas</Alert>
       {exibirTabela? 
       <TabelaPessoas 
       listaPessoas={pessoas}                    
