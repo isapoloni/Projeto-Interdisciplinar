@@ -21,6 +21,7 @@ export default function Header() {
                 style={{
                   textDecoration: "none",
                   color: "white",
+                  cursor: "default",
                 }}
               >
                 <h3>Titulo</h3>
@@ -47,8 +48,12 @@ export default function Header() {
                       Home
                     </NavLink>
                     <hr />
+                    <NavLink id="navlink" to="/Eventos">
+                      Eventos
+                    </NavLink>
+                    <hr />
                     <NavLink id="navlink" to="/CadastroProduto">
-                      Cadastro Produto 
+                      Cadastro Produto
                     </NavLink>
                     <hr />
                     <NavLink id="navlink" to="/CadastroPessoas">
