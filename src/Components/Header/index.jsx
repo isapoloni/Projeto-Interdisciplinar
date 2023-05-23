@@ -4,7 +4,7 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link, NavLink } from "react-router-dom";
 import "./styled.css";
 
-function Header() {
+export default function Header() {
   return (
     <>
       {[false].map((expand) => (
@@ -47,13 +47,14 @@ function Header() {
                       Home
                     </NavLink>
                     <hr />
-                    <NavLink id="navlink" to="#">
-                      Nav 1
-                    </NavLink>
-                    <hr />
                     <NavLink id="navlink" to="/CadastroProduto">
                       Cadastro Produto 
                     </NavLink>
+                    <hr />
+                    <NavLink id="navlink" to="/CadastroPessoas">
+                      Cadastro Pessoas
+                    </NavLink>
+                    <hr />
                   </Nav>
                 </Navbar.Collapse>
               </Offcanvas.Body>
@@ -65,4 +66,3 @@ function Header() {
   );
 }
 
-export default Header;
