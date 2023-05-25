@@ -1,4 +1,6 @@
+// Desenvolvido por Gabriel Coelho
 import { useState } from "react";
+import { Stack } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -39,13 +41,15 @@ export const FormEventos = (props) => {
 
   return (
     <>
-      <h1>Cadastro de Eventos</h1>
       <Form
-        className="FormEvent"
+        className=""
         noValidate
         validated={validated}
         onSubmit={handleSubmit}
       >
+        <Form.Group className="mb-3">
+          <h3>Cadastro de Eventos</h3>
+        </Form.Group>
         <Row>
           <Col className="mb-3">
             <Form.Group as={Col} md="10">
@@ -122,19 +126,15 @@ export const FormEventos = (props) => {
             </Form.Group>
           </Col>
         </Row>
-        <hr />
 
-        <Button type="submit" variant="primary">
-          Cadastrar
-        </Button>
-        <Button
-          style={{ marginLeft: "20px" }}
-          type="button"
-          variant="secondary"
-          onClick={props.alterPage}
-        >
-          Voltar
-        </Button>
+        <Stack className="mt-3 mb-3" direction="horizontal" gap={5}>
+          <Button type="submit" variant="primary">
+            Cadastrar
+          </Button>
+          <Button type="button" variant="danger" onClick={props.alterPage}>
+            Voltar
+          </Button>
+        </Stack>
       </Form>
     </>
   );

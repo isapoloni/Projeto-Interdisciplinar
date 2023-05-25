@@ -1,12 +1,13 @@
+// Desenvolvido pelo grupo
+
 import { Container } from "react-bootstrap";
-// import Header from "../../Components/Header/Header";
 import "./styled.css";
 
 const Home = () => {
   return (
     <>
       <Container id="conteudo">
-        <h1>Bora Codar</h1>
+        <h1>Assembleia de Deus - Ministério Belem / Quatá</h1>
       </Container>
     </>
   );

@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
-import CadProdutos from "./Pages/CadProdutos";
-import Header from "./Components/Header";
-import CadEventos from "./Pages/CadEventos";
+import CadProdutos from "./Pages/CadProdutos/TelaCadProdutos";
+import CadPessoa from "./Pages/CadPessoas/CadPessoa";
+import Header from "./Components/Header/index";
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/CadastroProduto" element={<CadProdutos />} />
-          <Route path="/Eventos" element={<CadEventos />} />
+          <Route path="/CadastroPessoas" element={<CadPessoa />} />
         </Routes>
       </BrowserRouter>
     </>
