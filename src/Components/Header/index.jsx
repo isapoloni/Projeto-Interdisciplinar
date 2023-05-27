@@ -1,8 +1,11 @@
+//Desenvolvido pelo Grupo
+
 import Container from "react-bootstrap/Container";
 import { Nav, Navbar } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link, NavLink } from "react-router-dom";
 import "./styled.css";
+import Logo from "../../assets/logo-igreja.png";
 
 export default function Header() {
   return (
@@ -24,7 +27,23 @@ export default function Header() {
                   cursor: "default",
                 }}
               >
-                <h3>Titulo</h3>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: "10px",
+                  }}
+                >
+                  <img src={Logo} alt="" width={65} height={75} />
+                  <h1
+                    style={{
+                      marginLeft: "15px",
+                      fontSize: "45px",
+                    }}
+                  >
+                    GIFSyS
+                  </h1>
+                </div>
               </Link>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
@@ -48,10 +67,6 @@ export default function Header() {
                       Home
                     </NavLink>
                     <hr />
-                    <NavLink id="navlink" to="#">
-                      Nav 1
-                    </NavLink>
-                    <hr />
                     <NavLink id="navlink" to="/CadastroProduto">
                       Cadastro Produto
                     </NavLink>
@@ -70,4 +85,3 @@ export default function Header() {
     </>
   );
 }
-

@@ -1,5 +1,7 @@
+// Desenvolvido por Francisco Carlos de Souza Junior
+
 import { useState } from "react";
-import { Form, Button, Col, Row,} from "react-bootstrap";
+import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 
 function FormPessoa(props) {
   const [validated, setValidated] = useState(false);
@@ -13,7 +15,7 @@ function FormPessoa(props) {
     tipo: "",
     disponibilidade: "",
     profissao1: "",
-    profissao2: ""
+    profissao2: "",
   });
   function manipularMudanca(e) {
     const elemForm = e.currentTarget;
@@ -23,16 +25,14 @@ function FormPessoa(props) {
   }
   function handleSubmit(event) {
     const form = event.currentTarget;
-    console.log('entrei aqui')
+    console.log("entrei aqui");
     if (form.checkValidity()) {
       let pessoas = props.listaPessoas;
       pessoas.push(pessoa);
       props.setPessoas(pessoas);
       props.exibirTabela(true);
-      console.log('push feito')
+      console.log("push feito");
       setValidated(false);
-
-
     } else {
       setValidated(true);
     }
@@ -41,10 +41,9 @@ function FormPessoa(props) {
 
   // const handleSubmit = (event) => {
   //   const form = event.currentTarget;
-  //   if (form.checkValidity() === false 
+  //   if (form.checkValidity() === false
   //   ) {props.listaPessoas.push(pessoa);
   //   props.exibirTabela(true)};{
-
 
   //     event.preventDefault();
   //     event.stopPropagation();
@@ -53,11 +52,13 @@ function FormPessoa(props) {
   //   setValidated(true);
   // };
   return (
-    <div>
-
+    <>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <h3>Cadastro de Pessoas</h3>
+        </Form.Group>
         <Row>
-          <Form.Group >
+          <Form.Group>
             <Form.Label>Nome</Form.Label>
             <Form.Control
               type="text"
@@ -75,9 +76,10 @@ function FormPessoa(props) {
 
         <Row>
           <Col>
-            <Form.Group className="mb-5">
+            <Form.Group className="mb-3">
               <Form.Label>CPF</Form.Label>
-              <Form.Control type="text"
+              <Form.Control
+                type="text"
                 placeholder="111.111.111-11"
                 required
                 value={pessoa.cpf}
@@ -91,9 +93,10 @@ function FormPessoa(props) {
           </Col>
 
           <Col>
-            <Form.Group className="mb-5">
+            <Form.Group className="mb-3">
               <Form.Label>Data de Nascimento</Form.Label>
-              <Form.Control type="date"
+              <Form.Control
+                type="date"
                 placeholder="ex: 11/11/1111"
                 required
                 value={pessoa.nascimento}
@@ -108,7 +111,7 @@ function FormPessoa(props) {
         </Row>
 
         <Row>
-          <Form.Group >
+          <Form.Group>
             <Form.Label>Endereço</Form.Label>
             <Form.Control
               type="text"
@@ -125,9 +128,10 @@ function FormPessoa(props) {
         </Row>
         <Row>
           <Col>
-            <Form.Group className="mb-5">
+            <Form.Group className="mb-3">
               <Form.Label>Cidade</Form.Label>
-              <Form.Control type="text"
+              <Form.Control
+                type="text"
                 placeholder="Digite a cidade"
                 required
                 value={pessoa.cidade}
@@ -140,7 +144,7 @@ function FormPessoa(props) {
             </Form.Control.Feedback>
           </Col>
           <Col>
-            <Form.Group className="mb-5">
+            <Form.Group className="mb-3">
               <Form.Label>Telefone</Form.Label>
               <Form.Control
                 type="text"
@@ -159,23 +163,25 @@ function FormPessoa(props) {
 
         <Row>
           <Col>
-            <Form.Group className="mb-5">
+            <Form.Group className="mb-3">
               <Form.Label>Tipo de Pessoa</Form.Label>
-              <Form.Select aria-label="Tipo de pessoa" value={pessoa.tipo}
+              <Form.Select
+                aria-label="Tipo de pessoa"
+                value={pessoa.tipo}
                 id="tipo"
-                onChange={manipularMudanca}>
+                onChange={manipularMudanca}
+              >
                 <option>Escolha uma das opções </option>
                 <option value="Doador">Doador</option>
                 <option value="Prestador">Prestador</option>
                 <option value="Recebedor">Recebedor</option>
                 <option value="Contratante">Contratante</option>
               </Form.Select>
-
             </Form.Group>
             <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
           </Col>
           <Col>
-            <Form.Group className="mb-5">
+            <Form.Group className="mb-3">
               <Form.Label>Disponibilidade</Form.Label>
               <Form.Control
                 type="text"
@@ -190,7 +196,7 @@ function FormPessoa(props) {
 
         <Row>
           <Col>
-            <Form.Group className="mb-5">
+            <Form.Group className="mb-3">
               <Form.Label>Profissão Primária</Form.Label>
               <Form.Control
                 type="text"
@@ -202,7 +208,7 @@ function FormPessoa(props) {
             </Form.Group>
           </Col>
           <Col>
-            <Form.Group className="mb-5">
+            <Form.Group className="mb-3">
               <Form.Label>Profissão Secundária</Form.Label>
               <Form.Control
                 type="text"
@@ -215,25 +221,25 @@ function FormPessoa(props) {
           </Col>
         </Row>
 
-        <Row>
-          <Col>
-            <Button variant="primary" type="submit" className="mb-3">
-              Cadastrar
-            </Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Button variant="danger" type="button" className="mb-3" onClick={() => {
+        <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
+          <Button variant="primary" type="submit" className="mb-3">
+            Cadastrar
+          </Button>
+
+          <Button
+            variant="danger"
+            type="button"
+            className="mb-3"
+            onClick={() => {
               props.exibirTabela(true);
-            }}>
-              Voltar
-            </Button>
-          </Col>
-        </Row>
+            }}
+          >
+            Voltar
+          </Button>
+        </Stack>
       </Form>
-    </div>
+    </>
   );
 }
 
-export default FormPessoa
+export default FormPessoa;
