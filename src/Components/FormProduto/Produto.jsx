@@ -1,4 +1,4 @@
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button } from "react-bootstrap";
 
 const ProdutoForm = () => {
   return (
@@ -20,7 +20,11 @@ const ProdutoForm = () => {
 
       <Form.Group controlId="descricaoInput">
         <Form.Label>Descrição</Form.Label>
-        <Form.Control as="textarea" rows={3} placeholder="Digite a descrição do produto" />
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="Digite a descrição do produto"
+        />
       </Form.Group>
 
       <Form.Group controlId="dataEntradaInput">
@@ -35,7 +39,10 @@ const ProdutoForm = () => {
 
       <Form.Group controlId="disponibilidadeInput">
         <Form.Label>Disponibilidade</Form.Label>
-        <Form.Control type="text" placeholder="Digite a disponibilidade do produto" />
+        <Form.Control
+          type="text"
+          placeholder="Digite a disponibilidade do produto"
+        />
       </Form.Group>
 
       <Form.Group controlId="funcionarioInput">

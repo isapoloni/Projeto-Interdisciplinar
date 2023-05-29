@@ -1,10 +1,13 @@
+//Desenvolvido pelo Grupo
+
 import Container from "react-bootstrap/Container";
 import { Nav, Navbar } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link, NavLink } from "react-router-dom";
 import "./styled.css";
+import Logo from "../../assets/logo-igreja.png";
 
-function Header() {
+export default function Header() {
   return (
     <>
       {[false].map((expand) => (
@@ -21,9 +24,26 @@ function Header() {
                 style={{
                   textDecoration: "none",
                   color: "white",
+                  cursor: "default",
                 }}
               >
-                <h3>Assembléia de Deus Ministério Belém - Quatá </h3>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: "10px",
+                  }}
+                >
+                  <img src={Logo} alt="" width={65} height={75} />
+                  <h1
+                    style={{
+                      marginLeft: "15px",
+                      fontSize: "45px",
+                    }}
+                  >
+                    GIFSyS
+                  </h1>
+                </div>
               </Link>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
@@ -47,13 +67,14 @@ function Header() {
                       Home
                     </NavLink>
                     <hr />
-                    <NavLink id="navlink" to="#">
-                      Nav 1
+                    <NavLink id="navlink" to="/CadastroProduto">
+                      Cadastro Produto
                     </NavLink>
                     <hr />
-                    <NavLink id="navlink" to="/CadastroProduto">
-                      Cadastro Produto 
+                    <NavLink id="navlink" to="/CadastroPessoas">
+                      Cadastro Pessoas
                     </NavLink>
+                    <hr />
                   </Nav>
                 </Navbar.Collapse>
               </Offcanvas.Body>
@@ -64,5 +85,3 @@ function Header() {
     </>
   );
 }
-
-export default Header;
