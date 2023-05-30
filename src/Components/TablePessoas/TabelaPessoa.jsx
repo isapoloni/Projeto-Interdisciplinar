@@ -61,6 +61,7 @@ export default function TabelaPessoas(props) {
             <th class="text-center">Endereço</th>
             <th class="text-center">Cidade</th>
             <th class="text-center">Telefone</th>
+            <th class="text-center">E-Mail</th>
             <th class="text-center">Tipo</th>
             <th class="text-center">Disponibilidade</th>
             <th class="text-center">Profissão Primária</th>
@@ -78,6 +79,7 @@ export default function TabelaPessoas(props) {
                 <td>{pessoa.endereco}</td>
                 <td>{pessoa.cidade}</td>
                 <td>{pessoa.telefone}</td>
+                <td>{pessoa.email}</td>
                 <td>{pessoa.tipo}</td>
                 <td>{pessoa.disponibilidade}</td>
                 <td>{pessoa.profissao1}</td>

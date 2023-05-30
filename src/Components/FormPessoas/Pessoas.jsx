@@ -1,9 +1,26 @@
 // Desenvolvido por Francisco Carlos de Souza Junior
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 
 function FormPessoa(props) {
+  const [checkedItems, setCheckedItems] = useState({}); // estado para rastrear os itens marcados
+  const [isFormValid, setIsFormValid] = useState(false); // estado para controlar a validação do formulário
+
+  useEffect(() => {
+    // Define o estado de validação do formulário
+    setIsFormValid(Object.values(checkedItems).some((value) => value));
+  }, [checkedItems]);
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+
+    setCheckedItems((prevCheckedItems) => ({
+      ...prevCheckedItems,
+      [name]: checked,
+    }));
+  };
+  
   const [validated, setValidated] = useState(false);
   const [pessoa, setPessoa] = useState({
     nome: " ",
@@ -12,6 +29,7 @@ function FormPessoa(props) {
     endereco: "",
     cidade: "",
     telefone: "",
+    email: "",
     tipo: "",
     disponibilidade: "",
     profissao1: "",
@@ -26,31 +44,24 @@ function FormPessoa(props) {
   function handleSubmit(event) {
     const form = event.currentTarget;
     console.log("entrei aqui");
-    if (form.checkValidity()) {
+    if (form.checkValidity() && isFormValid.checkValidity()) {
       let pessoas = props.listaPessoas;
       pessoas.push(pessoa);
       props.setPessoas(pessoas);
       props.exibirTabela(true);
       console.log("push feito");
       setValidated(false);
+      console.log('Pelo menos um checkbox está marcado!');
     } else {
       setValidated(true);
-    }
+      console.log('Nenhum checkbox está marcado!');
+    } 
+  
     event.preventDefault();
-  }
+  };
+    
+      
 
-  // const handleSubmit = (event) => {
-  //   const form = event.currentTarget;
-  //   if (form.checkValidity() === false
-  //   ) {props.listaPessoas.push(pessoa);
-  //   props.exibirTabela(true)};{
-
-  //     event.preventDefault();
-  //     event.stopPropagation();
-  //   }
-
-  //   setValidated(true);
-  // };
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -111,22 +122,22 @@ function FormPessoa(props) {
         </Row>
 
         <Row>
-          <Form.Group>
-            <Form.Label>Endereço</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Digite o endereço completo (Rua/av , número , complemento)"
-              required
-              value={pessoa.endereco}
-              id="endereco"
-              onChange={manipularMudanca}
-            />
-          </Form.Group>
-          <Form.Control.Feedback type="invalid">
-            Por favor, informe um endereço!
-          </Form.Control.Feedback>
-        </Row>
-        <Row>
+          <Col>
+            <Form.Group className="mb-3">
+              <Form.Label>Endereço</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Digite o endereço completo (Rua/av , número , complemento)"
+                required
+                value={pessoa.endereco}
+                id="endereco"
+                onChange={manipularMudanca}
+              />
+            </Form.Group>
+            <Form.Control.Feedback type="invalid">
+              Por favor, informe um endereço!
+            </Form.Control.Feedback>
+          </Col>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Cidade</Form.Label>
@@ -143,6 +154,8 @@ function FormPessoa(props) {
               Por favor, informe uma cidade!
             </Form.Control.Feedback>
           </Col>
+        </Row>
+        <Row>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Telefone</Form.Label>
@@ -159,26 +172,72 @@ function FormPessoa(props) {
               Por favor, informe um telefone
             </Form.Control.Feedback>
           </Col>
+          <Col>
+            <Form.Group className="mb-3">
+              <Form.Label>E-Mail</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Insira seu e-mail"
+                value={pessoa.email}
+                id="email"
+                onChange={manipularMudanca}
+              />
+            </Form.Group>
+          </Col>
         </Row>
 
         <Row>
           <Col>
-            <Form.Group className="mb-3">
-              <Form.Label>Tipo de Pessoa</Form.Label>
-              <Form.Select
-                aria-label="Tipo de pessoa"
-                value={pessoa.tipo}
-                id="tipo"
-                onChange={manipularMudanca}
-              >
-                <option>Escolha uma das opções </option>
-                <option value="Doador">Doador</option>
-                <option value="Prestador">Prestador</option>
-                <option value="Recebedor">Recebedor</option>
-                <option value="Contratante">Contratante</option>
-              </Form.Select>
+            <Form.Group className="mb-3" id="tipo">
+              <Form.Label>Tipo de Pessoa</Form.Label>   
+              
+                <Form.Check
+                  inline
+                  type="checkbox"
+                  label="Doador"
+                  name="doador"
+                  checked={checkedItems.doador}
+                  onChange={(e) => {
+                    handleCheckboxChange(e)
+                    manipularMudanca(e)
+                  }}
+                />
+                <Form.Check
+                  inline
+                  type="checkbox"
+                  label="Prestador"
+                  name="prestador"
+                  checked={checkedItems.prestador}
+                  onChange={(e) => {
+                    handleCheckboxChange(e)
+                    manipularMudanca(e)
+                  }}
+                />
+                <Form.Check
+                  inline
+                  type="checkbox"
+                  label="Recebedor"
+                  name="recebedor"
+                  checked={checkedItems.recebedor}
+                  onChange={(e) => {
+                    handleCheckboxChange(e)
+                    manipularMudanca(e)
+                  }}
+                />
+                <Form.Check
+                  inline
+                  type="checkbox"
+                  label="Contratante"
+                  name="contratante"
+                  checked={checkedItems.contratante}
+                  onChange={(e) => {
+                    handleCheckboxChange(e)
+                    manipularMudanca(e)
+                  }}
+                />
+                
             </Form.Group>
-            <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
+            {/* <Form.Control.Feedback type="invalid"></Form.Control.Feedback> */}
           </Col>
           <Col>
             <Form.Group className="mb-3">
