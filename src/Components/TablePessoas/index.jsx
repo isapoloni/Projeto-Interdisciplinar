@@ -30,7 +30,7 @@ export default function TabelaPessoas(props) {
   }
 
   return (
-    <Container>
+    <>
       <Button
         variant="primary"
         className="mb-4"
@@ -101,6 +101,6 @@ export default function TabelaPessoas(props) {
           })}
         </tbody>
       </Table>
-    </Container>
+    </>
   );
 }

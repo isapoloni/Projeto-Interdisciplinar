@@ -1,17 +1,16 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, redirect } from "react-router-dom";
 import Home from "./Pages/Home";
-import CadProdutos from "./Pages/CadProdutos/TelaCadProdutos";
-import CadPessoa from "./Pages/CadPessoas/CadPessoa";
-import Header from "./Components/Header/index";
+import CadPessoa from "./Pages/CadPessoas";
+import CadProdutos from "./Pages/CadProdutos";
 import Login from "./Pages/Login";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Header />
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/CadastroProduto" element={<CadProdutos />} />
           <Route path="/CadastroPessoas" element={<CadPessoa />} />
         </Routes>

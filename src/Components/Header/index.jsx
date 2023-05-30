@@ -63,7 +63,7 @@ export default function Header() {
                     className="justify-content-end flex-grow-1 pe-3"
                     id="sidebar"
                   >
-                    <NavLink id="navlink" to="/">
+                    <NavLink id="navlink" to="/Home">
                       Home
                     </NavLink>
                     <hr />

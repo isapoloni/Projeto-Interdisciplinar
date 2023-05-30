@@ -1,5 +1,10 @@
-// Desenvolvido por Isabela Poloni
-import { Table, Container, Button, InputGroup, FormControl} from "react-bootstrap";
+import {
+  Table,
+  Container,
+  Button,
+  InputGroup,
+  FormControl,
+} from "react-bootstrap";
 // import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
 import { RiSearchLine } from "react-icons/ri";
@@ -25,8 +30,9 @@ export default function TableProduto(props) {
   }
 
   return (
-    <Container>
+    <>
       <Button
+        variant="primary"
         className="mb-4"
         onClick={() => {
           props.exibirTabela(false);
@@ -100,6 +106,6 @@ export default function TableProduto(props) {
           })}
         </tbody>
       </Table>
-    </Container>
+    </>
   );
 }
