@@ -1,26 +1,9 @@
 // Desenvolvido por Francisco Carlos de Souza Junior
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 
 function FormPessoa(props) {
-  const [checkedItems, setCheckedItems] = useState({}); // estado para rastrear os itens marcados
-  const [isFormValid, setIsFormValid] = useState(false); // estado para controlar a validação do formulário
-
-  useEffect(() => {
-    // Define o estado de validação do formulário
-    setIsFormValid(Object.values(checkedItems).some((value) => value));
-  }, [checkedItems]);
-
-  const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
-
-    setCheckedItems((prevCheckedItems) => ({
-      ...prevCheckedItems,
-      [name]: checked,
-    }));
-  };
-  
   const [validated, setValidated] = useState(false);
   const [pessoa, setPessoa] = useState({
     nome: " ",
@@ -30,37 +13,38 @@ function FormPessoa(props) {
     cidade: "",
     telefone: "",
     email: "",
-    tipo: "",
+    tipo: [],
     disponibilidade: "",
     profissao1: "",
     profissao2: "",
   });
+
+  const [checkedValues, setCheckedValues] = useState([]);
+
   function manipularMudanca(e) {
     const elemForm = e.currentTarget;
     const id = elemForm.id;
     const valor = elemForm.value;
     setPessoa({ ...pessoa, [id]: valor });
   }
+
   function handleSubmit(event) {
     const form = event.currentTarget;
     console.log("entrei aqui");
-    if (form.checkValidity() && isFormValid.checkValidity()) {
+    if (form.checkValidity()) {
       let pessoas = props.listaPessoas;
       pessoas.push(pessoa);
       props.setPessoas(pessoas);
       props.exibirTabela(true);
       console.log("push feito");
       setValidated(false);
-      console.log('Pelo menos um checkbox está marcado!');
+      console.log("Pelo menos um checkbox está marcado!");
     } else {
       setValidated(true);
-      console.log('Nenhum checkbox está marcado!');
-    } 
-  
+      console.log("Nenhum checkbox está marcado!");
+    }
     event.preventDefault();
-  };
-    
-      
+  }
 
   return (
     <>
@@ -188,56 +172,24 @@ function FormPessoa(props) {
 
         <Row>
           <Col>
-            <Form.Group className="mb-3" id="tipo">
-              <Form.Label>Tipo de Pessoa</Form.Label>   
-              
-                <Form.Check
-                  inline
-                  type="checkbox"
-                  label="Doador"
-                  name="doador"
-                  checked={checkedItems.doador}
-                  onChange={(e) => {
-                    handleCheckboxChange(e)
-                    manipularMudanca(e)
-                  }}
-                />
-                <Form.Check
-                  inline
-                  type="checkbox"
-                  label="Prestador"
-                  name="prestador"
-                  checked={checkedItems.prestador}
-                  onChange={(e) => {
-                    handleCheckboxChange(e)
-                    manipularMudanca(e)
-                  }}
-                />
-                <Form.Check
-                  inline
-                  type="checkbox"
-                  label="Recebedor"
-                  name="recebedor"
-                  checked={checkedItems.recebedor}
-                  onChange={(e) => {
-                    handleCheckboxChange(e)
-                    manipularMudanca(e)
-                  }}
-                />
-                <Form.Check
-                  inline
-                  type="checkbox"
-                  label="Contratante"
-                  name="contratante"
-                  checked={checkedItems.contratante}
-                  onChange={(e) => {
-                    handleCheckboxChange(e)
-                    manipularMudanca(e)
-                  }}
-                />
-                
+            <Form.Group className="mb-3">
+              <Form.Label>Tipo de Pessoa</Form.Label>
+              {["doador", "prestador", "recebedor", "contratante"].map(
+                (tipo) => (
+                  <Form.Check
+                    key={tipo}
+                    type="checkbox"
+                    label={tipo}
+                    name={tipo}
+                    id={tipo}
+                    values={pessoa.tipo}
+                    onChange={manipularMudanca}
+                    feedback="Selecione uma opção"
+                    feedbackType="invalid"
+                  />
+                )
+              )}
             </Form.Group>
-            {/* <Form.Control.Feedback type="invalid"></Form.Control.Feedback> */}
           </Col>
           <Col>
             <Form.Group className="mb-3">
