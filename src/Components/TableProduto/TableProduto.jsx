@@ -1,4 +1,5 @@
-// Desenvolvido por Isabela Poloni
+// Desenvolvido por Isabella Poloni
+
 import { Table, Container, Button, InputGroup, FormControl} from "react-bootstrap";
 // import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
