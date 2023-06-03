@@ -6,24 +6,18 @@ import {
   Button,
   Col,
   Row,
-  Container,
-  TabContainer,
   Stack,
 } from "react-bootstrap";
+import { urlBaseProduto } from "../../util/definicoesProduto";
 
 export default function ProdutoForm(props) {
   const [validated, setValidated] = useState(false);
 
   const [produto, setProduto] = useState({
+    codigo: "",
     nome: "",
-    doador: "",
-    recebedor: "",
+    metrica: "",
     descricao: " ",
-    dtEntrada: "",
-    dtSaida: "",
-    disponibilidade: "",
-    funcionario: "",
-    dtVencimento: "",
     categoria: "",
   });
 
@@ -39,215 +33,161 @@ export default function ProdutoForm(props) {
     const form = event.currentTarget;
     console.log("entrei aqui");
     if (form.checkValidity()) {
-      let produtos = props.listaProdutos;
-      produtos.push(produto);
-      props.setProdutos(produtos);
 
+      if (props.modoEdicao) {
+
+      }
       props.exibirTabela(true);
-
-      console.log("push feito");
       setValidated(false);
     } else {
-      setValidated(true);
+      fetch(urlBaseProduto + "/produtos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(produto)
+      }).then((resposta) => {
+        return resposta.json();
+      })
+      .then((dados) => {
+          window.alert(dados.mensagem);
+       })
+       .catch((erro) => {
+        window.alert('Erro ao executar a requisição')
+       })
+      event.preventDefault();
     }
-    event.preventDefault();
+
+    return (
+      <>
+        <Form
+          noValidate
+          validated={validated}
+          onSubmit={handleSubmit}
+          variant="light"
+        >
+          <Form.Group className="mb-3">
+            <h3>Cadastro de Produtos</h3>
+          </Form.Group>
+
+          <Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>Código</Form.Label>
+                <Form.Control
+                  value={produto.codigo}
+                  type="text"
+                  placeholder="Digite o codigo do produto"
+                  id="codigo"
+                  onChange={manipularOnChange}
+                  required
+                />
+                <Form.Control.Feedback type="invalid">
+                  Por favor, informe o codigo do produto!
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+
+            <Col>
+              <Form.Group>
+                <Form.Label>Nome</Form.Label>
+                <Form.Control
+                  value={produto.nome}
+                  type="text"
+                  placeholder="Digite o nome do produto"
+                  id="nome"
+                  onChange={manipularOnChange}
+                  required
+                />
+                <Form.Control.Feedback type="invalid">
+                  Por favor, informe o nome do produto!
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+
+            <Col>
+              <Form.Group>
+                <Form.Label>Unidade</Form.Label>
+                <Form.Control
+                  value={produto.metrica}
+                  as="select"
+                  id="metrica"
+                  onChange={manipularOnChange}
+                  required
+                >
+                  <option>Selecione</option>
+                  <option>Peça</option>
+                  <option>Unidade</option>
+                  <option>Quilograma (kg)</option>
+                  <option>Grama (g)</option>
+                  <option>Litro (L)</option>
+                  <option>Pacote</option>
+                  <option>Par</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  Por favor, informe a metrica!
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+
+          </Row>
+          <Form.Group>
+            <Form.Label>Descrição</Form.Label>
+            <Form.Control
+              value={produto.descricao}
+              as="textarea"
+              rows={3}
+              placeholder="Digite a descrição do produto"
+              id="descricao"
+              onChange={manipularOnChange}
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Por favor, informe a descrição!
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>Categoria</Form.Label>
+                <Form.Control
+                  value={produto.categoria}
+                  as="select"
+                  id="categoria"
+                  onChange={manipularOnChange}
+                  required
+                >
+                  <option>Selecione a categoria</option>
+                  <option>Alimento</option>
+                  <option>Roupas</option>
+                  <option>Dinheiro</option>
+                  <option>Outros</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  Por favor, informe a categoria!
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+
+          </Row>
+
+          <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
+            <Button variant="primary" type="submit">
+              Enviar
+            </Button>
+            <Button
+              variant="danger"
+              type="button"
+              onClick={() => {
+                props.exibirTabela(true);
+              }}
+            >
+              Voltar
+            </Button>
+          </Stack>
+        </Form>
+      </>
+    );
   }
-
-  return (
-    <>
-      <Form
-        noValidate
-        validated={validated}
-        onSubmit={handleSubmit}
-        variant="light"
-      >
-        <Form.Group className="mb-3">
-          <h3>Cadastro de Produtos</h3>
-        </Form.Group>
-        <Col>
-          <Form.Group>
-            <Form.Label>Nome</Form.Label>
-            <Form.Control
-              value={produto.nome}
-              type="text"
-              placeholder="Digite o nome do produto"
-              id="nome"
-              onChange={manipularOnChange}
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Por favor, informe o nome do produto!
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-
-        <Row>
-          <Col>
-            <Form.Group>
-              <Form.Label>Doador</Form.Label>
-              <Form.Control
-                value={produto.doador}
-                type="text"
-                placeholder="Digite o nome do doador"
-                id="doador"
-                onChange={manipularOnChange}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Por favor, informe o nome do doador!
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-
-          <Col>
-            <Form.Group>
-              <Form.Label>Recebedor</Form.Label>
-              <Form.Control
-                value={produto.recebedor}
-                type="text"
-                placeholder="Digite o nome do recebedor"
-                id="recebedor"
-                onChange={manipularOnChange}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Form.Group>
-          <Form.Label>Descrição</Form.Label>
-          <Form.Control
-            value={produto.descricao}
-            as="textarea"
-            rows={3}
-            placeholder="Digite a descrição do produto"
-            id="descricao"
-            onChange={manipularOnChange}
-            required
-          />
-          <Form.Control.Feedback type="invalid">
-            Por favor, informe a descrição!
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Row>
-          <Col>
-            <Form.Group>
-              <Form.Label>Data de Entrada</Form.Label>
-              <Form.Control
-                value={produto.dtEntrada}
-                type="date"
-                id="dtEntrada"
-                onChange={manipularOnChange}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Por favor, informe a data de entrada!
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-
-          <Col>
-            <Form.Group>
-              <Form.Label>Data de Saída</Form.Label>
-              <Form.Control
-                value={produto.dtSaida}
-                type="date"
-                id="dtSaida"
-                onChange={manipularOnChange}
-              />
-            </Form.Group>
-          </Col>
-
-          <Col>
-            <Form.Group>
-              <Form.Label>Data de Vencimento</Form.Label>
-              <Form.Control
-                value={produto.dtVencimento}
-                type="date"
-                id="dtVencimento"
-                onChange={manipularOnChange}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Por favor, informe a data de vencimento!
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col>
-            <Form.Group>
-              <Form.Label>Categoria</Form.Label>
-              <Form.Control
-                value={produto.categoria}
-                as="select"
-                id="categoria"
-                onChange={manipularOnChange}
-                required
-              >
-                <option>Selecione a categoria</option>
-                <option>Alimento</option>
-                <option>Roupas</option>
-                <option>Dinheiro</option>
-                <option>Outros</option>
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                Por favor, informe a categoria!
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-
-          <Col>
-            <Form.Group>
-              <Form.Label>Disponibilidade</Form.Label>
-              <Form.Control
-                value={produto.disponibilidade}
-                type="text"
-                placeholder="Digite a disponibilidade do produto"
-                id="disponibilidade"
-                onChange={manipularOnChange}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Por favor, informe a disponibilidade!
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Row>
-          <Form.Group>
-            <Form.Label>Funcionário</Form.Label>
-            <Form.Control
-              value={produto.funcionario}
-              type="text"
-              placeholder="Digite o nome do funcionário"
-              id="funcionario"
-              onChange={manipularOnChange}
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Por favor, informe o Funcionário!
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Row>
-
-        <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
-          <Button variant="primary" type="submit">
-            Enviar
-          </Button>
-          <Button
-            variant="danger"
-            type="button"
-            onClick={() => {
-              props.exibirTabela(true);
-            }}
-          >
-            Voltar
-          </Button>
-        </Stack>
-      </Form>
-    </>
-  );
 }

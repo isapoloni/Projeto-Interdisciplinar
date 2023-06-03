@@ -10,22 +10,20 @@ export default function TelaCadPessoa() {
   const [exibirTabela, setExibirTabela] = useState(true);
   const [pessoas, setPessoas] = useState(listaPessoas);
   return (
-    <>
-      <Container>
-        {exibirTabela ? (
-          <TabelaPessoas
-            listaPessoas={pessoas}
-            setPessoas={setPessoas}
-            exibirTabela={setExibirTabela}
-          />
-        ) : (
-          <FormPessoa
-            listaPessoas={pessoas}
-            setPessoas={setPessoas}
-            exibirTabela={setExibirTabela}
-          />
-        )}
-      </Container>
-    </>
+    <Container>
+      {exibirTabela ? (
+        <TabelaPessoas
+          listaPessoas={pessoas}
+          setPessoas={setPessoas}
+          exibirTabela={setExibirTabela}
+        />
+      ) : (
+        <FormPessoa
+          listaPessoas={pessoas}
+          setPessoas={setPessoas}
+          exibirTabela={setExibirTabela}
+        />
+      )}
+    </Container>
   );
 }
