@@ -7,7 +7,6 @@ import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 function FormPessoa(props) {
   const [checkedItems, setCheckedItems] = useState({}); // estado para rastrear os itens marcados
   const [isFormValid, setIsFormValid] = useState(false); // estado para controlar a validação do formulário
-  const [field, setField] = useState([]);
 
   useEffect(() => {
     // Define o estado de validação do formulário
@@ -185,24 +184,23 @@ function FormPessoa(props) {
 
         <Row>
           <Col>
-            <Form.Group as={Col} controlId="my_multiselect_field">
-              <Form.Label>My multiselect</Form.Label>
-              <Form.Control
-                as="select"
-                multiple
-                value={field}
-                onChange={(e) =>
-                  setField(
-                    [].slice
-                      .call(e.target.selectedOptions)
-                      .map((item) => item.value)
-                  )
-                }
-              >
-                <option value="prestador">PRestador</option>
-                <option value="ajudante">Ajudante</option>
-                <option value="field3">Field 3</option>
-              </Form.Control>
+            <Form.Group className="mb-3">
+              <Form.Label>Tipo de Pessoa</Form.Label>
+              {["doador", "prestador", "recebedor", "contratante"].map(
+                (tipo) => (
+                  <Form.Check
+                    key={tipo}
+                    type="checkbox"
+                    label={tipo}
+                    name={tipo}
+                    id="tipo"
+                    values={pessoa.tipo}
+                    onChange={manipularMudanca}
+                    feedback="Selecione uma opção"
+                    feedbackType="invalid"
+                  />
+                )
+              )}
             </Form.Group>
           </Col>
           <Col>

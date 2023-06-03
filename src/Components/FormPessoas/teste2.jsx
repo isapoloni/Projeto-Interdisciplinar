@@ -5,14 +5,8 @@ import { useEffect } from "react";
 import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 
 function FormPessoa(props) {
-  const [checkedItems, setCheckedItems] = useState({}); // estado para rastrear os itens marcados
   const [isFormValid, setIsFormValid] = useState(false); // estado para controlar a validação do formulário
-  const [field, setField] = useState([]);
-
-  useEffect(() => {
-    // Define o estado de validação do formulário
-    setIsFormValid(Object.values(checkedItems).some((value) => value));
-  }, [checkedItems]);
+  const [errorMessage, seterrorMessage] = useState("");
 
   const [validated, setValidated] = useState(false);
   const [pessoa, setPessoa] = useState({
@@ -23,7 +17,12 @@ function FormPessoa(props) {
     cidade: "",
     telefone: "",
     email: "",
-    tipo: [],
+    tipo: {
+      doador: false,
+      prestador: false,
+      recebedor: false,
+      contratante: false,
+    },
     disponibilidade: "",
     profissao1: "",
     profissao2: "",
@@ -32,31 +31,46 @@ function FormPessoa(props) {
   function manipularMudanca(e) {
     const elemForm = e.currentTarget;
     const id = elemForm.id;
-    const valor = elemForm.value;
-    setPessoa({ ...pessoa, [id]: valor });
+    const valor =
+      elemForm.type === "checkbox" ? elemForm.checked : elemForm.value;
+    if (["doador", "prestador", "recebedor", "contratante"].includes(id))
+      //se for o id de um dos 4 tipos, seta o tipo
+      setPessoa((p) => ({ ...p, tipo: { ...p.tipo, [id]: valor } }));
+    else setPessoa({ ...pessoa, [id]: valor }); //se não seta a prop pelo id
   }
 
   function handleSubmit(event) {
-    const form = event.currentTarget;
-    console.log("entrei aqui");
-    if (!check1 && !check2 && !check3 && !check4) {
-      setValid(false);
-      setErrorMessage("Selecione ao menos 1 check");
-      return;
-    }
-    if (form.checkValidity()) {
-      let pessoas = props.listaPessoas;
-      pessoas.push(pessoa);
-      props.setPessoas(pessoas);
-      props.exibirTabela(true);
-      console.log("push feito");
-      setValidated(false);
-      console.log("Pelo menos um checkbox está marcado!");
-    } else {
-      setValidated(true);
-      console.log("Nenhum checkbox está marcado!");
-    }
     event.preventDefault();
+    const form = event.currentTarget;
+    setValidated(true);
+
+    if (form.checkValidity() === false) {
+      // se não estiver válido
+      setValidated(false);
+      seterrorMessage("Preencha todos os campos obrigatórios!");
+      return; //faz o que precisa e para a função
+    }
+
+    if (
+      !pessoa.tipo.contratante &&
+      !pessoa.tipo.doador &&
+      !pessoa.tipo.prestador &&
+      !pessoa.tipo.recebedor
+    ) {
+      seterrorMessage("Ao menos um tipo de pessoa é necessário");
+      setValidated(false);
+      return; //se um dos 4 não estiver marcado, faz o que precisa e para a função
+    }
+    seterrorMessage("Salvando....");
+    //se tiver td certo, continua....
+    return;
+    let pessoas = props.listaPessoas;
+    pessoas.push(pessoa);
+    props.setPessoas(pessoas);
+    props.exibirTabela(true);
+    console.log("push feito");
+    setValidated(false);
+    console.log("Pelo menos um checkbox está marcado!");
   }
 
   return (
@@ -66,7 +80,20 @@ function FormPessoa(props) {
           <h3>Cadastro de Pessoas</h3>
         </Form.Group>
         <Row>
-          <Form.Group>
+          <Form.Group as={Col} md="4">
+            <Form.Label>First name</Form.Label>
+            <Form.Control
+              required
+              type="text"
+              placeholder="First name"
+              defaultValue=""
+            />
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Por favor, informe o nome da pessoa!
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group controlId="nome">
             <Form.Label>Nome</Form.Label>
             <Form.Control
               type="text"
@@ -76,10 +103,10 @@ function FormPessoa(props) {
               id="nome"
               onChange={manipularMudanca}
             />
+            <Form.Control.Feedback type="invalid">
+              Por favor, informe o nome da pessoa!
+            </Form.Control.Feedback>
           </Form.Group>
-          <Form.Control.Feedback type="invalid">
-            Por favor, informe o nome da pessoa!
-          </Form.Control.Feedback>
         </Row>
 
         <Row>
@@ -185,24 +212,21 @@ function FormPessoa(props) {
 
         <Row>
           <Col>
-            <Form.Group as={Col} controlId="my_multiselect_field">
-              <Form.Label>My multiselect</Form.Label>
-              <Form.Control
-                as="select"
-                multiple
-                value={field}
-                onChange={(e) =>
-                  setField(
-                    [].slice
-                      .call(e.target.selectedOptions)
-                      .map((item) => item.value)
-                  )
-                }
-              >
-                <option value="prestador">PRestador</option>
-                <option value="ajudante">Ajudante</option>
-                <option value="field3">Field 3</option>
-              </Form.Control>
+            <Form.Group className="mb-3">
+              <Form.Label>Tipo de Pessoa</Form.Label>
+              {["doador", "prestador", "recebedor", "contratante"].map(
+                (tipo) => (
+                  <Form.Check
+                    key={tipo}
+                    type="checkbox"
+                    label={tipo}
+                    name={tipo}
+                    id={tipo}
+                    checked={pessoa.tipo[tipo]}
+                    onChange={manipularMudanca}
+                  />
+                )
+              )}
             </Form.Group>
           </Col>
           <Col>
@@ -245,6 +269,7 @@ function FormPessoa(props) {
             </Form.Group>
           </Col>
         </Row>
+        <p className="danger">{errorMessage}</p>
 
         <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
           <Button variant="primary" type="submit" className="mb-3">
