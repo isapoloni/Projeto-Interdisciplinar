@@ -15,8 +15,7 @@ function FormPessoa(props) {
 
   function handleSubmit(event) {
     const form = event.currentTarget;
-    console.log('entrei aqui')
-    if (form.checkValidity()) {
+      if (form.checkValidity()) {
       if(!props.modoEdicao){
         fetch(urlBackend+"/pessoas",{
           method:"POST",
