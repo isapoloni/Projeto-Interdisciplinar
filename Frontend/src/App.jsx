@@ -1,18 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import CadProdutos from "./Pages/CadProdutos/TelaCadProdutos";
-import CadPessoa from "./Pages/CadPessoas/CadPessoa";
-import Header from "./Components/Header/index";
+import TelaCadPessoa from "./Pages/CadPessoas/CadPessoa";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/CadastroProduto" element={<CadProdutos />} />
-          <Route path="/CadastroPessoas" element={<CadPessoa />} />
+          <Route path="/CadastroPessoas" element={<TelaCadPessoa />} />
         </Routes>
       </BrowserRouter>
     </>

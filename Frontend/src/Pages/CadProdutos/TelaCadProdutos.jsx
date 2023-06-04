@@ -4,6 +4,7 @@ import { useState } from "react";
 import ProdutoForm from "../../Components/FormProduto/FormProduto";
 import TableProduto from "../../Components/TableProduto/TableProduto";
 import { Container } from "react-bootstrap";
+import Header from "../../Components/Header";
 
 export default function CadProdutos() {
   const [produtos, setProdutos] = useState(listaProdutos);
@@ -11,6 +12,7 @@ export default function CadProdutos() {
 
   return (
     <>
+      <Header />
       <Container>
         {exibirTabela ? (
           <TableProduto
