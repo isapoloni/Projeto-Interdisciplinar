@@ -3,7 +3,6 @@
 import { useState } from "react";
 import ProdutoForm from "../../Components/FormProduto/FormProduto";
 import TableProduto from "../../Components/TableProduto/TableProduto";
-import listaProdutos from "../../Data/mockProduto";
 import { Container } from "react-bootstrap";
 
 export default function CadProdutos() {

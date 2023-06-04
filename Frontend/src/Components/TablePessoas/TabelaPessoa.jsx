@@ -9,25 +9,26 @@ import {
   Table,
 } from "react-bootstrap";
 import { RiSearchLine } from "react-icons/ri";
-import { HiTrash } from "react-icons/hi";
+import { HiPencilAlt, HiTrash } from "react-icons/hi";
+import { urlBackend } from "../../assets/funcoes";
 
 export default function TabelaPessoas(props) {
-  const [pessoas, setPessoas] = useState(props.listaPessoas);
-
-  function excluirPessoa(nome) {
-    const listaAtualizada = props.listaPessoas.filter(
-      (pessoa) => pessoa.nome !== nome
-    );
-    props.setPessoas(listaAtualizada);
-    setPessoas(listaAtualizada);
-  }
-  function filtrarPessoas(e) {
+  function filtrarPessoas(e){
     const termoBusca = e.currentTarget.value;
-    const resultadoBusca = props.listaPessoas.filter((pessoa) =>
-      pessoa.nome.toLowerCase().includes(termoBusca.toLowerCase())
-    );
-    setPessoas(resultadoBusca);
+    fetch(urlBackend+"/pessoas",{method:"GET"})
+    .then((resposta)=> {
+      return resposta.json()
+    })
+    .then((listaPessoas)=>{
+      if(Array.isArray(listaPessoas)){
+      const resultadoBusca = listaPessoas.filter((pessoa)=> pessoa.nome.toLowerCase().includes(termoBusca.toLowerCase()))
+      props.setPessoas(resultadoBusca);
+      }
+    })
+    
+
   }
+
 
   return (
     <Container>
@@ -70,7 +71,7 @@ export default function TabelaPessoas(props) {
           </tr>
         </thead>
         <tbody>
-          {pessoas?.map((pessoa) => {
+          {props.listaPessoas?.map((pessoa) => {
             return (
               <tr key={pessoa.nome}>
                 <td>{pessoa.nome}</td>
@@ -85,11 +86,15 @@ export default function TabelaPessoas(props) {
                 <td>{pessoa.profissao1}</td>
                 <td>{pessoa.profissao2}</td>
                 <td>
-                  {/* <Button></Button>{''} */}
+                  <Button onClick={()=>{if (window.confirm("Deseja atualizar os dados da pessoa?")){
+                                                    props.editar(pessoa)
+
+                                                }}}><HiPencilAlt/></Button>{''}
                   <Button
-                    onClick={() => {
-                      if (window.confirm("Confirma a exclusão da Pessoa?")) {
-                        excluirPessoa(pessoa.nome);
+                    Button onClick={() => {
+                      if (window.confirm("Deseja excluir permanentemente?")){
+                          props.excluir(pessoa)
+
                       }
                     }}
                   >

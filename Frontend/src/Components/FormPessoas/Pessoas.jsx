@@ -1,67 +1,68 @@
-// Desenvolvido por Francisco Carlos de Souza Junior
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Form, Button, Col, Row, Stack } from "react-bootstrap";
+import { urlBackend } from "../../assets/funcoes";
 
 function FormPessoa(props) {
-  const [checkedItems, setCheckedItems] = useState({}); // estado para rastrear os itens marcados
-  const [isFormValid, setIsFormValid] = useState(false); // estado para controlar a validação do formulário
-
-  useEffect(() => {
-    // Define o estado de validação do formulário
-    setIsFormValid(Object.values(checkedItems).some((value) => value));
-  }, [checkedItems]);
-
-  const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
-
-    setCheckedItems((prevCheckedItems) => ({
-      ...prevCheckedItems,
-      [name]: checked,
-    }));
-  };
-  
   const [validated, setValidated] = useState(false);
-  const [pessoa, setPessoa] = useState({
-    nome: " ",
-    cpf: "",
-    nascimento: "",
-    endereco: "",
-    cidade: "",
-    telefone: "",
-    email: "",
-    tipo: "",
-    disponibilidade: "",
-    profissao1: "",
-    profissao2: "",
-  });
-  function manipularMudanca(e) {
+  const [pessoa, setPessoa] =useState(props.pessoa);
+  
+  function manipularMudanca(e){
     const elemForm = e.currentTarget;
     const id = elemForm.id;
     const valor = elemForm.value;
-    setPessoa({ ...pessoa, [id]: valor });
+    setPessoa({...pessoa, [id]:valor});
   }
+
   function handleSubmit(event) {
     const form = event.currentTarget;
-    console.log("entrei aqui");
-    if (form.checkValidity() && isFormValid.checkValidity()) {
-      let pessoas = props.listaPessoas;
-      pessoas.push(pessoa);
-      props.setPessoas(pessoas);
-      props.exibirTabela(true);
-      console.log("push feito");
+    console.log('entrei aqui')
+    if (form.checkValidity()) {
+      if(!props.modoEdicao){
+        fetch(urlBackend+"/pessoas",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify(pessoa)
+        }).then((resposta)=>{
+            return resposta.json();
+        }).then((dados)=>{    
+            if(dados.status){
+              props.setModoEdicao(false);
+              let novaLista =props.listaPessoas;
+              novaLista.push(pessoa);              
+              props.setPessoas(novaLista);
+              props.exibirTabela(true);
+            }      
+            window.alert(dados.mensagem);          
+        }).catch((erro)=>{
+          window.alert("Erro ao executar a requisição :"+ erro.message);
+        })
+      }
+      else{
+        fetch(urlBackend + "/pessoas",{
+          method: "PUT",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify(pessoa)
+        }).then((resposta) =>{
+                    
+          window.location.reload();
+          return resposta.json()
+          
+      })
+        
+      }
+      
+      
       setValidated(false);
-      console.log('Pelo menos um checkbox está marcado!');
+
+
     } else {
       setValidated(true);
-      console.log('Nenhum checkbox está marcado!');
-    } 
-  
+    }
     event.preventDefault();
-  };
-    
-      
-
+  }
+  
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -187,58 +188,73 @@ function FormPessoa(props) {
         </Row>
 
         <Row>
-          <Col>
+        <Col>
+          <Form.Group  className="mb-5">
+            <Form.Label>Tipo de Pessoa</Form.Label>
+            <Form.Select aria-label="Tipo de pessoa" value={pessoa.tipo} 
+            id="tipo"
+            onChange={manipularMudanca}>
+              <option>Escolha uma das opções </option>
+              <option value="Doador">Doador</option>
+              <option value="Prestador">Prestador</option>
+              <option value="Recebedor">Recebedor</option>
+              <option value="Contratante">Contratante</option>
+            </Form.Select>
+            
+          </Form.Group>
+          <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
+        </Col>
+          {/* <Col>
             <Form.Group className="mb-3" id="tipo">
               <Form.Label>Tipo de Pessoa</Form.Label>   
               
                 <Form.Check
                   inline
+                  required
                   type="checkbox"
                   label="Doador"
                   name="doador"
-                  checked={checkedItems.doador}
-                  onChange={(e) => {
-                    handleCheckboxChange(e)
-                    manipularMudanca(e)
-                  }}
+                  value={pessoa.tipo}
+                id="tipo"
+                  
+                  onChange={
+                    manipularMudanca
+                  }
                 />
                 <Form.Check
                   inline
                   type="checkbox"
                   label="Prestador"
                   name="prestador"
-                  checked={checkedItems.prestador}
-                  onChange={(e) => {
-                    handleCheckboxChange(e)
-                    manipularMudanca(e)
-                  }}
+                  
+                  onChange={
+                    manipularMudanca
+                  }
                 />
                 <Form.Check
                   inline
                   type="checkbox"
                   label="Recebedor"
                   name="recebedor"
-                  checked={checkedItems.recebedor}
-                  onChange={(e) => {
-                    handleCheckboxChange(e)
-                    manipularMudanca(e)
-                  }}
+                  
+                  onChange={
+                    manipularMudanca
+                  }
                 />
                 <Form.Check
                   inline
                   type="checkbox"
                   label="Contratante"
                   name="contratante"
-                  checked={checkedItems.contratante}
-                  onChange={(e) => {
-                    handleCheckboxChange(e)
-                    manipularMudanca(e)
-                  }}
+                  
+                  onChange={
+                    manipularMudanca
+                 }
                 />
                 
             </Form.Group>
-            {/* <Form.Control.Feedback type="invalid"></Form.Control.Feedback> */}
-          </Col>
+            {* <Form.Control.Feedback type="invalid"></Form.Control.Feedback> *}
+          </Col> */}
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Disponibilidade</Form.Label>
@@ -282,7 +298,7 @@ function FormPessoa(props) {
 
         <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
           <Button variant="primary" type="submit" className="mb-3">
-            Cadastrar
+          {props.modoEdicao? "Atualizar" :"Cadastrar"}
           </Button>
 
           <Button
