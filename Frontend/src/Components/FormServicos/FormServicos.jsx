@@ -33,7 +33,9 @@ export default function ServicoForm(props) {
               let novaLista = props.listaServicos;
               novaLista.push(servico);
               props.setServicos(novaLista);
+              props.buscar()
               props.exibirTabela(true);
+              
             }
             window.alert(dados.mensagem);
           })
@@ -74,10 +76,11 @@ export default function ServicoForm(props) {
         </Form.Group>
 
         <Row>
-          <Col xs={1}>
+          {/* <Col xs={1}>
             <Form.Group>
               <Form.Label>Código</Form.Label>
               <Form.Control
+                disabled
                 value={servico.id}
                 type="text"
                 id="id"
@@ -85,7 +88,7 @@ export default function ServicoForm(props) {
                 required
               />              
             </Form.Group>
-          </Col>
+          </Col> */}
 
           <Col>
             <Form.Group>

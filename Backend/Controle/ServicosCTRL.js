@@ -30,7 +30,7 @@ export default class ServicosCTRL {
     response.type("application/json");
     if (request.method === "POST" && request.is("application/json")) {
       const data = request.body;
-      const id = data.id;      
+         
       const servico = data.servico;
       const jornada = data.jornada;
       const descricao = data.descricao;
@@ -38,7 +38,7 @@ export default class ServicosCTRL {
       const modelo = data.modelo;
              
       if (
-        id &&
+        
         servico &&
         jornada &&
         descricao &&
@@ -47,7 +47,7 @@ export default class ServicosCTRL {
            
       ) {
         const servicos = new Servico(
-          id,
+          0,
           servico,
           jornada,
           descricao,
