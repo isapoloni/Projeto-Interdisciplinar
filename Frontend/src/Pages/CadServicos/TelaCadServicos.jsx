@@ -13,11 +13,11 @@ export default function CadServicos(props) {
   const [modoEdicao, setModoEdicao] = useState(false);
   const [servicoEdicao, setServicoEdicao] = useState({
     id: "",
-    serviceType: "",
-    workSchedule: "",
-    serviceDescription:"",
-    estimatedCost: "",
-    workModel: ""
+    servico: "",
+    jornada: "",
+    descricao:"",
+    custo: "",
+    modelo: ""
   });
 
   function prepararTela(servico) {
@@ -27,7 +27,7 @@ export default function CadServicos(props) {
   }
 
   function deletarServico(servico) {
-    fetch(urlBackend + "/servico", {
+    fetch(urlBackend + "/servicos", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(servico)
@@ -40,7 +40,7 @@ export default function CadServicos(props) {
   }
 
   useEffect(() => {
-    fetch(urlBackend + "/servico", {
+    fetch(urlBackend + "/servicos", {
       method: "GET"
     })
       .then((resposta) => {

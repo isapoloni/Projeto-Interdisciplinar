@@ -17,7 +17,7 @@ export default function ServicoForm(props) {
     const form = evento.currentTarget;
     if (form.checkValidity()) {
       if (!props.modoEdicao) {
-        fetch(urlBackend + "/servico", {
+        fetch(urlBackend + "/servicos", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -41,7 +41,7 @@ export default function ServicoForm(props) {
             window.alert("Erro ao executar a requisição: " + erro.message);
           });
       } else {
-        fetch(urlBackend + "/servico", {
+        fetch(urlBackend + "/servicos", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json"
@@ -80,7 +80,6 @@ export default function ServicoForm(props) {
               <Form.Control
                 value={servico.id}
                 type="text"
-                readOnly
                 id="id"
                 onChange={manipularOnChange}
                 required
@@ -92,10 +91,10 @@ export default function ServicoForm(props) {
             <Form.Group>
               <Form.Label>Serviço</Form.Label>
               <Form.Control
-                value={servico.serviceType}
+                value={servico.servico}
                 type="text"
                 placeholder="Digite o nome do serviço"
-                id="serviceType"
+                id="servico"
                 onChange={manipularOnChange}
                 required
               />
@@ -109,9 +108,9 @@ export default function ServicoForm(props) {
             <Form.Group>
               <Form.Label>Jornada de Trabalho</Form.Label>
               <Form.Control
-                value={servico.workSchedule}
+                value={servico.jornada}
                 as="select"
-                id="workSchedule"
+                id="jornada"
                 onChange={manipularOnChange}
                 required
               >
@@ -131,11 +130,11 @@ export default function ServicoForm(props) {
         <Form.Group>
           <Form.Label>Descrição</Form.Label>
           <Form.Control
-            value={servico.serviceDescription}
+            value={servico.descricao}
             as="textarea"
             rows={3}
             placeholder="Digite a descrição do serviço"
-            id="serviceDescription"
+            id="descricao"
             onChange={manipularOnChange}
             required
           />
@@ -149,10 +148,10 @@ export default function ServicoForm(props) {
           <Form.Group>
               <Form.Label>Custo Estimado </Form.Label>
               <Form.Control
-                value={servico.estimatedCost}
+                value={servico.custo}
                 type="text"
                 placeholder="Insira um custo estimado"
-                id="estimatedCost"
+                id="custo"
                 onChange={manipularOnChange}
                 required
               />
@@ -163,17 +162,24 @@ export default function ServicoForm(props) {
           </Col>
           
           <Col xs={3}>
-          <Form.Group> 
-          <Form.Label>Serviço Remoto?</Form.Label>
-          <Form.Check
-            type="switch"
-            id="workModel"
-            label="Não/Sim"
-            required
-            value={servico.workModel}
-            onChange={manipularOnChange}
-            />              
-            </Form.Group>     
+          <Form.Group>
+              <Form.Label>Serviço Remoto?</Form.Label>
+              <Form.Control
+                value={servico.modelo}
+                as="select"
+                id="modelo"
+                onChange={manipularOnChange}
+                required
+              >
+                <option>Selecione</option>
+                <option>Remoto</option>
+                <option>Presencial</option>
+                
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                Por favor, Selecione uma opção!
+              </Form.Control.Feedback>
+            </Form.Group>
       
           </Col>
           </Row>

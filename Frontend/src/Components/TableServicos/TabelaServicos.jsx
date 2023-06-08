@@ -15,7 +15,7 @@ import { urlBackend } from "../../assets/funcoes";
 export default function TableServico(props) {
   function filtrarServicos(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/servico", { method: "GET" })
+    fetch(urlBackend + "/servicos", { method: "GET" })
       .then((resposta) => {
         return resposta.json();
       })
@@ -60,7 +60,7 @@ export default function TableServico(props) {
             <th className="text-center">Jornada</th>
             <th className="text-center">Descrição</th>
             <th className="text-center">Custo</th>
-            <th className="text-center">Tipo</th>
+            <th className="text-center">Modelo</th>
           </tr>
         </thead>
         <tbody>
@@ -68,11 +68,11 @@ export default function TableServico(props) {
             return (
               <tr key={servico.id}>
                 <td>{servico.id}</td>
-                <td>{servico.serviceType}</td>
-                <td>{servico.workSchedule}</td>
-                <td>{servico.serviceDescription}</td>
-                <td>{servico.estimatedCost}</td>
-                <td>{servico.workModel}</td>
+                <td>{servico.servico}</td>
+                <td>{servico.jornada}</td>
+                <td>{servico.descricao}</td>
+                <td>{servico.custo}</td>
+                <td>{servico.modelo}</td>
                 <td>
                   <Button
                     onClick={() => {

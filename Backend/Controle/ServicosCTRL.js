@@ -46,7 +46,7 @@ export default class ServicosCTRL {
         modelo 
            
       ) {
-        const servico = new Servico(
+        const servicos = new Servico(
           id,
           servico,
           jornada,
@@ -54,7 +54,7 @@ export default class ServicosCTRL {
           custo,
           modelo
         );
-        servico
+        servicos
           .gravar()
           .then(() => {
             response.status(200).json({
@@ -101,7 +101,7 @@ export default class ServicosCTRL {
         custo &&
         modelo 
       ) {
-        const servico = new Servico(
+        const servicos = new Servico(
           id,
           servico,
           jornada,
@@ -109,7 +109,7 @@ export default class ServicosCTRL {
           custo,
           modelo
         );
-        servico
+        servicos
           .atualizar()
           .then(() => {
             response.status(200).json({
@@ -143,8 +143,8 @@ export default class ServicosCTRL {
       const data = request.body;
       const id = data.id;
       if (id) {
-        const servico = new Servico(id);
-        servico
+        const servicos = new Servico(id);
+        servicos
           .excluir()
           .then(() => {
             response.status(200).json({
