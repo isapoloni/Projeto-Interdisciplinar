@@ -6,19 +6,20 @@ export default class ServicoBD {
     if (servico instanceof Servico) {
       const conect = await Conect();
       const sql =
-        "INSERT INTO servicos(id,servico,jornada,descricao,custo,modelo) VALUES (?,?,?,?,?,?) ";
+        "INSERT INTO servicos(servico,jornada,descricao,custo,modelo) VALUES (?,?,?,?,?) ";
       const values = [
-        servico.id,
         servico.servico,
         servico.jornada,
         servico.descricao,
         servico.custo,
         servico.modelo
       ];
-      await conect.query(sql, values);
+      const resultado = await conexao.query(sql, values);
+      return resultado[0].insertId;
     }
   }
 
+  
   async atualizar(servico) {
     if (servico instanceof Servico) {
       const conect = await Conect();

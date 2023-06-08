@@ -38,21 +38,25 @@ export default function CadServicos(props) {
     });
   }
 
-  useEffect(() => {
-    fetch(urlBackend + "/servicos", {
-      method: "GET",
-    })
-      .then((resposta) => {
-        return resposta.json();
-      })
-      .then((dados) => {
-        if (Array.isArray(dados)) {
-          setServicos(dados);
-        } else {
-          // Tratar erro caso necessário
-        }
-      });
+  
+    useEffect(() => {
+    buscar()
   }, []);
+  function buscar(){
+    fetch(urlBackend + "/servicos", {
+    method: "GET",
+  })
+    .then((resposta) => {
+      return resposta.json();
+    })
+    .then((dados) => {
+      if (Array.isArray(dados)) {
+        setServicos(dados);
+      } else {
+        // Tratar erro caso necessário
+      }
+    });
+  }
 
   return (
     <>
@@ -75,6 +79,7 @@ export default function CadServicos(props) {
             editar={prepararTela}
             setModoEdicao={setModoEdicao}
             servico={servicoEdicao}
+            buscar={buscar}
           />
         )}
       </Container>
