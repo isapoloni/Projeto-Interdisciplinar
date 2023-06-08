@@ -75,6 +75,10 @@ export default function Header() {
                       Cadastro Pessoas
                     </NavLink>
                     <hr />
+                    <NavLink id="navlink" to="/CadastroServicos">
+                      Cadastro Servicos
+                    </NavLink>
+                    <hr />
                   </Nav>
                 </Navbar.Collapse>
               </Offcanvas.Body>

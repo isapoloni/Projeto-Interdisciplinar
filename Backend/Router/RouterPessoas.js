@@ -10,4 +10,6 @@ routerPessoa
   .post("/", pessoasCTRL.gravar)
   .delete("/", pessoasCTRL.excluir);
 
-export default routerPessoa;
+
+
+export default  routerPessoa;
