@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
+import { IMaskInput } from "react-imask";
 
 export default function ServicoForm(props) {
   const [validated, setValidated] = useState(false);
@@ -20,9 +21,9 @@ export default function ServicoForm(props) {
         fetch(urlBackend + "/servicos", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(servico)
+          body: JSON.stringify(servico),
         })
           .then((resposta) => {
             return resposta.json();
@@ -44,14 +45,13 @@ export default function ServicoForm(props) {
         fetch(urlBackend + "/servicos", {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(servico)
-        })
-          .then((resposta) => {
-            window.location.reload();
-            return resposta.json();
-          });
+          body: JSON.stringify(servico),
+        }).then((resposta) => {
+          window.location.reload();
+          return resposta.json();
+        });
       }
       setValidated(false);
     } else {
@@ -83,7 +83,7 @@ export default function ServicoForm(props) {
                 id="id"
                 onChange={manipularOnChange}
                 required
-              />              
+              />
             </Form.Group>
           </Col>
 
@@ -145,7 +145,7 @@ export default function ServicoForm(props) {
 
         <Row>
           <Col xs={5}>
-          <Form.Group>
+            <Form.Group>
               <Form.Label>Custo Estimado </Form.Label>
               <Form.Control
                 value={servico.custo}
@@ -160,9 +160,9 @@ export default function ServicoForm(props) {
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
-          
+
           <Col xs={3}>
-          <Form.Group>
+            <Form.Group>
               <Form.Label>Serviço Remoto?</Form.Label>
               <Form.Control
                 value={servico.modelo}
@@ -174,15 +174,13 @@ export default function ServicoForm(props) {
                 <option>Selecione</option>
                 <option>Remoto</option>
                 <option>Presencial</option>
-                
               </Form.Control>
               <Form.Control.Feedback type="invalid">
                 Por favor, Selecione uma opção!
               </Form.Control.Feedback>
             </Form.Group>
-      
           </Col>
-          </Row>
+        </Row>
 
         <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
           <Button variant="primary" type="submit">
