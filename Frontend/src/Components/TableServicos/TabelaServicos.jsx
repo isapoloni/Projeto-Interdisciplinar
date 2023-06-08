@@ -22,7 +22,7 @@ export default function TableServico(props) {
       .then((listaServicos) => {
         if (Array.isArray(listaServicos)) {
           const resultadoBusca = listaServicos.filter((servico) =>
-            servico.nome.toLowerCase().includes(termoBusca.toLowerCase())
+            servico.servico.toLowerCase().includes(termoBusca.toLowerCase())
           );
           props.setServicos(resultadoBusca);
         }
