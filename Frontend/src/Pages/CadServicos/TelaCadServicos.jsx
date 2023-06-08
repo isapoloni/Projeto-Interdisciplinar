@@ -15,9 +15,9 @@ export default function CadServicos(props) {
     id: "",
     servico: "",
     jornada: "",
-    descricao:"",
+    descricao: "",
     custo: "",
-    modelo: ""
+    modelo: "",
   });
 
   function prepararTela(servico) {
@@ -30,18 +30,17 @@ export default function CadServicos(props) {
     fetch(urlBackend + "/servicos", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(servico)
-    })
-      .then((resposta) => {
-        window.alert("Serviço excluído com sucesso!!!");
-        window.location.reload();
-        return resposta.json();
-      });
+      body: JSON.stringify(servico),
+    }).then((resposta) => {
+      window.alert("Serviço excluído com sucesso!!!");
+      window.location.reload();
+      return resposta.json();
+    });
   }
 
   useEffect(() => {
     fetch(urlBackend + "/servicos", {
-      method: "GET"
+      method: "GET",
     })
       .then((resposta) => {
         return resposta.json();

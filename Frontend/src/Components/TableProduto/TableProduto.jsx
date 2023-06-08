@@ -17,7 +17,7 @@ export default function TableProduto(props) {
 
   function filtrarProdutos(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/produto", { method: "GET" })
+    fetch(urlBackend + "/produtos", { method: "GET" })
       .then((resposta) => {
         return resposta.json();
       })
