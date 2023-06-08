@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
+import rotaProduto from "./Router/rotaProduto.js";
+import rotaServices from "./Router/routerServices.js";
 import routerPessoa from "./Router/RouterPessoas.js";
-import rotaProduto from "./Router/rotaProduto.js"
-import rotaServices from "./Router/routerServices.js"
 
 const server = express();
 server.use(cors({ origin: "*" }));
@@ -14,4 +14,3 @@ server.use("/service", rotaServices);
 server.listen(3308, "localhost", () => {
   console.log("Service running on http://localhost:3308 ");
 });
- 

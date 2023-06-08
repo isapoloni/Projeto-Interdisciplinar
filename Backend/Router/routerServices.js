@@ -5,11 +5,10 @@ const rotaServices = new Router();
 const servicesCtrl = new ServicesCtrl();
 
 rotaServices
-.get('/',servicesCtrl.consultar)
-.post('/' ,servicesCtrl.gravar)
-.put('/' ,servicesCtrl.atualizar)
-.delete('/' ,servicesCtrl.excluir)
-.get('/:id' ,servicesCtrl.consultId);
-
+  .post("/", servicesCtrl.record)
+  .put("/", servicesCtrl.update)
+  .delete("/", servicesCtrl.delete)
+  .get("/", servicesCtrl.consult)
+  .get("/:id", servicesCtrl.consultId);
 
 export default rotaServices;
