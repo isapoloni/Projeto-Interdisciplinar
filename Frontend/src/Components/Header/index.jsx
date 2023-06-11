@@ -63,7 +63,7 @@ export default function Header() {
                     className="justify-content-end flex-grow-1 pe-3"
                     id="sidebar"
                   >
-                    <NavLink id="navlink" to="/">
+                    <NavLink id="navlink" to="/Home">
                       Home
                     </NavLink>
                     <hr />
@@ -77,8 +77,8 @@ export default function Header() {
                     <hr />
                     <NavLink id="navlink" to="/CadastroServicos">
                       Cadastro Servicos
-                      </NavLink>
-                      <hr/>
+                    </NavLink>
+                    <hr />
                     <NavLink id="navlink" to="/CadastroCategoria">
                       Cadastro Categoria
                     </NavLink>
