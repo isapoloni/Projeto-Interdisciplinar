@@ -17,11 +17,14 @@ export default function CadProdutos(props) {
     nome: "",
     metrica: "",
     descricao: "",
-    categoria: ""
+    codigoCategoria: ""
   })
+  const [categoria, setCategoria] = useState()
+
 
   function prepararTela(produto) {
     setModoEdicao(true);
+  
     setProdutoEdicao(produto);
     setExibirTabela(false)
 
@@ -40,6 +43,11 @@ export default function CadProdutos(props) {
   }
 
   useEffect(() => {
+    buscarProduto()
+    buscarCategoria()
+  }, []);
+
+  function buscarProduto() {
     fetch(urlBackend + '/produto', {
       method: "GET"
     }).then((resposta) => {
@@ -47,42 +55,58 @@ export default function CadProdutos(props) {
     }).then((dados) => {
       if (Array.isArray(dados)) {
         setProdutos(dados)
-
       }
       else {
 
       }
     });
+  }
 
-  }, []);
+  function buscarCategoria() {
+    fetch(urlBackend + '/categoria', {
+      method: "GET"
+    }).then((resposta) => {
+      return resposta.json()
+    }).then((dados) => {
+      if (Array.isArray(dados)) {
+        setCategoria(dados)
+      }
+      else {
+
+      }
+    });
+  }
+
 
   return (
     <>
-    <Header/>
-    <Container>
-      {
-        exibirTabela ?
-          <TableProduto
-            listaProdutos={produtos}
-            setProdutos={setProdutos}
-            exibirTabela={setExibirTabela}
-            editar={prepararTela}
-            deletar={deletarProduto}
-          />
-          :
-          <ProdutoForm
-            listaProdutos={produtos}
-            setProdutos={setProdutos}
-            exibirTabela={setExibirTabela}
-            modoEdicao={modoEdicao}
-            editar = {prepararTela}
-            setModoEdicao = {setModoEdicao}
-            produto = {produtoEdicao}
-          />
+      <Header />
+      <Container>
+        {
+          exibirTabela ?
+            <TableProduto
+              listaProdutos={produtos}
+              setProdutos={setProdutos}
+              exibirTabela={setExibirTabela}
+              editar={prepararTela}
+              deletar={deletarProduto}
+            />
+            :
+            <ProdutoForm
+              listaProdutos={produtos}
+              setProdutos={setProdutos}
+              exibirTabela={setExibirTabela}
+              modoEdicao={modoEdicao}
+              editar={prepararTela}
+              setModoEdicao={setModoEdicao}
+              produto={produtoEdicao}
+              buscarProduto={buscarProduto}
+              categorias={categoria}
+            />
 
-      }
-    </Container>
+        }
+      </Container>
     </>
   );
-  
+
 }

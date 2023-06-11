@@ -3,6 +3,7 @@ import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import CadProdutos from "./Pages/CadProdutos/TelaCadProdutos";
 import TelaCadPessoa from "./Pages/CadPessoas/CadPessoa";
+import CadCategoria from "./Pages/CadCategoria/TelaCadCategoria";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/Home" element={<Home />} />
           <Route path="/CadastroProduto" element={<CadProdutos />} />
           <Route path="/CadastroPessoas" element={<TelaCadPessoa />} />
+          <Route path="/CadastroCategoria" element={<CadCategoria/>} />
         </Routes>
       </BrowserRouter>
     </>

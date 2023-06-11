@@ -1,6 +1,7 @@
 import express from "express";
 import routerPessoa from "./Router/RouterPessoas.js";
 import rotaProduto from "./Router/rotaProduto.js";
+import rotaCategoriaProd from "./Router/rotaCategoriaProd.js";
 import cors from "cors";
 
 const server = express();
@@ -9,6 +10,8 @@ server.use(express.urlencoded({ extended: false }));
 server.use(express.json());
 server.use("/pessoas", routerPessoa);
 server.use("/produto", rotaProduto);
+server.use("/categoria", rotaCategoriaProd);
+
 server.listen(3308, "localhost", () => {
   console.log("Service running on http://localhost:3308 ");
 });

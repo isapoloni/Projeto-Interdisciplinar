@@ -1,98 +1,109 @@
 import ProdutoBDPid from "../Persistencia/ProdutoBdPid.js";
 
 export default class Produto {
-  #codigo;
-  #nome;
-  #metrica;
-  #descricao;
-  #categoria;
+    #codigo;
+    #nome;
+    #metrica;
+    #descricao;
+    #categoria;
+    #codigoCategoria;
 
-  constructor(codigo, nome, metrica, descricao, categoria) {
-      this.#codigo = codigo;
-      this.#nome = nome;
-      this.#metrica = metrica;
-      this.#descricao = descricao;
-      this.#categoria = categoria;
-  }
+    constructor(codigo, nome, metrica, descricao, codigoCategoria, categoria) {
+        this.#codigo = codigo;
+        this.#nome = nome;
+        this.#metrica = metrica;
+        this.#descricao = descricao;
+        this.#codigoCategoria = codigoCategoria;
+        this.#categoria = categoria;
+    }
 
-  get codigo() {
-      return this.#codigo
-  }
+    get codigo() {
+        return this.#codigo
+    }
 
-  set codigo(novoCodigo) {
-      if (novoCodigo != '')
-          this.#nome = novoCodigo;
-  }
+    set codigo(novoCodigo) {
+        if (novoCodigo != '')
+            this.#nome = novoCodigo;
+    }
 
-  get nome() {
-      return this.#nome;
-  }
+    get nome() {
+        return this.#nome;
+    }
 
-  set nome(newNome) {
-      if (newNome != '')
-          this.#nome = newNome;
-  }
+    set nome(newNome) {
+        if (newNome != '')
+            this.#nome = newNome;
+    }
 
-  get metrica() {
-      return this.#metrica;
-  }
+    get metrica() {
+        return this.#metrica;
+    }
 
-  set metrica(newMetrica) {
-      this.#metrica = newMetrica;    
-  }
+    set metrica(newMetrica) {
+        this.#metrica = newMetrica;
+    }
 
-  get descricao() {
-      return this.#descricao;
-  }
+    get descricao() {
+        return this.#descricao;
+    }
 
-  set descricao(newDescricao) {
-      this.#descricao = newDescricao;
-  }
-  
-  get categoria() {
-      return this.#categoria;
-  }
+    set descricao(newDescricao) {
+        this.#descricao = newDescricao;
+    }
 
-  set categoria(novaCat) {
-      this.#categoria = novaCat;
-  }
+    get categoria() {
+        return this.#categoria;
+    }
 
-  toJSON() {
-      return {
-          "codigo": this.#codigo,
-          "nome": this.#nome,
-          "metrica": this.#metrica,
-          "descricao": this.#descricao,
-          "categoria": this.#categoria
-      }
-  }
+    set categoria(novaCat) {
+        this.#categoria = novaCat;
+    }
 
-  async gravar() {
-      const produtoBD = new ProdutoBDPid();
-      await produtoBD.incluir(this);
+    get codigoCategoria() {
+        return this.#codigoCategoria;
+    }
 
-  }
+    set codigoCategoria(novaCodCat) {
+        this.#codigoCategoria = novaCodCat;
+    }
 
-  async atualizar() {
-      const produtoBD = new ProdutoBDPid();
-      await produtoBD.alterar(this);
-  }
+    toJSON() {
+        return {
+            "codigo": this.#codigo,
+            "nome": this.#nome,
+            "metrica": this.#metrica,
+            "descricao": this.#descricao,
+            "codigoCategoria": this.#codigoCategoria,
+            "categoria": this.#categoria
+        }
+    }
 
-  async remover() {
-      const produtoBD = new ProdutoBDPid();
-      await produtoBD.excluir(this);
-  }
+    async gravar() {
+        const produtoBD = new ProdutoBDPid();
+        await produtoBD.incluir(this);
 
-  async consultar(termo) {
-      const produtoBD = new ProdutoBDPid();
-      const produtos = await produtoBD.consutlar(termo);
-      return produtos;
-  }
+    }
 
-  async consultarCodigo(codigo){
-      const produtoBD = new ProdutoBDPid();
-      const produtos = await produtoBD.consultarId(termo);
-      return produtos;
-  }
+    async atualizar() {
+        const produtoBD = new ProdutoBDPid();
+        await produtoBD.alterar(this);
+    }
+
+    async remover() {
+        const produtoBD = new ProdutoBDPid();
+        await produtoBD.excluir(this);
+    }
+
+    async consultar(termo) {
+        const produtoBD = new ProdutoBDPid();
+        const produtos = await produtoBD.consutlar(termo);
+        return produtos;
+    }
+
+    async consultarCodigo(codigo) {
+        const produtoBD = new ProdutoBDPid();
+        const produtos = await produtoBD.consultarId(termo);
+        return produtos;
+    }
 
 }
