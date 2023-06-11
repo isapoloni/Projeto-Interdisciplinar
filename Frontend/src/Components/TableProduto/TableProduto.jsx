@@ -17,7 +17,7 @@ export default function TableProduto(props) {
 
   function filtrarProdutos(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/produtos", { method: "GET" })
+    fetch(urlBackend + "/produto", { method: "GET" })
       .then((resposta) => {
         return resposta.json();
       })
@@ -46,7 +46,7 @@ export default function TableProduto(props) {
         <FormControl
           type="text"
           id="termoBusca"
-          placeholder="Buscar"
+          placeholder="Busque aqui o produto desejado"
           onChange={filtrarProdutos}
         />
         <InputGroup.Text>

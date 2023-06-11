@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form, Button, Col, Row, Stack, } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
-import { HiChevronDoubleRight } from "react-icons/hi";
+
 
 export default function ProdutoForm(props) {
   const [validated, setValidated] = useState(false);
