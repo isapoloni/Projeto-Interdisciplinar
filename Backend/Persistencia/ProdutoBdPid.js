@@ -4,108 +4,107 @@ import Produto from "../Modelo/ProdutoPid.js";
 
 export default class ProdutoBDPid {
 
-  async incluir(produto) {
-      if (produto instanceof Produto) {
-          const conexao = await conectar();
+    async incluir(produto) {
+        if (produto instanceof Produto) {
+            const conexao = await conectar();
 
-          const sql = "INSERT INTO produto(codigo, nome, metrica, descricao, categoria) VALUES (?, ?, ?, ?, ?)";
-          const valores = [
-              produto.codigo,
-              produto.nome,
-              produto.metrica,
-              produto.descricao,
-              produto.categoria,
-          ];
+            const sql = "INSERT INTO produto(nome, metrica, descricao, categoria) VALUES ( ?, ?, ?, ?)";
+            const valores = [
+                produto.nome,
+                produto.metrica,
+                produto.descricao,
+                produto.codigoCategoria,
+            ];
+            const resultado = await conexao.query(sql, valores);
+            return await resultado[0].insertId;
 
-          await conexao.query(sql, valores);
-
-      }
-  }
-
-
-  async alterar(produto) {
-      if (produto instanceof Produto) {
-          const conexao = await conectar();
-
-          const sql = "UPDATE produto SET nome = ?, metrica = ?, descricao = ?, categoria = ? WHERE codigo = ?";
-
-          const valores = [
-              produto.nome,
-              produto.metrica,
-              produto.descricao,
-              produto.categoria,
-              produto.codigo,
-          ];
-
-          await conexao.query(sql, valores);
-      }
-  }
+        }
+    }
 
 
-  async excluir(produto) {
-      if (produto instanceof Produto) {
-          const conexao = await conectar();
+    async alterar(produto) {
+        if (produto instanceof Produto) {
+            const conexao = await conectar();
 
-          const sql = "DELETE FROM produto WHERE codigo = ? ";
+            const sql = "UPDATE produto SET nome = ?, metrica = ?, descricao = ?, categoria = ? WHERE codigo = ?";
 
-          const valores = [produto.codigo]
+            const valores = [
+                produto.nome,
+                produto.metrica,
+                produto.descricao,
+                produto.codigoCategoria,
+                produto.codigo,
+            ];
 
-          await conexao.query(sql, valores);
-      }
-  }
+            await conexao.query(sql, valores);
+        }
+    }
 
-  async consutlar(termo) {
-      // if (produto instanceof Produto) {
-      const conexao = await conectar();
 
-      const sql = "SELECT * FROM produto WHERE nome LIKE ?";
+    async excluir(produto) {
+        if (produto instanceof Produto) {
+            const conexao = await conectar();
 
-      const valores = ['%' + termo + '%'];
+            const sql = "DELETE FROM produto WHERE codigo = ? ";
 
-      const [rows] = await conexao.query(sql, valores);
+            const valores = [produto.codigo]
 
-      const listaProdutos = [];
+            await conexao.query(sql, valores);
+        }
+    }
 
-      for (const row of rows) {
-          const produto = new Produto(
+    async consutlar(termo) {
+        // if (produto instanceof Produto) {
+        const conexao = await conectar();
 
-              row['codigo'],
-              row['nome'],
-              row['metrica'],
-              row['descricao'],
-              row['categoria'],
-          );
-          listaProdutos.push(produto);
-      }
-      return listaProdutos;
-      // }
-  }
+        const sql = "SELECT p.*, cp.codigo AS codigoCategoria, cp.categoria FROM produto p INNER JOIN categoria_produto cp on cp.codigo = p.categoria WHERE p.nome LIKE ?";
 
-  async consultarId(codigo) {
-      const conexao = await conectar();
+        const valores = ['%' + termo + '%'];
 
-      const sql = "SELECT * FROM PRODUTO WHERE codigo = ?";
+        const [rows] = await conexao.query(sql, valores);
+        const listaProdutos = [];
 
-      const valores = [codigo]
+        for (const row of rows) {
+            const produto = new Produto(
 
-      const [rows] = await conexao.query(sql, valores);
+                row['codigo'],
+                row['nome'],
+                row['metrica'],
+                row['descricao'],
+                row['codigoCategoria'],
+                row['categoria'],
+            );
+            listaProdutos.push(produto);
+        }
+        return listaProdutos;
+        // }
+    }
 
-      const listaProdutos = [];
+    //   async consultarID(codigo) {
+    //       const conexao = await conectar();
 
-      for (const row of rows) {
-          const produto = new Produto(
+    //       const sql = "SELECT * FROM PRODUTO WHERE codigo = ?";
 
-              row['codigo'],
-              row['nome'],
-              row['metrica'],
-              row['descricao'],
-              row['categoria'],
+    //       const valores = [codigo]
 
-          );
-          listaProdutos.push(produto);
-      }
-      return listaProdutos;
-  }
+    //       const [rows] = await conexao.query(sql, valores);
+
+    //       const listaProdutos = [];
+
+    //       for (const row of rows) {
+    //           const produto = new Produto(
+
+    //               row['codigo'],
+    //               row['nome'],
+    //               row['metrica'],
+    //               row['descricao'],
+    //               row['categoria'],
+
+    //           );
+    //           listaProdutos.push(produto);
+    //       }
+    //       return listaProdutos;
+    //   }
 
 
 }

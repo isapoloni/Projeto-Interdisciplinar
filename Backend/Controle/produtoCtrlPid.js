@@ -1,186 +1,187 @@
 import Produto from "../Modelo/ProdutoPid.js";
 
 export default class ProdutoCTRL {
-  
-  consultar(requiscao, resposta) {
-      resposta.type('application/json')
 
-      if (requiscao.method === 'GET') {
+    consultar(requiscao, resposta) {
+        resposta.type('application/json')
 
-          const produto = new Produto();
+        if (requiscao.method === 'GET') {
 
-          produto.consultar('').then((produtos) => {
-              resposta.status(200).json(produtos);
+            const produto = new Produto();
 
-          }).catch((erro) => {
-              resposta.status(500).json({
-                  status: false,
-                  mensagem: erro.message
-              })
-          });
-      } else {
-          resposta.status(400).json({
-              status: false,
-              mensagem: 'Método não permitido! Consulte a documentação da API'
-          });
-      }
-  }
+            produto.consultar('').then((produtos) => {
+                resposta.status(200).json(produtos);
 
-  gravar(requiscao, resposta) {
-      resposta.type('application/json')
-      if (requiscao.method === 'POST' && requiscao.is('application/json')) {
-          
-          const dados = requiscao.body;
-          const codigo = dados.codigo;
-          const nome = dados.nome;
-          const metrica = dados.metrica;
-          const descricao = dados.descricao;
-          const categoria = dados.categoria;
+            }).catch((erro) => {
+                resposta.status(500).json({
+                    status: false,
+                    mensagem: erro.message
+                })
+            });
+        } else {
+            resposta.status(400).json({
+                status: false,
+                mensagem: 'Método não permitido! Consulte a documentação da API'
+            });
+        }
+    }
 
+    gravar(requiscao, resposta) {
+        resposta.type('application/json')
+        if (requiscao.method === 'POST' && requiscao.is('application/json')) {
 
-          if (codigo && nome && metrica && descricao && categoria) {
-
-              const produto = new Produto(codigo, nome, metrica, descricao, categoria);
-
-              produto.gravar().then(() => {
-                  resposta.status(200).json({
-                      status: true,
-                      id: produto.codigo,
-                      mensagem: 'Produto gravado com sucesso!'
-                  });
-              }).catch((erro) => {
-                  resposta.status(500).json({
-                      status: false,
-                      mensagem: erro.message
-                  })
-              });
-
-          } else {
-              resposta.status(400).json({
-                  status: false,
-                  mensagem: 'Registro inválido! informe adequadamente todos os dados do produto conforme a documentação da API'
-
-              });
-          }
-      } else {
-          resposta.status(400).json({
-              status: false,
-              mensagem: 'Método não permitido ou produto no formato JSON não fornecido! Consulte a documentação da API'
-
-          });
-      }
-  }
+            const dados = requiscao.body;
+            const nome = dados.nome;
+            const metrica = dados.metrica;
+            const descricao = dados.descricao;
+            const categoria = dados.codigoCategoria;
 
 
-  atualizar(requiscao, resposta) {
-      resposta.type('application/json')
+            if (nome && metrica && descricao && categoria) {
 
-      if (requiscao.method === 'PUT' && requiscao.is('application/json')) {
-          const dados = requiscao.body;
-          const codigo = dados.codigo;
-          const nome = dados.nome;
-          const metrica = dados.metrica;
-          const descricao = dados.descricao;
-          const categoria = dados.categoria;
+                const produto = new Produto(0, nome, metrica, descricao, categoria);
 
-          if (codigo && nome && metrica && descricao && categoria) {
+                produto.gravar().then(() => {
+                    resposta.status(200).json({
+                        status: true,
+                        id: produto.codigo,
+                        mensagem: 'Produto gravado com sucesso!'
+                    });
+                }).catch((erro) => {
+                    resposta.status(500).json({
+                        status: false,
+                        mensagem: erro.message
+                    })
+                });
 
-              const produto = new Produto(codigo ,nome, metrica, descricao, categoria);
+            } else {
+                resposta.status(400).json({
+                    status: false,
+                    mensagem: 'Registro inválido! informe adequadamente todos os dados do produto conforme a documentação da API'
 
-              produto.atualizar().then(() => {
-                  resposta.status(200).json({
-                      status: true,
-                      mensagem: 'Produto atualizado com sucesso!'
-                  });
+                });
+            }
+        } else {
+            resposta.status(400).json({
+                status: false,
+                mensagem: 'Método não permitido ou produto no formato JSON não fornecido! Consulte a documentação da API'
 
-              }).catch((erro) => {
-                  resposta.status(500).json({
-                      status: false,
-                      mensagem: erro.message
-                  })
-              });
+            });
+        }
+    }
 
-          } else {
-              resposta.status(400).json({
-                  status: false,
-                  mensagem: 'Atualização inválida! informe adequadamente todos os dados do produto conforme a documentação da API'
 
-              });
-          }
-      } else {
-          resposta.status(400).json({
-              status: false,
-              mensagem: 'Método não permitido ou produto no formato JSON não fornecido! Consulte a documentação da API'
+    atualizar(requiscao, resposta) {
+        resposta.type('application/json')
 
-          });
-      }
-  }
+        if (requiscao.method === 'PUT' && requiscao.is('application/json')) {
+            const dados = requiscao.body;
+            console.log(dados)
+            const codigo = dados.codigo;
+            const nome = dados.nome;
+            const metrica = dados.metrica;
+            const descricao = dados.descricao;
+            const codigoCategoria = dados.codigoCategoria;
+            const categoria = dados.categoria;
 
-  excluir(requiscao, resposta) {
+            if (codigo && nome && metrica && descricao && categoria && codigoCategoria) {
 
-      resposta.type('application/json')
+                const produto = new Produto(codigo, nome, metrica, descricao, codigoCategoria, categoria);
 
-      if (requiscao.method === 'DELETE' && requiscao.is('application/json')) {
+                produto.atualizar().then(() => {
+                    resposta.status(200).json({
+                        status: true,
+                        mensagem: 'Produto atualizado com sucesso!'
+                    });
 
-          const dados = requiscao.body;
-          const codigo = dados.codigo;
+                }).catch((erro) => {
+                    resposta.status(500).json({
+                        status: false,
+                        mensagem: erro.message
+                    })
+                });
 
-          if (codigo) {
+            } else {
+                resposta.status(400).json({
+                    status: false,
+                    mensagem: 'Atualização inválida! informe adequadamente todos os dados do produto conforme a documentação da API'
 
-              const produto = new Produto(codigo);
+                });
+            }
+        } else {
+            resposta.status(400).json({
+                status: false,
+                mensagem: 'Método não permitido ou produto no formato JSON não fornecido! Consulte a documentação da API'
 
-              produto.remover().then(() => {
-                  resposta.status(200).json({
-                      status: true,
-                      mensagem: 'Produto excluído com sucesso!'
-                  });
+            });
+        }
+    }
 
-              }).catch((erro) => {
-                  resposta.status(500).json({
-                      status: false,
-                      mensagem: erro.message
-                  })
-              });
+    excluir(requiscao, resposta) {
 
-          } else {
-              resposta.status(400).json({
-                  status: false,
-                  mensagem: 'Exclusão inválida! informe adequadamente o nome do produto conforme a documentação da API.'
+        resposta.type('application/json')
 
-              });
-          }
-      } else {
-          resposta.status(400).json({
-              status: false,
-              mensagem: 'Método não permitido ou produto no formato JSON não fornecido! Consulte a documentação da API'
+        if (requiscao.method === 'DELETE' && requiscao.is('application/json')) {
 
-          });
-      }
-  }
+            const dados = requiscao.body;
+            const codigo = dados.codigo;
 
-  consultarPeloCodigo(requiscao, resposta) {
-      resposta.type('application/json')
+            if (codigo) {
 
-      const codigo = requiscao.params['codigo'];
+                const produto = new Produto(codigo);
 
-      if (requiscao.method === 'GET') {
+                produto.remover().then(() => {
+                    resposta.status(200).json({
+                        status: true,
+                        mensagem: 'Produto excluído com sucesso!'
+                    });
 
-          const produto = new Produto();
+                }).catch((erro) => {
+                    resposta.status(500).json({
+                        status: false,
+                        mensagem: erro.message
+                    })
+                });
 
-          produto.consultarID(codigo).then((produtos) => {
-              resposta.status(200).json(produtos);
+            } else {
+                resposta.status(400).json({
+                    status: false,
+                    mensagem: 'Exclusão inválida! informe adequadamente o nome do produto conforme a documentação da API.'
 
-          }).catch((erro) => {
-              resposta.status(500).json({
-                  status: false,
-                  mensagem: erro.message
-              })
-          });
-      } else {
-          resposta.status(400).json({
-              status: false,
-              mensagem: 'Método não permitido! Consulte a documentação da API'
-          });
-      }
-  }
+                });
+            }
+        } else {
+            resposta.status(400).json({
+                status: false,
+                mensagem: 'Método não permitido ou produto no formato JSON não fornecido! Consulte a documentação da API'
+
+            });
+        }
+    }
+
+    // consultarPeloCodigo(requiscao, resposta) {
+    //     resposta.type('application/json')
+
+    //     const codigo = requiscao.params['codigo'];
+
+    //     if (requiscao.method === 'GET') {
+
+    //         const produto = new Produto();
+
+    //         produto.consultarID(codigo).then((produtos) => {
+    //             resposta.status(200).json(produtos);
+
+    //         }).catch((erro) => {
+    //             resposta.status(500).json({
+    //                 status: false,
+    //                 mensagem: erro.message
+    //             })
+    //         });
+    //     } else {
+    //         resposta.status(400).json({
+    //             status: false,
+    //             mensagem: 'Método não permitido! Consulte a documentação da API'
+    //         });
+    //     }
+    // }
 }

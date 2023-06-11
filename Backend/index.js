@@ -1,4 +1,7 @@
 import express from "express";
+import routerPessoa from "./Router/RouterPessoas.js";
+import rotaProduto from "./Router/rotaProduto.js";
+import rotaCategoriaProd from "./Router/rotaCategoriaProd.js";
 import cors from "cors";
 import rotaProduto from "./Router/rotaProduto.js";
 import routerPessoa from "./Router/RouterPessoas.js";
@@ -11,6 +14,8 @@ server.use(express.json());
 server.use("/pessoas", routerPessoa);
 server.use("/produto", rotaProduto);
 server.use("/servicos", routerServico);
+server.use("/categoria", rotaCategoriaProd);
+
 server.listen(3308, "localhost", () => {
   console.log("Service running on http://localhost:3308 ");
 });

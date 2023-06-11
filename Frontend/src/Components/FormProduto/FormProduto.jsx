@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button, Col, Row, Stack, } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
+import { HiChevronDoubleRight } from "react-icons/hi";
 
 export default function ProdutoForm(props) {
   const [validated, setValidated] = useState(false);
   const [produto, setProduto] = useState(props.produto);
+
 
   function manipularOnChange(e) {
     const elementForm = e.currentTarget;
@@ -16,7 +18,6 @@ export default function ProdutoForm(props) {
   function manipulaSubmissao(evento) {
     const form = evento.currentTarget;
     if (form.checkValidity()) {
-
       if (!props.modoEdicao) {
         fetch(urlBackend + "/produto", {
           method: "POST",
@@ -34,6 +35,7 @@ export default function ProdutoForm(props) {
               let novaLista = props.listaProdutos;
               novaLista.push(produto)
               props.setProdutos(novaLista)
+              props.buscarProduto()
               props.exibirTabela(true)
             }
             window.alert(dados.mensagem)
@@ -79,7 +81,7 @@ export default function ProdutoForm(props) {
         </Form.Group>
 
         <Row>
-          <Col>
+          {/* <Col>
             <Form.Group>
               <Form.Label>Código</Form.Label>
               <Form.Control
@@ -94,7 +96,7 @@ export default function ProdutoForm(props) {
                 Por favor, informe o codigo do produto!
               </Form.Control.Feedback>
             </Form.Group>
-          </Col>
+          </Col> */}
 
           <Col>
             <Form.Group>
@@ -156,33 +158,35 @@ export default function ProdutoForm(props) {
         </Form.Group>
 
         <Row>
-          <Col>
-            <Form.Group>
-              <Form.Label>Categoria</Form.Label>
-              <Form.Control
-                value={produto.categoria}
-                as="select"
-                id="categoria"
-                onChange={manipularOnChange}
-                required
-              >
-                <option>Selecione a categoria</option>
-                <option>Alimento</option>
-                <option>Roupas</option>
-                <option>Dinheiro</option>
-                <option>Outros</option>
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                Por favor, informe a categoria!
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
+          {
+
+            <Col>
+              <Form.Group>
+                <Form.Label>Categoria</Form.Label>
+                <Form.Control
+                  value={produto.codigoCategoria}
+                  as="select"
+                  id="codigoCategoria"
+                  onChange={manipularOnChange}
+                  required
+                >
+                  <option>Selecione</option>
+                  {props.categorias.map((categoria) => (
+                    
+                    <option value={categoria.codigo}>{categoria.categoria}</option>
+                  ))}
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  Por favor, informe a categoria!
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>}
 
         </Row>
 
         <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
           <Button variant="primary" type="submit">
-          {props.modoEdicao? "Atualizar" :"Cadastrar"}
+            {props.modoEdicao ? "Atualizar" : "Cadastrar"}
           </Button>
           <Button
             variant="danger"

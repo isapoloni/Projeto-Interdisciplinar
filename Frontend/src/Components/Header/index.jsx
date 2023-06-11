@@ -77,6 +77,10 @@ export default function Header() {
                     <hr />
                     <NavLink id="navlink" to="/CadastroServicos">
                       Cadastro Servicos
+                      </NavLink>
+                      <hr/>
+                    <NavLink id="navlink" to="/CadastroCategoria">
+                      Cadastro Categoria
                     </NavLink>
                     <hr />
                   </Nav>
