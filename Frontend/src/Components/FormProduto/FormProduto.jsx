@@ -81,23 +81,7 @@ export default function ProdutoForm(props) {
         </Form.Group>
 
         <Row>
-          {/* <Col>
-            <Form.Group>
-              <Form.Label>Código</Form.Label>
-              <Form.Control
-                value={produto.codigo}
-                type="text"
-                placeholder="Digite o codigo do produto"
-                id="codigo"
-                onChange={manipularOnChange}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Por favor, informe o codigo do produto!
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col> */}
-
+          
           <Col>
             <Form.Group>
               <Form.Label>Nome</Form.Label>
@@ -125,7 +109,7 @@ export default function ProdutoForm(props) {
                 onChange={manipularOnChange}
                 required
               >
-                <option>Selecione</option>
+                <option></option>
                 <option>Peça</option>
                 <option>Unidade</option>
                 <option>Quilograma (kg)</option>
@@ -170,7 +154,7 @@ export default function ProdutoForm(props) {
                   onChange={manipularOnChange}
                   required
                 >
-                  <option>Selecione</option>
+                  <option></option>
                   {props.categorias.map((categoria) => (
                     
                     <option value={categoria.codigo}>{categoria.categoria}</option>
