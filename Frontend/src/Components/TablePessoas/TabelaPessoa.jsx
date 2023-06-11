@@ -11,24 +11,24 @@ import {
 import { RiSearchLine } from "react-icons/ri";
 import { HiPencilAlt, HiTrash } from "react-icons/hi";
 import { urlBackend } from "../../assets/funcoes";
+import { MdModeEdit } from "react-icons/md";
 
 export default function TabelaPessoas(props) {
-  function filtrarPessoas(e){
+  function filtrarPessoas(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend+"/pessoas",{method:"GET"})
-    .then((resposta)=> {
-      return resposta.json()
-    })
-    .then((listaPessoas)=>{
-      if(Array.isArray(listaPessoas)){
-      const resultadoBusca = listaPessoas.filter((pessoa)=> pessoa.nome.toLowerCase().includes(termoBusca.toLowerCase()))
-      props.setPessoas(resultadoBusca);
-      }
-    })
-    
-
+    fetch(urlBackend + "/pessoas", { method: "GET" })
+      .then((resposta) => {
+        return resposta.json();
+      })
+      .then((listaPessoas) => {
+        if (Array.isArray(listaPessoas)) {
+          const resultadoBusca = listaPessoas.filter((pessoa) =>
+            pessoa.nome.toLowerCase().includes(termoBusca.toLowerCase())
+          );
+          props.setPessoas(resultadoBusca);
+        }
+      });
   }
-
 
   return (
     <Container>
@@ -64,9 +64,7 @@ export default function TabelaPessoas(props) {
             <th class="text-center">Telefone</th>
             <th class="text-center">E-Mail</th>
             <th class="text-center">Tipo</th>
-            <th class="text-center">Disponibilidade</th>
             <th class="text-center">Profissão Primária</th>
-            <th class="text-center">Profissão Secundária</th>
             <th class="text-center">Ações</th>
           </tr>
         </thead>
@@ -82,19 +80,25 @@ export default function TabelaPessoas(props) {
                 <td>{pessoa.telefone}</td>
                 <td>{pessoa.email}</td>
                 <td>{pessoa.tipo}</td>
-                <td>{pessoa.disponibilidade}</td>
                 <td>{pessoa.profissao1}</td>
-                <td>{pessoa.profissao2}</td>
                 <td>
-                  <Button onClick={()=>{if (window.confirm("Deseja atualizar os dados da pessoa?")){
-                                                    props.editar(pessoa)
-
-                                                }}}><HiPencilAlt/></Button>{''}
                   <Button
-                    Button onClick={() => {
-                      if (window.confirm("Deseja excluir permanentemente?")){
-                          props.excluir(pessoa)
-
+                    onClick={() => {
+                      if (
+                        window.confirm("Deseja atualizar os dados da pessoa?")
+                      ) {
+                        props.editar(pessoa);
+                      }
+                    }}
+                  >
+                    <MdModeEdit/>
+                  </Button>
+                  {""}
+                  <Button
+                    Button
+                    onClick={() => {
+                      if (window.confirm("Deseja excluir permanentemente?")) {
+                        props.excluir(pessoa);
                       }
                     }}
                   >

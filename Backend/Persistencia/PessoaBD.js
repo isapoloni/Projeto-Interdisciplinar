@@ -6,7 +6,7 @@ export default class PessoaBD {
     if (pessoas instanceof Pessoas) {
       const conect = await Conect();
       const sql =
-        "INSERT INTO pessoas(cpf,nome,nascimento,endereco,cidade,telefone,email,tipo,disponibilidade,profissao1,profissao2) VALUES (?,?,?,?,?,?,?,?,?,?,?) ";
+        "INSERT INTO pessoas(cpf,nome,nascimento,endereco,cidade,telefone,email,tipo,profissao1) VALUES (?,?,?,?,?,?,?,?,?) ";
       const values = [
         pessoas.cpf,
         pessoas.nome,
@@ -16,9 +16,7 @@ export default class PessoaBD {
         pessoas.telefone,
         pessoas.email,
         pessoas.tipo,
-        pessoas.disponibilidade,
-        pessoas.profissao1,
-        pessoas.profissao2      
+        pessoas.profissao1     
       ];
       await conect.query(sql, values);
     }
@@ -28,7 +26,7 @@ export default class PessoaBD {
     if (pessoas instanceof Pessoas) {
       const conect = await Conect();
       const sql =
-        "UPDATE pessoas SET nome=?,nascimento=?,endereco=?,cidade=?,telefone=?,email=?,tipo=?,disponibilidade=?,profissao1=?,profissao2=? WHERE cpf=?";
+        "UPDATE pessoas SET nome=?,nascimento=?,endereco=?,cidade=?,telefone=?,email=?,tipo=?,profissao1=? WHERE cpf=?";
       const values = [
         pessoas.nome,
         pessoas.nascimento,
@@ -37,9 +35,7 @@ export default class PessoaBD {
         pessoas.telefone,
         pessoas.email,
         pessoas.tipo,
-        pessoas.disponibilidade,
         pessoas.profissao1,
-        pessoas.profissao2, 
         pessoas.cpf
       ];
       await conect.query(sql, values);
@@ -69,9 +65,7 @@ export default class PessoaBD {
         row["telefone"],
         row["email"],
         row["tipo"],
-        row["disponibilidade"],
-        row["profissao1"],
-        row["profissao2"]     
+        row["profissao1"]  
         
         
         

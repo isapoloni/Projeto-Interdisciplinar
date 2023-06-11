@@ -61,6 +61,7 @@ export default function TableServico(props) {
             <th className="text-center">Descrição</th>
             <th className="text-center">Custo</th>
             <th className="text-center">Modelo</th>
+            <th className="text-center">Ações</th>
           </tr>
         </thead>
         <tbody>

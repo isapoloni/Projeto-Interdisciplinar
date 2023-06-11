@@ -7,6 +7,23 @@ export default function ServicoForm(props) {
   const [validated, setValidated] = useState(false);
   const [servico, setServico] = useState(props.servico);
 
+  function mascaraMoeda(event) {
+    const onlyDigits = event.target.value
+      .split("")
+      .filter(s => /\d/.test(s))
+      .join("")
+      .padStart(3, "0")
+    const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2)
+    event.target.value = maskCurrency(digitsFloat)
+  }
+  
+  function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency
+    }).format(valor)
+  }
+  
   function manipularOnChange(e) {
     const elementForm = e.currentTarget;
     const id = elementForm.id;
@@ -34,9 +51,8 @@ export default function ServicoForm(props) {
               let novaLista = props.listaServicos;
               novaLista.push(servico);
               props.setServicos(novaLista);
-              props.buscar()
+              props.buscar();
               props.exibirTabela(true);
-              
             }
             window.alert(dados.mensagem);
           })
@@ -75,21 +91,7 @@ export default function ServicoForm(props) {
           <h3>Cadastro de Serviços</h3>
         </Form.Group>
 
-        <Row>
-          {/* <Col xs={1}>
-            <Form.Group>
-              <Form.Label>Código</Form.Label>
-              <Form.Control
-                disabled
-                value={servico.id}
-                type="text"
-                id="id"
-                onChange={manipularOnChange}
-                required
-              />
-            </Form.Group>
-          </Col> */}
-
+        <Row>         
           <Col>
             <Form.Group>
               <Form.Label>Serviço</Form.Label>
@@ -117,7 +119,7 @@ export default function ServicoForm(props) {
                 onChange={manipularOnChange}
                 required
               >
-                <option>Selecione</option>
+                <option></option>
                 <option>Por Hora</option>
                 <option>Por Diária</option>
                 <option>Por Contrato</option>
@@ -149,12 +151,13 @@ export default function ServicoForm(props) {
         <Row>
           <Col xs={5}>
             <Form.Group>
-              <Form.Label>Custo Estimado </Form.Label>
+              <Form.Label>Custo Estimado </Form.Label>              
               <Form.Control
                 value={servico.custo}
                 type="text"
                 placeholder="Insira um custo estimado"
                 id="custo"
+                onInput={mascaraMoeda}
                 onChange={manipularOnChange}
                 required
               />
@@ -174,7 +177,7 @@ export default function ServicoForm(props) {
                 onChange={manipularOnChange}
                 required
               >
-                <option>Selecione</option>
+                <option></option>
                 <option>Remoto</option>
                 <option>Presencial</option>
               </Form.Control>

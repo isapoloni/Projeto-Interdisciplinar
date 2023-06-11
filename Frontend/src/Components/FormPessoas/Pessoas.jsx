@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Col, Row, Stack } from "react-bootstrap";
+import { Form, Button, Col, Row, Stack, FormControl } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
 import { IMaskInput } from "react-imask";
 
@@ -62,11 +62,11 @@ function FormPessoa(props) {
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-5">
           <h3>Cadastro de Pessoas</h3>
         </Form.Group>
         <Row>
-          <Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>Nome</Form.Label>
             <Form.Control
               type="text"
@@ -76,10 +76,10 @@ function FormPessoa(props) {
               id="nome"
               onChange={manipularMudanca}
             />
+            <Form.Control.Feedback type="invalid">
+              Por favor, informe o nome da pessoa!
+            </Form.Control.Feedback>
           </Form.Group>
-          <Form.Control.Feedback type="invalid">
-            Por favor, informe o nome da pessoa!
-          </Form.Control.Feedback>
         </Row>
 
         <Row>
@@ -96,10 +96,11 @@ function FormPessoa(props) {
                 id="cpf"
                 onChange={manipularMudanca}
               />
+
+              <Form.Control.Feedback type="invalid">
+                Por favor, informe um cpf válido!
+              </Form.Control.Feedback>
             </Form.Group>
-            <Form.Control.Feedback type="invalid">
-              Por favor, informe um cpf válido!
-            </Form.Control.Feedback>
           </Col>
 
           <Col>
@@ -113,10 +114,11 @@ function FormPessoa(props) {
                 id="nascimento"
                 onChange={manipularMudanca}
               />
+
+              <Form.Control.Feedback type="invalid">
+                Por favor informe uma data de nasciemento
+              </Form.Control.Feedback>
             </Form.Group>
-            <Form.Control.Feedback type="invalid">
-              Por favor informe uma data de nasciemento
-            </Form.Control.Feedback>
           </Col>
         </Row>
 
@@ -132,10 +134,11 @@ function FormPessoa(props) {
                 id="endereco"
                 onChange={manipularMudanca}
               />
+
+              <Form.Control.Feedback type="invalid">
+                Por favor, informe um endereço!
+              </Form.Control.Feedback>
             </Form.Group>
-            <Form.Control.Feedback type="invalid">
-              Por favor, informe um endereço!
-            </Form.Control.Feedback>
           </Col>
           <Col>
             <Form.Group className="mb-3">
@@ -148,10 +151,11 @@ function FormPessoa(props) {
                 id="cidade"
                 onChange={manipularMudanca}
               />
+
+              <Form.Control.Feedback type="invalid">
+                Por favor, informe uma cidade!
+              </Form.Control.Feedback>
             </Form.Group>
-            <Form.Control.Feedback type="invalid">
-              Por favor, informe uma cidade!
-            </Form.Control.Feedback>
           </Col>
         </Row>
         <Row>
@@ -168,21 +172,26 @@ function FormPessoa(props) {
                 id="telefone"
                 onChange={manipularMudanca}
               />
+
+              <Form.Control.Feedback type="invalid">
+                Por favor, informe um telefone
+              </Form.Control.Feedback>
             </Form.Group>
-            <Form.Control.Feedback type="invalid">
-              Por favor, informe um telefone
-            </Form.Control.Feedback>
           </Col>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>E-Mail</Form.Label>
               <Form.Control
+                required
                 type="email"
                 placeholder="Insira seu e-mail"
                 value={pessoa.email}
                 id="email"
                 onChange={manipularMudanca}
               />
+              <Form.Control.Feedback type="invalid">
+                Por favor, informe um e-mail
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -192,112 +201,37 @@ function FormPessoa(props) {
             <Form.Group className="mb-5">
               <Form.Label>Tipo de Pessoa</Form.Label>
               <Form.Select
+                required
                 aria-label="Tipo de pessoa"
                 value={pessoa.tipo}
                 id="tipo"
                 onChange={manipularMudanca}
               >
-                <option>Escolha uma das opções </option>
+                <option> </option>
                 <option value="Doador">Doador</option>
                 <option value="Prestador">Prestador</option>
                 <option value="Recebedor">Recebedor</option>
                 <option value="Contratante">Contratante</option>
               </Form.Select>
-            </Form.Group>
-            <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
-          </Col>
-          {/* <Col>
-            <Form.Group className="mb-3" id="tipo">
-              <Form.Label>Tipo de Pessoa</Form.Label>   
-              
-                <Form.Check
-                  inline
-                  required
-                  type="checkbox"
-                  label="Doador"
-                  name="doador"
-                  value={pessoa.tipo}
-                id="tipo"
-                  
-                  onChange={
-                    manipularMudanca
-                  }
-                />
-                <Form.Check
-                  inline
-                  type="checkbox"
-                  label="Prestador"
-                  name="prestador"
-                  
-                  onChange={
-                    manipularMudanca
-                  }
-                />
-                <Form.Check
-                  inline
-                  type="checkbox"
-                  label="Recebedor"
-                  name="recebedor"
-                  
-                  onChange={
-                    manipularMudanca
-                  }
-                />
-                <Form.Check
-                  inline
-                  type="checkbox"
-                  label="Contratante"
-                  name="contratante"
-                  
-                  onChange={
-                    manipularMudanca
-                 }
-                />
-                
-            </Form.Group>
-            {* <Form.Control.Feedback type="invalid"></Form.Control.Feedback> *}
-          </Col> */}
-          <Col>
-            <Form.Group className="mb-3">
-              <Form.Label>Disponibilidade</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Digite a disponibilidade de horário caso a pessoa seja um prestador"
-                value={pessoa.disponibilidade}
-                id="disponibilidade"
-                onChange={manipularMudanca}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
 
-        <Row>
+              <Form.Control.Feedback type="invalid">
+                Selecione um tipo de pessoa!
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
           <Col>
             <Form.Group className="mb-3">
-              <Form.Label>Profissão Primária</Form.Label>
+              <Form.Label>Profissão </Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Digite a profissão/área de atuação principal"
+                placeholder="Digite a profissão"
                 value={pessoa.profissao1}
                 id="profissao1"
                 onChange={manipularMudanca}
               />
             </Form.Group>
           </Col>
-          <Col>
-            <Form.Group className="mb-3">
-              <Form.Label>Profissão Secundária</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Digite a profissão/área de interesse ou atuação secundária"
-                value={pessoa.profissao2}
-                id="profissao2"
-                onChange={manipularMudanca}
-              />
-            </Form.Group>
-          </Col>
         </Row>
-
         <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
           <Button variant="primary" type="submit" className="mb-3">
             {props.modoEdicao ? "Atualizar" : "Cadastrar"}

@@ -10,7 +10,7 @@ export default function TelaCadPessoa(props) {
   const [pessoas, setPessoas] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [editPessoa, setEditPessoa] = useState({
-    nome: " ",
+    nome: "",
     cpf: "",
     nascimento: "",
     endereco: "",
@@ -18,10 +18,8 @@ export default function TelaCadPessoa(props) {
     telefone: "",
     email: "",
     tipo: "",
-    disponibilidade: "",
     profissao1: "",
-    profissao2: "",
-  });
+    });
 
   function preparaTela(pessoa) {
     setModoEdicao(true);

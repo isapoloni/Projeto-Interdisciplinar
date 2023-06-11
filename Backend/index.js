@@ -1,10 +1,8 @@
 import express from "express";
 import routerPessoa from "./Router/RouterPessoas.js";
-import rotaProduto from "./Router/rotaProduto.js";
 import rotaCategoriaProd from "./Router/rotaCategoriaProd.js";
 import cors from "cors";
 import rotaProduto from "./Router/rotaProduto.js";
-import routerPessoa from "./Router/RouterPessoas.js";
 import routerServico from "./Router/routerServicos.js";
 
 const server = express();

@@ -9,9 +9,7 @@ export default class Pessoas {
   #telefone;
   #email;
   #tipo;
-  #disponibilidade;
-  #profissao1;
-  #profissao2;     
+  #profissao1;     
 
   constructor(
     cpf,
@@ -22,9 +20,7 @@ export default class Pessoas {
     telefone,
     email,
     tipo,
-    disponibilidade,
-    profissao1,
-    profissao2      
+    profissao1   
   ) {
     this.#cpf = cpf;
     this.#nome = nome;
@@ -34,9 +30,7 @@ export default class Pessoas {
     this.#telefone = telefone;
     this.#email = email;
     this.#tipo = tipo;
-    this.#disponibilidade = disponibilidade;
     this.#profissao1 = profissao1;
-    this.#profissao2 = profissao2;
    
    
   }
@@ -118,21 +112,9 @@ export default class Pessoas {
     this.#profissao1 = newProfissao1;
   }
 
-  get profissao2() {
-    return this.#profissao2;
-  }
+  
 
-  set profissao2(newProfissao2) {
-    this.#profissao2 = newProfissao2;
-  }
-
-  get disponibilidade() {
-    return this.#disponibilidade;
-  }
-
-  set disponibilidade(newDisponibilidade) {
-    this.#disponibilidade = newDisponibilidade;
-  }
+  
 
   toJSON() {
     return {
@@ -144,9 +126,7 @@ export default class Pessoas {
     telefone:this.#telefone,
     email:this.#email,
     tipo:this.#tipo,
-    disponibilidade:this.#disponibilidade ,
-    profissao1:this.#profissao1,
-    profissao2:this.#profissao2
+    profissao1:this.#profissao1
     };
   }
 

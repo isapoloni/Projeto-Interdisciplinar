@@ -38,9 +38,7 @@ export default class PessoasCTRL {
       const telefone = data.telefone;
       const email = data.email;
       const tipo = data.tipo;
-      const disponibilidade = data.disponibilidade;
-      const profissao1 = data.profissao1;
-      const profissao2 = data.profissao2;       
+      const profissao1 = data.profissao1;       
       if (
         cpf &&
         nome &&
@@ -50,9 +48,7 @@ export default class PessoasCTRL {
         telefone &&
         email &&
         tipo &&
-        disponibilidade &&
-        profissao1 &&
-        profissao2      
+        profissao1     
             
       ) {
         const pessoa = new Pessoas(
@@ -64,9 +60,7 @@ export default class PessoasCTRL {
         telefone,
         email,
         tipo,
-        disponibilidade,
-        profissao1,
-        profissao2      
+        profissao1    
         );
         pessoa
           .gravar()
@@ -109,9 +103,7 @@ export default class PessoasCTRL {
       const telefone = data.telefone;
       const email = data.email;
       const tipo = data.tipo;
-      const disponibilidade = data.disponibilidade;
-      const profissao1 = data.profissao1;
-      const profissao2 = data.profissao2;  
+      const profissao1 = data.profissao1;  
       if (
         cpf &&
         nome &&
@@ -121,9 +113,7 @@ export default class PessoasCTRL {
         telefone &&
         email &&
         tipo &&
-        disponibilidade &&
-        profissao1 &&
-        profissao2      
+        profissao1  
       ) {
         const pessoas = new Pessoas(
         cpf,
@@ -134,9 +124,7 @@ export default class PessoasCTRL {
         telefone,
         email,
         tipo,
-        disponibilidade,
-        profissao1,
-        profissao2      
+        profissao1  
         );
         pessoas
           .atualizar()
