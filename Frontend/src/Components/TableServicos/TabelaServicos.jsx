@@ -44,7 +44,7 @@ export default function TableServico(props) {
         <FormControl
           type="text"
           id="termoBusca"
-          placeholder="Buscar"
+          placeholder="Busque serviços aqui"
           onChange={filtrarServicos}
         />
         <InputGroup.Text>
@@ -75,7 +75,7 @@ export default function TableServico(props) {
                 <td>{servico.custo}</td>
                 <td>{servico.modelo}</td>
                 <td>
-                  <Button
+                  <Button variant="outline-primary"
                     onClick={() => {
                       if (
                         window.confirm("Deseja atualizar os dados do serviço?")
@@ -86,7 +86,7 @@ export default function TableServico(props) {
                   >
                     <MdModeEdit />
                   </Button>{" "}
-                  <Button
+                  <Button variant="outline-danger"
                     onClick={() => {
                       if (window.confirm("Deseja excluir?")) {
                         props.deletar(servico);

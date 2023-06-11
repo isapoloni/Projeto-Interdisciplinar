@@ -75,7 +75,7 @@ export default function TableProduto(props) {
                 <td>{produto.descricao}</td>
                 <td>{produto.categoria}</td>
                 <td>
-                  <Button
+                  <Button variant="outline-primary"
                     onClick={() => {
                       if (
                         window.confirm("Deseja atualizar os dados do produto?")
@@ -87,7 +87,7 @@ export default function TableProduto(props) {
                     <MdModeEdit />
                   </Button>
                   {""}
-                  <Button
+                  <Button variant="outline-danger"
                     onClick={() => {
                       if (window.confirm("Deseja excluir?")) {
                         props.deletar(produto);

@@ -6,6 +6,7 @@ import {
   Button,
   InputGroup,
   FormControl,
+  Stack
 } from "react-bootstrap";
 import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
@@ -59,7 +60,7 @@ export default function TableCategoria(props) {
           <tr className="text-center">
             <th className="text-center">Código</th>
             <th className="text-center">Categoria</th>
-            <th className="text-center">Ações</th>
+            <th className="text-center" >Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -68,8 +69,9 @@ export default function TableCategoria(props) {
               <tr key={categoria.codigo}>
                 <td>{categoria.codigo}</td>
                 <td>{categoria.categoria}</td>
-                <td>
-                  <Button
+                <td >
+                  <Stack className="justify-content-center" direction="horizontal" gap={2}>
+                  <Button variant="outline-primary"
                     onClick={() => {
                       if (
                         window.confirm("Deseja atualizar os dados do categoria?")
@@ -81,13 +83,14 @@ export default function TableCategoria(props) {
                     <MdModeEdit />
                   </Button>
                   {""}
-                  <Button
+                  <Button variant="outline-danger"
                     onClick={() => {
                       window.confirm("Não é possivel excluir uma categoria")
                     }}
                   >
                     <HiTrash />
                   </Button>
+                  </Stack>
                 </td>
               </tr>
             );

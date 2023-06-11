@@ -7,11 +7,14 @@ import {
   FormControl,
   InputGroup,
   Table,
+  Row,
+  Col,
 } from "react-bootstrap";
 import { RiSearchLine } from "react-icons/ri";
-import { HiPencilAlt, HiTrash } from "react-icons/hi";
+import { HiTrash } from "react-icons/hi";
 import { urlBackend } from "../../assets/funcoes";
 import { MdModeEdit } from "react-icons/md";
+import Stack from 'react-bootstrap/Stack';
 
 export default function TabelaPessoas(props) {
   function filtrarPessoas(e) {
@@ -82,28 +85,35 @@ export default function TabelaPessoas(props) {
                 <td>{pessoa.tipo}</td>
                 <td>{pessoa.profissao1}</td>
                 <td>
-                  <Button
-                    onClick={() => {
-                      if (
-                        window.confirm("Deseja atualizar os dados da pessoa?")
-                      ) {
-                        props.editar(pessoa);
-                      }
-                    }}
-                  >
-                    <MdModeEdit/>
-                  </Button>
-                  {""}
-                  <Button
-                    Button
-                    onClick={() => {
-                      if (window.confirm("Deseja excluir permanentemente?")) {
-                        props.excluir(pessoa);
-                      }
-                    }}
-                  >
-                    <HiTrash />
-                  </Button>
+                <Stack direction="horizontal" gap={1}>
+                      <Button variant="outline-primary"
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              "Deseja atualizar os dados da pessoa?"
+                            )
+                          ) {
+                            props.editar(pessoa);
+                          }
+                        }}
+                      >
+                        <MdModeEdit />
+                      </Button>
+                    
+                      {""}
+                      <Button variant="outline-danger"
+                        Button
+                        onClick={() => {
+                          if (
+                            window.confirm("Deseja excluir permanentemente?")
+                          ) {
+                            props.excluir(pessoa);
+                          }
+                        }}
+                      >
+                        <HiTrash />
+                      </Button>
+                      </Stack>
                 </td>
               </tr>
             );
