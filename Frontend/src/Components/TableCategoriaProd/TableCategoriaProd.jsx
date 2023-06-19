@@ -83,13 +83,13 @@ export default function TableCategoria(props) {
                     <MdModeEdit />
                   </Button>
                   {""}
-                  <Button variant="outline-danger"
+                  {/* <Button variant="outline-danger"
                     onClick={() => {
                       window.confirm("Não é possivel excluir uma categoria")
                     }}
                   >
                     <HiTrash />
-                  </Button>
+                  </Button> */}
                   </Stack>
                 </td>
               </tr>

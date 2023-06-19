@@ -67,7 +67,7 @@ export default function TabelaPessoas(props) {
             <th class="text-center">Telefone</th>
             <th class="text-center">E-Mail</th>
             <th class="text-center">Tipo</th>
-            <th class="text-center">Profissão Primária</th>
+            <th class="text-center">Profissão</th>
             <th class="text-center">Ações</th>
           </tr>
         </thead>
