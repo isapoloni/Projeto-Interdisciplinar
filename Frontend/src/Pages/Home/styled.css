@@ -1,0 +1,26 @@
+#conteudo {
+  display: flex;
+  justify-content: center;
+}
+
+.h1Conteudo {
+  margin-bottom: 50px;
+  margin-top: 30px;
+}
+
+.item {
+  background-color: #212529;
+  color: aliceblue;
+  padding: 20px;
+  border-radius: 20px;
+  transform: perspective(1000px) rotateX(8deg);
+  box-shadow: -10px 30px 40px rgba(0, 0, 0, 0.7);
+}
+
+.item:hover {
+  background-color: #212529;
+  color: aliceblue;
+  padding: 20px;
+  border-radius: 20px;
+  transform: skew(2deg, 2deg);
+}

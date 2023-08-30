@@ -1,0 +1,17 @@
+.containerLogin {
+  display: flex;
+  justify-content: center;
+  margin-top: 10rem;
+}
+
+.logo {
+  margin-bottom: 20px;
+}
+
+.areaLogin {
+  color: white;
+  background: rgb(33, 37, 41);
+  width: 500px;
+  border-radius: 20px;
+  padding: 80px;
+}
