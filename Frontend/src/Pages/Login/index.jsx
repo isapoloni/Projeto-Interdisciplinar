@@ -2,22 +2,33 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import Logo from "../../assets/logo-igreja.png";
 import { useNavigate } from "react-router-dom";
+import Cookie from 'universal-cookie'
 import "./style.css";
 
 function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleSubmit = () => {
-    if (username === "admin" && password === "123456") {
-      console.log("Autenticação bem-sucedida");
-
-      // Redirecionar para a página inicial
+  const cookies = new Cookie()
+  async function handleSubmit (event){
+    event.preventDefault()
+    const data = await fetch('http://localhost:3308/access', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user:username,
+        password
+      })
+    }).then(data => data.json())
+    
+    if(data.auth === true){
+      cookies.set('authorization', data.token,{
+        path:'/'
+      })
       navigate("/Home");
-    } else {
-      // Autenticação falhou
-      alert("Credenciais inválidas");
+    }else{
+      navigate('/')
+      window.alert('Credencial inválida')
     }
   };
 
@@ -27,7 +38,7 @@ function Login() {
         <div className="logo">
           <img src={Logo} alt="" width={95} height={115} />
         </div>
-        <Form onSubmit={handleSubmit}>
+        <Form id='form'>
           <Form.Group>
             <Form.Label>Login</Form.Label>
             <Form.Control
@@ -48,7 +59,7 @@ function Login() {
             />
           </Form.Group>
           <br />
-          <Button onClick={handleSubmit} variant="primary" type="submit">
+          <Button onClick={handleSubmit} variant="primary" type="submit" form="form">
             Entrar
           </Button>
         </Form>

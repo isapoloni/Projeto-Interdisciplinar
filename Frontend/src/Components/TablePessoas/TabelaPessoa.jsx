@@ -15,11 +15,14 @@ import { HiTrash } from "react-icons/hi";
 import { urlBackend } from "../../assets/funcoes";
 import { MdModeEdit } from "react-icons/md";
 import Stack from 'react-bootstrap/Stack';
-
+import Cookies from "universal-cookie";
 export default function TabelaPessoas(props) {
-  function filtrarPessoas(e) {
+
+  const cookies = new Cookies()
+  const jwtAuth= cookies.get('authorization')
+    function filtrarPessoas(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/pessoas", { method: "GET" })
+    fetch(urlBackend + "/pessoas", { method: "GET" , headers: { "Content-Type": "application/json", "authorization": `${jwtAuth}` } })
       .then((resposta) => {
         return resposta.json();
       })

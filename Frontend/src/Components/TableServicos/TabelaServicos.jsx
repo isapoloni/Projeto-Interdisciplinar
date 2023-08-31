@@ -11,11 +11,14 @@ import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
 import { RiSearchLine } from "react-icons/ri";
 import { urlBackend } from "../../assets/funcoes";
+import Cookies from "universal-cookie";
 
 export default function TableServico(props) {
+  const cookies = new Cookies()
+  const jwtAuth= cookies.get('authorization')
   function filtrarServicos(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/servicos", { method: "GET" })
+    fetch(urlBackend + "/servicos", { method: "GET" , headers: { "Content-Type": "application/json", "authorization": `${jwtAuth}` } })
       .then((resposta) => {
         return resposta.json();
       })

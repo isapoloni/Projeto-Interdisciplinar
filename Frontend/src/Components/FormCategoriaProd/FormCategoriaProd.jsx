@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Form, Button, Col, Row, Stack, } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
-
+import Cookies from "universal-cookie";
 export default function CategoriaForm(props) {
     const [validated, setValidated] = useState(false);
     const [categoria, setCategoria] = useState(props.categoria);
-
+    const cookies = new Cookies()
+    const jwtAuth= cookies.get('authorization')
     function manipularOnChange(e) {
         const elementForm = e.currentTarget;
         const id = elementForm.id;
@@ -21,7 +22,8 @@ export default function CategoriaForm(props) {
                 fetch(urlBackend + "/categoria", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "authorization": `${jwtAuth}`
                     },
                     body: JSON.stringify(categoria)
                 })
@@ -47,7 +49,8 @@ export default function CategoriaForm(props) {
                 fetch(urlBackend + '/categoria', {
                     method: "PUT",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "authorization": `${jwtAuth}`
                     },
                     body: JSON.stringify(categoria)
                 })

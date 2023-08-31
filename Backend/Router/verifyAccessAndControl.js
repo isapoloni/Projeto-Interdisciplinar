@@ -7,7 +7,7 @@ const secret_key = "secret";
 export function verifyJWT(req,res,next){
   const token = req.headers["authorization"]
   jwt.verify(token,secret_key,(err,decoded)=>{
-    if (err) return res.status(401).send("Unauthorized")
+    if (err) return res.status(401).json({auth:false, message: "Credencial inválida"})
     req.userId = decoded.userId
     next()
   })
@@ -19,6 +19,6 @@ verifyAccess.post("/access", (req, res) => {
     const token  = jwt.sign({userId:1},secret_key,{expiresIn:"12h"})
     return res.json({auth:true,token})
   }
-  res.status(401).send("Unauthorized")
+  res.status(401).json({auth:false, message: "Credencial inválida"})
 })
 export { verifyAccess };

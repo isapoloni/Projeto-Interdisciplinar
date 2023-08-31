@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
 import Header from "../../Components/Header";
+import Cookie from "universal-cookie";
 
 export default function TelaCadPessoa(props) {
   const [exibirTabela, setExibirTabela] = useState(true);
@@ -20,7 +21,8 @@ export default function TelaCadPessoa(props) {
     tipo: "",
     profissao1: "",
     });
-
+    const cookies = new Cookie()
+    const jwtAuth= cookies.get('authorization')
   function preparaTela(pessoa) {
     setModoEdicao(true);
     setEditPessoa(pessoa);
@@ -30,7 +32,8 @@ export default function TelaCadPessoa(props) {
   function excluirPessoa(pessoa) {
     fetch(urlBackend + "/pessoas", {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" ,
+              "authorization": `${jwtAuth}`},
       body: JSON.stringify(pessoa),
     }).then((resposta) => {
       window.alert("Pessoa excluída com sucesso!");
@@ -42,6 +45,10 @@ export default function TelaCadPessoa(props) {
   useEffect(() => {
     fetch(urlBackend + "/pessoas", {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
     })
       .then((resposta) => {
         return resposta.json();

@@ -12,13 +12,14 @@ import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
 import { RiSearchLine } from "react-icons/ri";
 import { urlBackend } from "../../assets/funcoes";
-
+import Cookies from "universal-cookie";
 export default function TableCategoria(props) {
   // const [categorias, setCategorias] = useState(props.listaCategorias);
-
+  const cookies = new Cookies()
+  const jwtAuth= cookies.get('authorization')
   function filtrarCategorias(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/categoria", { method: "GET" })
+    fetch(urlBackend + "/categoria", { method: "GET", headers: { "Content-Type": "application/json", "authorization": ` ${jwtAuth}` } })
       .then((resposta) => {
         return resposta.json();
       })
