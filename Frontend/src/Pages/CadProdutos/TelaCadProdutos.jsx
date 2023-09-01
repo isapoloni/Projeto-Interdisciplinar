@@ -6,7 +6,7 @@ import { Container } from "react-bootstrap";
 import ProdutoForm from "../../Components/FormProduto/FormProduto";
 import { urlBackend } from "../../assets/funcoes";
 import Header from "../../Components/Header";
-
+import Cookie from "universal-cookie";
 export default function CadProdutos(props) {
 
   const [exibirTabela, setExibirTabela] = useState(true)
@@ -20,7 +20,8 @@ export default function CadProdutos(props) {
     codigoCategoria: ""
   })
   const [categoria, setCategoria] = useState()
-
+  const cookies = new Cookie()
+  const jwtAuth= cookies.get('authorization')
 
   function prepararTela(produto) {
     setModoEdicao(true);
@@ -33,7 +34,8 @@ export default function CadProdutos(props) {
   function deletarProduto(produto) {
     fetch(urlBackend + '/produto', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' ,
+      "authorization": `${jwtAuth}`},
       body: JSON.stringify(produto)
     }).then((resposta) => {
       window.alert('Produto excluído com sucesso!!!')
@@ -49,7 +51,11 @@ export default function CadProdutos(props) {
 
   function buscarProduto() {
     fetch(urlBackend + '/produto', {
-      method: "GET"
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
     }).then((resposta) => {
       return resposta.json()
     }).then((dados) => {
@@ -64,7 +70,11 @@ export default function CadProdutos(props) {
 
   function buscarCategoria() {
     fetch(urlBackend + '/categoria', {
-      method: "GET"
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
     }).then((resposta) => {
       return resposta.json()
     }).then((dados) => {

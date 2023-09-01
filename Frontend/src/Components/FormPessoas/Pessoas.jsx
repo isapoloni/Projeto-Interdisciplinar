@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Form, Button, Col, Row, Stack, FormControl } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
 import { IMaskInput } from "react-imask";
-
+import Cookie from "universal-cookie";
 function FormPessoa(props) {
   const [validated, setValidated] = useState(false);
   const [pessoa, setPessoa] = useState(props.pessoa);
+  const cookies = new Cookie()
+  const jwtAuth= cookies.get('authorization')
 
   function manipularMudanca(e) {
     const elemForm = e.currentTarget;
@@ -22,6 +24,7 @@ function FormPessoa(props) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "authorization": `${jwtAuth}`
           },
           body: JSON.stringify(pessoa),
         })
@@ -44,7 +47,8 @@ function FormPessoa(props) {
       } else {
         fetch(urlBackend + "/pessoas", {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json" ,
+          "authorization": `${jwtAuth}`},
           body: JSON.stringify(pessoa),
         }).then((resposta) => {
           window.location.reload();

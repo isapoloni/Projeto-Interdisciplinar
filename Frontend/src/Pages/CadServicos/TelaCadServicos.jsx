@@ -6,11 +6,13 @@ import { urlBackend } from "../../assets/funcoes";
 import Header from "../../Components/Header";
 import ServicoForm from "../../Components/FormServicos/FormServicos";
 import TableServico from "../../Components/TableServicos/TabelaServicos";
-
+import Cookies from "universal-cookie";
 export default function CadServicos(props) {
   const [exibirTabela, setExibirTabela] = useState(true);
   const [servicos, setServicos] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
+  const cookies = new Cookies()
+  const jwtAuth= cookies.get('authorization')
   const [servicoEdicao, setServicoEdicao] = useState({
     id: "",
     servico: "",
@@ -29,7 +31,8 @@ export default function CadServicos(props) {
   function deletarServico(servico) {
     fetch(urlBackend + "/servicos", {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",
+              "authorization": `${jwtAuth}`},
       body: JSON.stringify(servico),
     }).then((resposta) => {
       window.alert("Serviço excluído com sucesso!!!");
@@ -45,6 +48,10 @@ export default function CadServicos(props) {
   function buscar(){
     fetch(urlBackend + "/servicos", {
     method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "authorization": `${jwtAuth}`
+    }
   })
     .then((resposta) => {
       return resposta.json();

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Form, Button, Col, Row, Stack, } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
-
+import Cookie from "universal-cookie";
 
 export default function ProdutoForm(props) {
   const [validated, setValidated] = useState(false);
   const [produto, setProduto] = useState(props.produto);
-
+  const cookies = new Cookie()
+  const jwtAuth= cookies.get('authorization')
 
   function manipularOnChange(e) {
     const elementForm = e.currentTarget;
@@ -22,7 +23,8 @@ export default function ProdutoForm(props) {
         fetch(urlBackend + "/produto", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "authorization": `${jwtAuth}`
           },
           body: JSON.stringify(produto)
         })
@@ -48,7 +50,8 @@ export default function ProdutoForm(props) {
         fetch(urlBackend + '/produto', {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "authorization": `${jwtAuth}`
           },
           body: JSON.stringify(produto)
         })

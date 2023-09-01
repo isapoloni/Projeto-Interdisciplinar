@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
 import { IMaskInput } from "react-imask";
-
+import Cookies from "universal-cookie";
 export default function ServicoForm(props) {
   const [validated, setValidated] = useState(false);
   const [servico, setServico] = useState(props.servico);
-
+  const cookies = new Cookies()
+  const jwtAuth= cookies.get('authorization')
   function mascaraMoeda(event) {
     const onlyDigits = event.target.value
       .split("")
@@ -39,6 +40,7 @@ export default function ServicoForm(props) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "authorization": `${jwtAuth}`
           },
           body: JSON.stringify(servico),
         })
@@ -64,6 +66,7 @@ export default function ServicoForm(props) {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "authorization": `${jwtAuth}`
           },
           body: JSON.stringify(servico),
         }).then((resposta) => {
