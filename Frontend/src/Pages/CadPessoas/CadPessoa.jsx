@@ -9,6 +9,7 @@ import Cookie from "universal-cookie";
 export default function TelaCadPessoa(props) {
   const [exibirTabela, setExibirTabela] = useState(true);
   const [pessoas, setPessoas] = useState([]);
+  const [servico,setServico] = useState()
   const [modoEdicao, setModoEdicao] = useState(false);
   const [editPessoa, setEditPessoa] = useState({
     nome: "",
@@ -20,6 +21,7 @@ export default function TelaCadPessoa(props) {
     email: "",
     tipo: "",
     profissao1: "",
+    servico:"",
     });
     const cookies = new Cookie()
     const jwtAuth= cookies.get('authorization')
@@ -27,6 +29,21 @@ export default function TelaCadPessoa(props) {
     setModoEdicao(true);
     setEditPessoa(pessoa);
     setExibirTabela(false);
+  }
+  function buscarServico() {
+    fetch(urlBackend + '/servicos', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
+    }).then((resposta) => {
+      return resposta.json()
+    }).then((dados) => {
+      if (Array.isArray(dados)) {
+        setServico(dados)
+      }
+    });
   }
 
   function excluirPessoa(pessoa) {
@@ -51,6 +68,7 @@ export default function TelaCadPessoa(props) {
       }
     })
       .then((resposta) => {
+        buscarServico()
         return resposta.json();
       })
       .then((dados) => {
@@ -79,6 +97,7 @@ export default function TelaCadPessoa(props) {
             exibirTabela={setExibirTabela}
             modoEdicao={modoEdicao}
             setModoEdicao={setModoEdicao}
+            buscarServico={servico}
             editar={preparaTela}
             pessoa={editPessoa}
           />
