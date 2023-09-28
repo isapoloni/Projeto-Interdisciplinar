@@ -238,33 +238,7 @@ function FormPessoa(props) {
           </Col>
         </Row>
        
-        {
-         // Here
-         pessoa.tipo === 'Prestador' ? (
-          <Col>
-          <Form.Group>
-            <Form.Label>Serviço</Form.Label>
-            <Form.Control
-              value={pessoa.servico}//pessoa.servico
-              as="select"
-              id="codigoCategoria"
-              onChange={manipularMudanca}
-              required
-            >
-              <option></option>
-              {props.buscarServico.map((servico) => (
-                
-                <option key={servico.id} value={servico.id}>{servico.servico}</option>
-              ))}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              Por favor, informe o serviço!
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-        ) : null
-        //here
-        }
+  
         <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
           <Button variant="primary" type="submit" className="mb-3">
             {props.modoEdicao ? "Atualizar" : "Cadastrar"}

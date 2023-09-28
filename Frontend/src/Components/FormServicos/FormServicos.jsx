@@ -134,7 +134,37 @@ export default function ServicoForm(props) {
             </Form.Group>
           </Col>
         </Row>
-
+        <Row>
+          {
+          //Here
+          }
+        <Col>
+          <Form.Group>
+            <Form.Label>Cpf da pessoa</Form.Label>
+            <Form.Control
+              value={servico.cpfPessoa}
+              as="select"
+              id="cpfPessoa"
+              onChange={manipularOnChange}
+              required
+            >
+              <option></option>
+              
+               {props.cpfPessoas.map((pessoa) => (
+                
+                 <option key={pessoa.cpf} value={pessoa.cpf}>{`${pessoa.nome} - ${pessoa.cpf}`}</option>
+               ))} 
+              
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">
+              Por favor, informe o cpf da pessoa!
+            </Form.Control.Feedback>
+          </Form.Group>
+      </Col>
+          {
+          //Here
+          }
+        </Row>
         <Form.Group>
           <Form.Label>Descrição</Form.Label>
           <Form.Control

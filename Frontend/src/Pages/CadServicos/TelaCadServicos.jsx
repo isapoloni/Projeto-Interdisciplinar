@@ -11,11 +11,13 @@ export default function CadServicos(props) {
   const [exibirTabela, setExibirTabela] = useState(true);
   const [servicos, setServicos] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
+  const [cpfPessoas,setCpfPessoas] = useState()
   const cookies = new Cookies()
   const jwtAuth= cookies.get('authorization')
   const [servicoEdicao, setServicoEdicao] = useState({
     id: "",
     servico: "",
+    cpfPessoa:"",
     jornada: "",
     descricao: "",
     custo: "",
@@ -40,9 +42,24 @@ export default function CadServicos(props) {
       return resposta.json();
     });
   }
-
+  function buscarCpfPessoas() {
+    fetch(urlBackend + '/pessoas', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
+    }).then((resposta) => {
+      return resposta.json()
+    }).then((dados) => {
+      if (Array.isArray(dados)) {
+        setCpfPessoas(dados)
+      }
+    });
+  }
   
     useEffect(() => {
+    buscarCpfPessoas()
     buscar()
   }, []);
   function buscar(){
@@ -86,6 +103,7 @@ export default function CadServicos(props) {
             editar={prepararTela}
             setModoEdicao={setModoEdicao}
             servico={servicoEdicao}
+            cpfPessoas={cpfPessoas}
             buscar={buscar}
           />
         )}

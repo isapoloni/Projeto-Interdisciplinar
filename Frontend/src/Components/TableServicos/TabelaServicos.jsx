@@ -59,6 +59,7 @@ export default function TableServico(props) {
         <thead>
           <tr className="text-center">
             <th className="text-center">Código</th>
+            <th className="text-center">Pessoa</th>
             <th className="text-center">Serviço</th>
             <th className="text-center">Jornada</th>
             <th className="text-center">Descrição</th>
@@ -72,6 +73,7 @@ export default function TableServico(props) {
             return (
               <tr key={servico.id}>
                 <td>{servico.id}</td>
+                <td>{servico.cpfPessoa}</td>
                 <td>{servico.servico}</td>
                 <td>{servico.jornada}</td>
                 <td>{servico.descricao}</td>
