@@ -1,7 +1,6 @@
 import Servico from "../Modelo/Servicos.js";
 
 export default class ServicosCTRL {
-
   consultar(request, response) {
     response.type("application/json");
 
@@ -30,25 +29,19 @@ export default class ServicosCTRL {
     response.type("application/json");
     if (request.method === "POST" && request.is("application/json")) {
       const data = request.body;
-         
+
       const servico = data.servico;
+      const cpfPessoa = data.cpfPessoa;
       const jornada = data.jornada;
       const descricao = data.descricao;
       const custo = data.custo;
       const modelo = data.modelo;
-             
-      if (
-        
-        servico &&
-        jornada &&
-        descricao &&
-        custo &&
-        modelo 
-           
-      ) {
+
+      if (servico && jornada && cpfPessoa && descricao && custo && modelo) {
         const servicos = new Servico(
           0,
           servico,
+          cpfPessoa,
           jornada,
           descricao,
           custo,
@@ -86,24 +79,27 @@ export default class ServicosCTRL {
     response.type("application/json");
     if (request.method === "PUT" && request.is("application/json")) {
       const data = request.body;
-      const id = data.id;      
+      const id = data.id;
       const servico = data.servico;
+      const cpfPessoa = data.cpfPessoa;
       const jornada = data.jornada;
       const descricao = data.descricao;
       const custo = data.custo;
       const modelo = data.modelo;
-        
+
       if (
         id &&
         servico &&
+        cpfPessoa &&
         jornada &&
         descricao &&
         custo &&
-        modelo 
+        modelo
       ) {
         const servicos = new Servico(
           id,
           servico,
+          cpfPessoa,
           jornada,
           descricao,
           custo,

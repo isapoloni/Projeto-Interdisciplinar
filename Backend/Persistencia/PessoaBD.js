@@ -16,7 +16,7 @@ export default class PessoaBD {
         pessoas.telefone,
         pessoas.email,
         pessoas.tipo,
-        pessoas.profissao1     
+        pessoas.profissao1,
       ];
       await conect.query(sql, values);
     }
@@ -36,7 +36,7 @@ export default class PessoaBD {
         pessoas.email,
         pessoas.tipo,
         pessoas.profissao1,
-        pessoas.cpf
+        pessoas.cpf,
       ];
       await conect.query(sql, values);
     }
@@ -65,10 +65,7 @@ export default class PessoaBD {
         row["telefone"],
         row["email"],
         row["tipo"],
-        row["profissao1"]  
-        
-        
-        
+        row["profissao1"]
       );
       listPessoas.push(pessoas);
     }

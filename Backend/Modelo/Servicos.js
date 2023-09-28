@@ -3,27 +3,20 @@ import ServicoBD from "../Persistencia/ServicoBD.js";
 export default class Servico {
   #id;
   #servico;
+  #cpfPessoa;
   #jornada;
   #descricao;
   #custo;
   #modelo;
-     
 
-  constructor(
-    id,
-    servico,
-    jornada,
-    descricao,
-    custo,
-    modelo
-  ) {
+  constructor(id, servico, cpfPessoa, jornada, descricao, custo, modelo) {
     this.#id = id;
     this.#servico = servico;
+    this.#cpfPessoa = cpfPessoa;
     this.#jornada = jornada;
     this.#descricao = descricao;
     this.#custo = custo;
     this.#modelo = modelo;
-    
   }
 
   get id() {
@@ -34,14 +27,20 @@ export default class Servico {
     this.#id = newid;
   }
 
-  
-
   get servico() {
     return this.#servico;
   }
 
   set servico(newServico) {
     this.#servico = newServico;
+  }
+
+  get cpfPessoa() {
+    return this.#cpfPessoa;
+  }
+
+  set cpfPessoa(newcpfPessoa) {
+    this.#cpfPessoa = newcpfPessoa;
   }
 
   get modelo() {
@@ -76,16 +75,15 @@ export default class Servico {
     this.#custo = newCusto;
   }
 
- 
-
   toJSON() {
     return {
       id: this.#id,
       servico: this.#servico,
+      cpfPessoa: this.#cpfPessoa,
       jornada: this.#jornada,
       descricao: this.#descricao,
       custo: this.#custo,
-      modelo: this.#modelo
+      modelo: this.#modelo,
     };
   }
 
