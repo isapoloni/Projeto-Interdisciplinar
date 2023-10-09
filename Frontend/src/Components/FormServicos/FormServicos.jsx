@@ -179,8 +179,8 @@ export default function ServicoForm(props) {
               
                {props.cpfPessoas.map((pessoa) => (
                 
-                 <option key={pessoa.cpf} value={ 
-                 `${pessoa.nome}` 
+                 <option key={pessoa.cpf} value={ props.modoEdicao?
+                 `${pessoa.nome}` :`${pessoa.cpf}`
                   
                 }>{`${pessoa.nome} - ${pessoa.cpf}`}</option>
                ))} 
