@@ -1,15 +1,15 @@
-import Servico from "../Modelo/Servicos.js";
+import HistServModel from "../Modelo/HistServModel.js";
 
-export default class ServicosCTRL {
+export default class HistServControl {
   consultar(request, response) {
     response.type("application/json");
 
     if (request.method === "GET") {
-      const servicos = new Servico();
-      servicos
+      const histServModels = new HistServModel();
+      histServModels
         .consultar("")
-        .then((servicos) => {
-          response.status(200).json(servicos);
+        .then((histServModels) => {
+          response.status(200).json(histServModels);
         })
         .catch((erro) => {
           response.status(500).json({
@@ -30,22 +30,19 @@ export default class ServicosCTRL {
     if (request.method === "POST" && request.is("application/json")) {
       const data = request.body;
 
+      const prestador = data.prestador;
       const servico = data.servico;
-      const jornada = data.jornada;
-      const descricao = data.descricao;
-      const custo = data.custo;
-      const modelo = data.modelo;
+      const serviceData = data.serviceData;
+      const valor = data.valor;
 
-      if (servico && jornada && descricao && custo && modelo) {
-        const servicos = new Servico(
-          0,
+      if (prestador && servico && serviceData && valor) {
+        const histServModels = new HistServModel(
+          prestador,
           servico,
-          jornada,
-          descricao,
-          custo,
-          modelo
+          serviceData,
+          valor
         );
-        servicos
+        histServModels
           .gravar()
           .then(() => {
             response.status(200).json({
@@ -78,22 +75,20 @@ export default class ServicosCTRL {
     if (request.method === "PUT" && request.is("application/json")) {
       const data = request.body;
       const id = data.id;
+      const prestador = data.prestador;
       const servico = data.servico;
-      const jornada = data.jornada;
-      const descricao = data.descricao;
-      const custo = data.custo;
-      const modelo = data.modelo;
+      const serviceData = data.serviceData;
+      const valor = data.valor;
 
-      if (id && servico && jornada && descricao && custo && modelo) {
-        const servicos = new Servico(
+      if (id && prestador && servico && serviceData && valor) {
+        const histServModels = new HistServModel(
           id,
+          prestador,
           servico,
-          jornada,
-          descricao,
-          custo,
-          modelo
+          serviceData,
+          valor
         );
-        servicos
+        histServModels
           .atualizar()
           .then(() => {
             response.status(200).json({
@@ -127,8 +122,8 @@ export default class ServicosCTRL {
       const data = request.body;
       const id = data.id;
       if (id) {
-        const servicos = new Servico(id);
-        servicos
+        const histServModels = new HistServModel(id);
+        histServModels
           .excluir()
           .then(() => {
             response.status(200).json({

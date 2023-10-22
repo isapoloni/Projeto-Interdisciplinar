@@ -4,6 +4,7 @@ import rotaCategoriaProd from "./Router/rotaCategoriaProd.js";
 import cors from "cors";
 import rotaProduto from "./Router/rotaProduto.js";
 import routerServico from "./Router/routerServicos.js";
+import routerHistServ from "./Router/RouterPessoas.js";
 import { verifyAccess, verifyJWT } from "./Router/verifyAccessAndControl.js";
 const server = express();
 server.use(cors({ origin: "*" }));
@@ -14,6 +15,7 @@ server.use("/pessoas", routerPessoa);
 server.use("/produto", rotaProduto);
 server.use("/servicos", routerServico);
 server.use("/categoria", rotaCategoriaProd);
+server.use("/histServ", routerHistServ);
 server.use(verifyAccess);
 
 server.listen(3308, "localhost", () => {
