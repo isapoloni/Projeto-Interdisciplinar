@@ -26,17 +26,20 @@ export default class HistServControl {
   }
 
   gravarC(request, response) {
+    console.log("Requisição recebida"); // Mensagem de depuração
     response.type("application/json");
     if (request.method === "POST" && request.is("application/json")) {
+      console.log("Requisição é um POST e é JSON"); // Mensagem de depuração
       const data = request.body;
-
       const prestador = data.prestador;
       const servico = data.servico;
       const serviceData = data.serviceData;
       const valor = data.valor;
 
       if (prestador && servico && serviceData && valor) {
+        console.log("Todos os campos estão preenchidos"); // Mensagem de depuração
         const histServModels = new HistServModel(
+          0,
           prestador,
           servico,
           serviceData,
@@ -45,24 +48,28 @@ export default class HistServControl {
         histServModels
           .gravarM()
           .then(() => {
+            console.log("Registro salvo com sucesso"); // Mensagem de depuração
             response.status(200).json({
               status: true,
               mensagem: "Serviço salvo com sucesso!",
             });
           })
           .catch((erro) => {
+            console.log("Erro ao salvar o registro:", erro); // Mensagem de depuração
             response.status(500).json({
               status: false,
               mensagem: erro.message,
             });
           });
       } else {
+        console.log("Campos obrigatórios não preenchidos"); // Mensagem de depuração
         response.status(400).json({
           status: false,
           mensagem: "Insira todos os dados",
         });
       }
     } else {
+      console.log("Método não permitido, consulte a API"); // Mensagem de depuração
       response.status(400).json({
         status: false,
         mensagem: "Método não permitido, consulte a API",

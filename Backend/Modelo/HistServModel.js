@@ -8,31 +8,31 @@ export default class HistServModel {
   #valor;
 
   constructor(id, prestador, servico, serviceData, valor) {
-    this.id = id;
-    this.prestador = prestador;
-    this.servico = servico;
-    this.serviceData = serviceData;
-    this.valor = valor;
+    this.#id = id;
+    this.#prestador = prestador;
+    this.#servico = servico;
+    this.#serviceData = serviceData;
+    this.#valor = valor;
   }
 
   get id() {
-    return this.id;
+    return this.#id;
   }
 
   get prestador() {
-    return this.prestador;
+    return this.#prestador;
   }
 
   get servico() {
-    return this.servico;
+    return this.#servico;
   }
 
   get serviceData() {
-    return this.serviceData;
+    return this.#serviceData;
   }
 
   get valor() {
-    return this.valor;
+    return this.#valor;
   }
 
   set id(idNew) {
