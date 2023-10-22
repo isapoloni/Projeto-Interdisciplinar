@@ -14,11 +14,17 @@ import { urlBackend } from "../../assets/funcoes";
 import Cookies from "universal-cookie";
 
 export default function TableServico(props) {
-  const cookies = new Cookies()
-  const jwtAuth= cookies.get('authorization')
+  const cookies = new Cookies();
+  const jwtAuth = cookies.get("authorization");
   function filtrarServicos(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/servicos", { method: "GET" , headers: { "Content-Type": "application/json", "authorization": `${jwtAuth}` } })
+    fetch(urlBackend + "/servicos", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${jwtAuth}`,
+      },
+    })
       .then((resposta) => {
         return resposta.json();
       })
@@ -59,7 +65,7 @@ export default function TableServico(props) {
         <thead>
           <tr className="text-center">
             <th className="text-center">Código</th>
-            <th className="text-center">Pessoa</th>
+            {/* <th className="text-center">Pessoa</th> */}
             <th className="text-center">Serviço</th>
             <th className="text-center">Jornada</th>
             <th className="text-center">Descrição</th>
@@ -73,14 +79,15 @@ export default function TableServico(props) {
             return (
               <tr key={servico.id}>
                 <td>{servico.id}</td>
-                <td>{servico.cpfPessoa}</td>
+                {/* <td>{servico.cpfPessoa}</td> */}
                 <td>{servico.servico}</td>
                 <td>{servico.jornada}</td>
                 <td>{servico.descricao}</td>
                 <td>{servico.custo}</td>
                 <td>{servico.modelo}</td>
                 <td>
-                  <Button variant="outline-primary"
+                  <Button
+                    variant="outline-primary"
                     onClick={() => {
                       if (
                         window.confirm("Deseja atualizar os dados do serviço?")
@@ -91,7 +98,8 @@ export default function TableServico(props) {
                   >
                     <MdModeEdit />
                   </Button>{" "}
-                  <Button variant="outline-danger"
+                  <Button
+                    variant="outline-danger"
                     onClick={() => {
                       if (window.confirm("Deseja excluir?")) {
                         props.deletar(servico);

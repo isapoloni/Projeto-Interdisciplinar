@@ -50,7 +50,7 @@ export default class ServicoBD {
     const conect = await Conect();
     // const sql =
     //   "SELECT s.id, s.servico, c.nome AS cpfPessoa, s.jornada, s.descricao, s.custo, s.modelo FROM Servicos s INNER JOIN Pessoas c ON s.cpfPessoa = c.cpf";
-    const sql = "select * from servicos like ?";
+    const sql = "select * from servicos";
 
     const values = ["%" + term + "%"];
     const [rows] = await conect.query(sql, values);

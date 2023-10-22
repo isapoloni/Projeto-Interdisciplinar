@@ -5,59 +5,59 @@ import { IMaskInput } from "react-imask";
 import Cookies from "universal-cookie";
 export default function ServicoForm(props) {
   // console.log(props)
-  console.log('props' , props)
+  console.log("props", props);
 
   const [validated, setValidated] = useState(false);
   const [servico, setServico] = useState(props.servico);
-  console.log('serv' ,servico)
-  const cookies = new Cookies()
-  const jwtAuth= cookies.get('authorization')
-  const [cpfSelecionado, setCpfSelecionado] = useState('');
-  console.log('cpf' , cpfSelecionado)
+  console.log("serv", servico);
+  const cookies = new Cookies();
+  const jwtAuth = cookies.get("authorization");
+  // const [cpfSelecionado, setCpfSelecionado] = useState('');
+  // console.log('cpf' , cpfSelecionado)
   function mascaraMoeda(event) {
     const onlyDigits = event.target.value
       .split("")
-      .filter(s => /\d/.test(s))
+      .filter((s) => /\d/.test(s))
       .join("")
-      .padStart(3, "0")
-    const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2)
-    event.target.value = maskCurrency(digitsFloat)
+      .padStart(3, "0");
+    const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2);
+    event.target.value = maskCurrency(digitsFloat);
   }
-  
-  function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
+
+  function maskCurrency(valor, locale = "pt-BR", currency = "BRL") {
     return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency
-    }).format(valor)
+      style: "currency",
+      currency,
+    }).format(valor);
   }
-  
+
   function manipularOnChange(e) {
     const elementForm = e.currentTarget;
     const id = elementForm.id;
     const valor = elementForm.value;
     setServico({ ...servico, [id]: valor });
   }
-  useEffect(() => {
-    if (props.modoEdicao) {
-      fetch(urlBackend + "/pessoas", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "authorization": `${jwtAuth}`
-        },
-      }).then((resposta) => {
-        return resposta.json()
-      }).then((dados) => {
-        if (Array.isArray(dados)) {
-          dados.filter((pessoa) => {
-            if (pessoa.nome === servico.cpfPessoa) {
-              setCpfSelecionado(pessoa.cpf)
-            }
-          })
-        }
-      })
-    }
-  })
+  // useEffect(() => {
+  //   if (props.modoEdicao) {
+  //     fetch(urlBackend + "/pessoas", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "authorization": `${jwtAuth}`
+  //       },
+  //     }).then((resposta) => {
+  //       return resposta.json()
+  //     }).then((dados) => {
+  //       if (Array.isArray(dados)) {
+  //         dados.filter((pessoa) => {
+  //           if (pessoa.nome === servico.cpfPessoa) {
+  //             setCpfSelecionado(pessoa.cpf)
+  //           }
+  //         })
+  //       }
+  //     })
+  //   }
+  // })
   function manipulaSubmissao(evento) {
     const form = evento.currentTarget;
     if (form.checkValidity()) {
@@ -66,7 +66,7 @@ export default function ServicoForm(props) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "authorization": `${jwtAuth}`
+            authorization: `${jwtAuth}`,
           },
           body: JSON.stringify(servico),
         })
@@ -92,10 +92,9 @@ export default function ServicoForm(props) {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            "authorization": `${jwtAuth}`
+            authorization: `${jwtAuth}`,
           },
-          body: JSON.stringify({...servico
-            ,cpfPessoa:cpfSelecionado}),
+          body: JSON.stringify({ ...servico }),
         }).then((resposta) => {
           window.location.reload();
           return resposta.json();
@@ -121,7 +120,7 @@ export default function ServicoForm(props) {
           <h3>Cadastro de Serviços</h3>
         </Form.Group>
 
-        <Row>         
+        <Row>
           <Col>
             <Form.Group>
               <Form.Label>Serviço</Form.Label>
@@ -143,17 +142,17 @@ export default function ServicoForm(props) {
             <Form.Group>
               <Form.Label>Jornada de Trabalho</Form.Label>
               <Form.Control
-                value={ servico.jornada}
+                value={servico.jornada}
                 as="select"
                 id="jornada"
                 onChange={manipularOnChange}
                 required
               >
                 <option></option>
-                <option value='Por hora'>Por hora</option>
-                <option value='Por Diária'>Por Diária</option>
-                <option value='Por Contrato'>Por Contrato</option>
-                <option value='À Combinar'>À Combinar</option>
+                <option value="Por hora">Por hora</option>
+                <option value="Por Diária">Por Diária</option>
+                <option value="Por Contrato">Por Contrato</option>
+                <option value="À Combinar">À Combinar</option>
               </Form.Control>
               <Form.Control.Feedback type="invalid">
                 Por favor, Selecione uma opção!
@@ -161,7 +160,7 @@ export default function ServicoForm(props) {
             </Form.Group>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           {
           //Here
           }
@@ -194,7 +193,7 @@ export default function ServicoForm(props) {
           {
           //Here
           }
-        </Row>
+        </Row> */}
         <Form.Group>
           <Form.Label>Descrição</Form.Label>
           <Form.Control
@@ -214,7 +213,7 @@ export default function ServicoForm(props) {
         <Row>
           <Col xs={5}>
             <Form.Group>
-              <Form.Label>Custo Estimado </Form.Label>              
+              <Form.Label>Custo Estimado </Form.Label>
               <Form.Control
                 value={servico.custo}
                 type="text"
