@@ -7,7 +7,7 @@ export default async function conectar() {
   const conexao = await mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "root",
+    password: "",
     database: "backend",
   });
   global.conexao = conexao;

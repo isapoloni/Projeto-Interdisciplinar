@@ -5,6 +5,7 @@ import CadProdutos from "./Pages/CadProdutos/TelaCadProdutos";
 import TelaCadPessoa from "./Pages/CadPessoas/CadPessoa";
 import CadServicos from "./Pages/CadServicos/TelaCadServicos";
 import CadCategoria from "./Pages/CadCategoria/TelaCadCategoria";
+import CadHistServicos from "./Pages/CadHistServicos/TelaHistServicos";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/CadastroPessoas" element={<TelaCadPessoa />} />
           <Route path="/CadastroServicos" element={<CadServicos />} />
           <Route path="/CadastroCategoria" element={<CadCategoria/>} />
+          <Route path="/HistoricoServicos" element={<CadHistServicos/>} />
         </Routes>
       </BrowserRouter>
     </>
