@@ -7,7 +7,7 @@ const histServControl = new HistServControl();
 routerHistServ
   .get("/", histServControl.consultar)
   .put("/", histServControl.atualizar)
-  .post("/", histServControl.gravar)
+  .post("/", histServControl.gravarC)
   .delete("/", histServControl.excluir);
 
 export default routerHistServ;

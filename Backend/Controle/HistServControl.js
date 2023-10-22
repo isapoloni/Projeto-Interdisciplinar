@@ -25,7 +25,7 @@ export default class HistServControl {
     }
   }
 
-  gravar(request, response) {
+  gravarC(request, response) {
     response.type("application/json");
     if (request.method === "POST" && request.is("application/json")) {
       const data = request.body;
@@ -43,7 +43,7 @@ export default class HistServControl {
           valor
         );
         histServModels
-          .gravar()
+          .gravarM()
           .then(() => {
             response.status(200).json({
               status: true,

@@ -2,7 +2,7 @@ import HistServModel from "../Modelo/HistServModel.js";
 import Conect from "./Conexao.js";
 
 export default class HistServBD {
-  async gravar(histServ) {
+  async gravarBD(histServ) {
     if (histServ instanceof HistServModel) {
       const conect = await Conect();
       const sql =

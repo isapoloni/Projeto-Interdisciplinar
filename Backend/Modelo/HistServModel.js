@@ -65,9 +65,9 @@ export default class HistServModel {
     };
   }
 
-  async gravar() {
-    const histServ = new HistServBD();
-    await histServ.gravar(this);
+  async gravarM() {
+    const histServBD = new HistServBD();
+    await histServBD.gravarBD(this);
   }
 
   async excluir() {
