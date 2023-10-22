@@ -152,7 +152,7 @@ export default function ServicoForm(props) {
                 <option value="Por hora">Por hora</option>
                 <option value="Por Diária">Por Diária</option>
                 <option value="Por Contrato">Por Contrato</option>
-                <option value="À Combinar">À Combinar</option>
+                <option value="A Combinar">A Combinar</option>
               </Form.Control>
               <Form.Control.Feedback type="invalid">
                 Por favor, Selecione uma opção!
