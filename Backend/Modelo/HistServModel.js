@@ -7,9 +7,9 @@ export default class HistServModel {
   #serviceData;
   #valor;
 
-  constructor(id, prestado, servico, serviceData, valor) {
+  constructor(id, prestador, servico, serviceData, valor) {
     this.id = id;
-    this.prestado = prestado;
+    this.prestador = prestador;
     this.servico = servico;
     this.serviceData = serviceData;
     this.valor = valor;
@@ -19,8 +19,8 @@ export default class HistServModel {
     return this.id;
   }
 
-  get prestado() {
-    return this.prestado;
+  get prestador() {
+    return this.prestador;
   }
 
   get servico() {
@@ -35,24 +35,24 @@ export default class HistServModel {
     return this.valor;
   }
 
-  set id(id) {
-    this.id = id;
+  set id(idNew) {
+    this.#id = idNew;
   }
 
-  set prestado(prestado) {
-    this.prestado = prestado;
+  set prestador(prestadorNew) {
+    this.#prestador = prestadorNew;
   }
 
-  set servico(servico) {
-    this.servico = servico;
+  set servico(servicoNew) {
+    this.#servico = servicoNew;
   }
 
-  set serviceData(serviceData) {
-    this.serviceData = serviceData;
+  set serviceData(serviceDataNew) {
+    this.#serviceData = serviceDataNew;
   }
 
-  set valor(valor) {
-    this.valor = valor;
+  set valor(valorNew) {
+    this.#valor = valorNew;
   }
 
   toJSON() {

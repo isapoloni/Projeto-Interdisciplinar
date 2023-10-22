@@ -6,7 +6,7 @@ export default class HistServBD {
     if (histServ instanceof HistServModel) {
       const conect = await Conect();
       const sql =
-        "INSERT INTO TbHistServ (prestador, servico, serviceData, valor) VALUES (?,?,?,?) ";
+        "INSERT INTO tbhistserv (prestador, servico, serviceData, valor) VALUES (?,?,?,?) ";
       const values = [
         histServ.prestador,
         histServ.servico,
@@ -22,7 +22,7 @@ export default class HistServBD {
     if (histServ instanceof HistServModel) {
       const conect = await Conect();
       const sql =
-        "UPDATE TbHistServ SET servico=?, prestador=?, serviceData=?, valor=? WHERE id=?";
+        "UPDATE tbhistserv SET servico=?, prestador=?, serviceData=?, valor=? WHERE id=?";
       const values = [
         histServ.prestador,
         histServ.servico,
@@ -37,7 +37,7 @@ export default class HistServBD {
   async excluir(histServ) {
     if (histServ instanceof HistServModel) {
       const conect = await Conect();
-      const sql = "DELETE FROM TbHistServ WHERE id=?";
+      const sql = "DELETE FROM tbhistserv WHERE id=?";
       const values = [histServ.id];
       await conect.query(sql, values);
     }
@@ -46,7 +46,7 @@ export default class HistServBD {
   async consultar(term) {
     const conect = await Conect();
     const sql =
-      "SELECT h.id, s.servico AS servico, c.nome AS prestador, h.jornada, h.serviceData, h.valor FROM TbHistServ h INNER JOIN Pessoas c ON h.prestador = c.cpf INNER JOIN Servico s ON h.servico = s.id";
+      "SELECT h.id, s.servico AS servico, c.nome AS prestador, h.serviceData, h.valor FROM tbhistserv h INNER JOIN Pessoas c ON h.prestador = c.cpf INNER JOIN Servico s ON h.servico = s.id";
     // const sql = "select * from TbHistServ like ?";
 
     const values = ["%" + term + "%"];
@@ -55,8 +55,8 @@ export default class HistServBD {
     for (const row of rows) {
       const histServ = new HistServModel(
         row["id"],
-        row["prestador"],
         row["servico"],
+        row["prestador"],
         row["serviceData"],
         row["valor"]
       );

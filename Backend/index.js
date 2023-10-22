@@ -4,7 +4,7 @@ import rotaCategoriaProd from "./Router/rotaCategoriaProd.js";
 import cors from "cors";
 import rotaProduto from "./Router/rotaProduto.js";
 import routerServico from "./Router/routerServicos.js";
-import routerHistServ from "./Router/RouterPessoas.js";
+import routerHistServ from "./Router/RouterHistServ.js";
 import { verifyAccess, verifyJWT } from "./Router/verifyAccessAndControl.js";
 const server = express();
 server.use(cors({ origin: "*" }));
