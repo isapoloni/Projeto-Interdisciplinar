@@ -1,5 +1,5 @@
 import conectar from "./Conexao.js";
-import Produto from "../Modelo/ProdutoPid.js";
+import Produto from "../Modelo/Produto.js";
 
 
 export default class ProdutoBDPid {
@@ -53,11 +53,11 @@ export default class ProdutoBDPid {
         }
     }
 
-    async consutlar(termo) {
+    async consultar(termo) {
         // if (produto instanceof Produto) {
         const conexao = await conectar();
 
-        const sql = "SELECT p.*, cp.codigo AS codigoCategoria, cp.categoria FROM produto p INNER JOIN categoria_produto cp on cp.codigo = p.categoria WHERE p.nome LIKE ?";
+        const sql = "SELECT p.*, cp.codigo AS codigoCategoria, cp.categoria FROM produto p INNER JOIN categoriaProduto cp on cp.codigo = p.categoria WHERE p.nome LIKE ?";
 
         const valores = ['%' + termo + '%'];
 

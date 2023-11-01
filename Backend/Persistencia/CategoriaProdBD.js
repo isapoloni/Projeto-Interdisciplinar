@@ -7,7 +7,7 @@ export default class CategoriaProdutoBD {
     if (categoriaProd instanceof CategoriaProd) {
       const conexao = await conectar();
 
-      const sql = "INSERT INTO categoria_produto (categoria) VALUES (?)";
+      const sql = "INSERT INTO categoriaProduto (categoria) VALUES (?)";
       const valores = [categoriaProd.categoria];
 
       const resultado = await conexao.query(sql, valores);
@@ -19,7 +19,7 @@ export default class CategoriaProdutoBD {
     if (categoriaProd instanceof CategoriaProd) {
       const conexao = await conectar();
 
-      const sql = "UPDATE categoria_produto SET categoria = ? WHERE codigo = ?";
+      const sql = "UPDATE categoriaProduto SET categoria = ? WHERE codigo = ?";
       const valores = [categoriaProd.categoria, categoriaProd.codigo];
 
       await conexao.query(sql, valores);
@@ -30,7 +30,7 @@ export default class CategoriaProdutoBD {
     if (categoriaProd instanceof CategoriaProd) {
       const conexao = await conectar();
 
-      const sql = "DELETE FROM categoria_produto WHERE codigo = ?";
+      const sql = "DELETE FROM categoriaProduto WHERE codigo = ?";
       const valores = [categoriaProd.codigo];
 
       await conexao.query(sql, valores);
@@ -40,7 +40,7 @@ export default class CategoriaProdutoBD {
   async consultar(termo) {
     const conexao = await conectar();
 
-    const sql = "SELECT * FROM categoria_produto WHERE categoria LIKE ?";
+    const sql = "SELECT * FROM categoriaProduto WHERE categoria LIKE ?";
     const valores = ['%' + termo + '%'];
 
     const [rows] = await conexao.query(sql, valores);
@@ -58,7 +58,7 @@ export default class CategoriaProdutoBD {
   async consultarCodigo(codigo) {
     const conexao = await conectar();
 
-    const sql = "SELECT * FROM categoria_produto WHERE codigo = ?";
+    const sql = "SELECT * FROM categoriaProduto WHERE codigo = ?";
     const valores = [codigo];
 
     const [rows] = await conexao.query(sql, valores);
