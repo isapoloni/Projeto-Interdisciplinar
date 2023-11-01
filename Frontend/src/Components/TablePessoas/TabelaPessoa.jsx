@@ -1,6 +1,5 @@
 // Desenvolvido por Francisco Carlos de Souza Junior
 
-
 import {
   Button,
   Container,
@@ -14,15 +13,20 @@ import { RiSearchLine } from "react-icons/ri";
 import { HiTrash } from "react-icons/hi";
 import { urlBackend } from "../../assets/funcoes";
 import { MdModeEdit } from "react-icons/md";
-import Stack from 'react-bootstrap/Stack';
+import Stack from "react-bootstrap/Stack";
 import Cookies from "universal-cookie";
 export default function TabelaPessoas(props) {
-
-  const cookies = new Cookies()
-  const jwtAuth= cookies.get('authorization')
-    function filtrarPessoas(e) {
+  const cookies = new Cookies();
+  const jwtAuth = cookies.get("authorization");
+  function filtrarPessoas(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/pessoas", { method: "GET" , headers: { "Content-Type": "application/json", "authorization": `${jwtAuth}` } })
+    fetch(urlBackend + "/pessoas", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${jwtAuth}`,
+      },
+    })
       .then((resposta) => {
         return resposta.json();
       })
@@ -88,35 +92,33 @@ export default function TabelaPessoas(props) {
                 <td>{pessoa.tipo}</td>
                 <td>{pessoa.profissao1}</td>
                 <td>
-                <Stack direction="horizontal" gap={1}>
-                      <Button variant="outline-primary"
-                        onClick={() => {
-                          if (
-                            window.confirm(
-                              "Deseja atualizar os dados da pessoa?"
-                            )
-                          ) {
-                            props.editar(pessoa);
-                          }
-                        }}
-                      >
-                        <MdModeEdit />
-                      </Button>
-                    
-                      {""}
-                      <Button variant="outline-danger"
-                        Button
-                        onClick={() => {
-                          if (
-                            window.confirm("Deseja excluir permanentemente?")
-                          ) {
-                            props.excluir(pessoa);
-                          }
-                        }}
-                      >
-                        <HiTrash />
-                      </Button>
-                      </Stack>
+                  <Stack direction="horizontal" gap={1}>
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => {
+                        if (
+                          window.confirm("Deseja atualizar os dados da pessoa?")
+                        ) {
+                          props.editar(pessoa);
+                        }
+                      }}
+                    >
+                      <MdModeEdit />
+                    </Button>
+
+                    {""}
+                    <Button
+                      variant="outline-danger"
+                      Button
+                      onClick={() => {
+                        if (window.confirm("Deseja excluir permanentemente?")) {
+                          props.excluir(pessoa);
+                        }
+                      }}
+                    >
+                      <HiTrash />
+                    </Button>
+                  </Stack>
                 </td>
               </tr>
             );

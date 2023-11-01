@@ -68,8 +68,14 @@ export default function CadProdutos(props) {
     });
   }
 
+
+  function exibirTabelaEAtualizarDados() {
+    setExibirTabela(true);
+    buscarProduto();
+  }
+
   function buscarCategoria() {
-    fetch(urlBackend + '/categoria', {
+    fetch(urlBackend + '/categoriaProduto', {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -112,6 +118,7 @@ export default function CadProdutos(props) {
               produto={produtoEdicao}
               buscarProduto={buscarProduto}
               categorias={categoria}
+              dadosAtualizados={exibirTabelaEAtualizarDados}
             />
 
         }

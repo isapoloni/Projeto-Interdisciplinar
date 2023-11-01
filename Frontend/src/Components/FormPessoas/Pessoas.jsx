@@ -6,6 +6,7 @@ import Cookie from "universal-cookie";
 function FormPessoa(props) {
   const [validated, setValidated] = useState(false);
   const [pessoa, setPessoa] = useState(props.pessoa);
+  console.log(pessoa)
   const cookies = new Cookie()
   const jwtAuth= cookies.get('authorization')
 
@@ -236,6 +237,8 @@ function FormPessoa(props) {
             </Form.Group>
           </Col>
         </Row>
+       
+  
         <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
           <Button variant="primary" type="submit" className="mb-3">
             {props.modoEdicao ? "Atualizar" : "Cadastrar"}

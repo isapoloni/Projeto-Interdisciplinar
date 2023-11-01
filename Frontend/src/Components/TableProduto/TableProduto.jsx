@@ -1,19 +1,35 @@
-// Desenvolvido por Isabella Poloni
-
+import React, { useState } from 'react';
 import {
   Table,
-  Container,
-  Button,
-  InputGroup,
-  FormControl,
-} from "react-bootstrap";
-import { MdModeEdit } from "react-icons/md";
-import { HiTrash } from "react-icons/hi";
-import { RiSearchLine } from "react-icons/ri";
-import { urlBackend } from "../../assets/funcoes";
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TablePagination,
+  InputAdornment,
+  TextField,
+} from '@mui/material';
+import { MdModeEdit } from 'react-icons/md';
+import { HiTrash } from 'react-icons/hi';
+import { RiSearchLine } from 'react-icons/ri';
+import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { urlBackend } from '../../assets/funcoes';
 
 export default function TableProduto(props) {
-  // const [produtos, setProdutos] = useState(props.listaProdutos);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   function filtrarProdutos(e) {
     const termoBusca = e.currentTarget.value;
@@ -30,7 +46,6 @@ export default function TableProduto(props) {
         }
       });
   }
-
   return (
     <Container>
       <Button
@@ -43,65 +58,82 @@ export default function TableProduto(props) {
       </Button>
 
       <InputGroup className="mt-2">
-        <FormControl
+        <TextField
+          fullWidth
           type="text"
           id="termoBusca"
           placeholder="Busque aqui o produto desejado"
           onChange={filtrarProdutos}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <RiSearchLine />
+              </InputAdornment>
+            ),
+          }}
         />
-        <InputGroup.Text>
-          <RiSearchLine />
-        </InputGroup.Text>
       </InputGroup>
 
-      <Table striped bordered hover size="sm" className="mt-5">
-        <thead>
-          <tr className="text-center">
-            <th className="text-center">Código</th>
-            <th className="text-center">Nome</th>
-            <th className="text-center">Unidade</th>
-            <th className="text-center">Descrição</th>
-            <th className="text-center">Categoria</th>
-            <th className="text-center">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {props.listaProdutos?.map((produto) => {
-            return (
-              <tr key={produto.codigo}>
-                <td>{produto.codigo}</td>
-                <td>{produto.nome}</td>
-                <td>{produto.metrica}</td>
-                <td>{produto.descricao}</td>
-                <td>{produto.categoria}</td>
-                <td>
-                  <Button variant="outline-primary"
+      <TableContainer component={Paper} className="mt-5">
+        <Table striped bordered hover size="sm" className="custom-table">
+          <TableHead>
+            <TableRow className="text-center">
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Código</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Nome</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Unidade</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Descrição</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Categoria</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Ações</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {props.listaProdutos?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((produto) => (
+              <TableRow key={produto.codigo}>
+                <TableCell>{produto.codigo}</TableCell>
+                <TableCell>{produto.nome}</TableCell>
+                <TableCell>{produto.metrica}</TableCell>
+                <TableCell>{produto.descricao}</TableCell>
+                <TableCell>{produto.categoria}</TableCell>
+                <TableCell>
+                  <IconButton
+                    variant="outlined"
+                    style={{ color: '#1683cc' }}
                     onClick={() => {
-                      if (
-                        window.confirm("Deseja atualizar os dados do produto?")
-                      ) {
+                      if (window.confirm('Deseja atualizar os dados do produto?')) {
                         props.editar(produto);
                       }
                     }}
                   >
                     <MdModeEdit />
-                  </Button>
-                  {""}
-                  <Button variant="outline-danger"
+                  </IconButton>
+                  {/* {' '}
+                  <IconButton
+                    variant="outlined"
+                    style={{ color: '#cc3116' }}
                     onClick={() => {
                       if (window.confirm("Deseja excluir?")) {
                         props.deletar(produto);
+                    
                       }
                     }}
                   >
                     <HiTrash />
-                  </Button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+                  </IconButton> */}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={props.listaProdutos?.length || 0}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={(e, newPage) => setPage(newPage)}
+          onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
+        />
+      </TableContainer>
     </Container>
   );
 }

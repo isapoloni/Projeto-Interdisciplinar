@@ -28,7 +28,7 @@ export default function TelaCadPessoa(props) {
     setEditPessoa(pessoa);
     setExibirTabela(false);
   }
-
+ 
   function excluirPessoa(pessoa) {
     fetch(urlBackend + "/pessoas", {
       method: "DELETE",

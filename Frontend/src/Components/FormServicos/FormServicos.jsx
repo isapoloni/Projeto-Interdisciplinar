@@ -1,37 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
 import { IMaskInput } from "react-imask";
 import Cookies from "universal-cookie";
 export default function ServicoForm(props) {
+  // console.log(props)
+  console.log("props", props);
+
   const [validated, setValidated] = useState(false);
   const [servico, setServico] = useState(props.servico);
-  const cookies = new Cookies()
-  const jwtAuth= cookies.get('authorization')
+  console.log("serv", servico);
+  const cookies = new Cookies();
+  const jwtAuth = cookies.get("authorization");
+  // const [cpfSelecionado, setCpfSelecionado] = useState('');
+  // console.log('cpf' , cpfSelecionado)
   function mascaraMoeda(event) {
     const onlyDigits = event.target.value
       .split("")
-      .filter(s => /\d/.test(s))
+      .filter((s) => /\d/.test(s))
       .join("")
-      .padStart(3, "0")
-    const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2)
-    event.target.value = maskCurrency(digitsFloat)
+      .padStart(3, "0");
+    const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2);
+    event.target.value = maskCurrency(digitsFloat);
   }
-  
-  function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
+
+  function maskCurrency(valor, locale = "pt-BR", currency = "BRL") {
     return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency
-    }).format(valor)
+      style: "currency",
+      currency,
+    }).format(valor);
   }
-  
+
   function manipularOnChange(e) {
     const elementForm = e.currentTarget;
     const id = elementForm.id;
     const valor = elementForm.value;
     setServico({ ...servico, [id]: valor });
   }
-
+  // useEffect(() => {
+  //   if (props.modoEdicao) {
+  //     fetch(urlBackend + "/pessoas", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "authorization": `${jwtAuth}`
+  //       },
+  //     }).then((resposta) => {
+  //       return resposta.json()
+  //     }).then((dados) => {
+  //       if (Array.isArray(dados)) {
+  //         dados.filter((pessoa) => {
+  //           if (pessoa.nome === servico.cpfPessoa) {
+  //             setCpfSelecionado(pessoa.cpf)
+  //           }
+  //         })
+  //       }
+  //     })
+  //   }
+  // })
   function manipulaSubmissao(evento) {
     const form = evento.currentTarget;
     if (form.checkValidity()) {
@@ -40,7 +66,7 @@ export default function ServicoForm(props) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "authorization": `${jwtAuth}`
+            authorization: `${jwtAuth}`,
           },
           body: JSON.stringify(servico),
         })
@@ -66,9 +92,9 @@ export default function ServicoForm(props) {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            "authorization": `${jwtAuth}`
+            authorization: `${jwtAuth}`,
           },
-          body: JSON.stringify(servico),
+          body: JSON.stringify({ ...servico }),
         }).then((resposta) => {
           window.location.reload();
           return resposta.json();
@@ -94,7 +120,7 @@ export default function ServicoForm(props) {
           <h3>Cadastro de Serviços</h3>
         </Form.Group>
 
-        <Row>         
+        <Row>
           <Col>
             <Form.Group>
               <Form.Label>Serviço</Form.Label>
@@ -123,10 +149,10 @@ export default function ServicoForm(props) {
                 required
               >
                 <option></option>
-                <option>Por Hora</option>
-                <option>Por Diária</option>
-                <option>Por Contrato</option>
-                <option>À Combinar</option>
+                <option value="Por hora">Por hora</option>
+                <option value="Por Diária">Por Diária</option>
+                <option value="Por Contrato">Por Contrato</option>
+                <option value="A Combinar">A Combinar</option>
               </Form.Control>
               <Form.Control.Feedback type="invalid">
                 Por favor, Selecione uma opção!
@@ -134,7 +160,40 @@ export default function ServicoForm(props) {
             </Form.Group>
           </Col>
         </Row>
-
+        {/* <Row>
+          {
+          //Here
+          }
+        <Col>
+          <Form.Group>
+            <Form.Label>Cpf da pessoa</Form.Label>
+            <Form.Control
+              value={servico.cpfPessoa}
+              as="select"
+              id="cpfPessoa"
+              onChange={manipularOnChange}
+              required
+            >
+              <option></option>
+              
+               {props.cpfPessoas.map((pessoa) => (
+                
+                 <option key={pessoa.cpf} value={ props.modoEdicao?
+                 `${pessoa.nome}` :`${pessoa.cpf}`
+                  
+                }>{`${pessoa.nome} - ${pessoa.cpf}`}</option>
+               ))} 
+              
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">
+              Por favor, informe o cpf da pessoa!
+            </Form.Control.Feedback>
+          </Form.Group>
+      </Col>
+          {
+          //Here
+          }
+        </Row> */}
         <Form.Group>
           <Form.Label>Descrição</Form.Label>
           <Form.Control
@@ -154,7 +213,7 @@ export default function ServicoForm(props) {
         <Row>
           <Col xs={5}>
             <Form.Group>
-              <Form.Label>Custo Estimado </Form.Label>              
+              <Form.Label>Custo Estimado </Form.Label>
               <Form.Control
                 value={servico.custo}
                 type="text"
