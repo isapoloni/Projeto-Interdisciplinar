@@ -1,11 +1,10 @@
-import conectar from "./Conexao.js";
+import Conectar from "./Conexao.js";
 import CategoriaProd from "../Modelo/CategoriaProd.js";
 
 export default class CategoriaProdutoBD {
-  
   async incluir(categoriaProd) {
     if (categoriaProd instanceof CategoriaProd) {
-      const conexao = await conectar();
+      const conexao = await Conectar();
 
       const sql = "INSERT INTO categoria_produto (categoria) VALUES (?)";
       const valores = [categoriaProd.categoria];
@@ -17,7 +16,7 @@ export default class CategoriaProdutoBD {
 
   async alterar(categoriaProd) {
     if (categoriaProd instanceof CategoriaProd) {
-      const conexao = await conectar();
+      const conexao = await Conectar();
 
       const sql = "UPDATE categoria_produto SET categoria = ? WHERE codigo = ?";
       const valores = [categoriaProd.categoria, categoriaProd.codigo];
@@ -28,7 +27,7 @@ export default class CategoriaProdutoBD {
 
   async excluir(categoriaProd) {
     if (categoriaProd instanceof CategoriaProd) {
-      const conexao = await conectar();
+      const conexao = await Conectar();
 
       const sql = "DELETE FROM categoria_produto WHERE codigo = ?";
       const valores = [categoriaProd.codigo];
@@ -38,17 +37,17 @@ export default class CategoriaProdutoBD {
   }
 
   async consultar(termo) {
-    const conexao = await conectar();
+    const conexao = await Conectar();
 
     const sql = "SELECT * FROM categoria_produto WHERE categoria LIKE ?";
-    const valores = ['%' + termo + '%'];
+    const valores = ["%" + termo + "%"];
 
     const [rows] = await conexao.query(sql, valores);
 
     const listaCategorias = [];
 
     for (const row of rows) {
-      const categoriaProd = new CategoriaProd(row['codigo'], row['categoria']);
+      const categoriaProd = new CategoriaProd(row["codigo"], row["categoria"]);
       listaCategorias.push(categoriaProd);
     }
 
@@ -56,7 +55,7 @@ export default class CategoriaProdutoBD {
   }
 
   async consultarCodigo(codigo) {
-    const conexao = await conectar();
+    const conexao = await Conectar();
 
     const sql = "SELECT * FROM categoria_produto WHERE codigo = ?";
     const valores = [codigo];
@@ -66,7 +65,7 @@ export default class CategoriaProdutoBD {
     const listaCategorias = [];
 
     for (const row of rows) {
-      const categoriaProd = new CategoriaProd(row['codigo'], row['categoria']);
+      const categoriaProd = new CategoriaProd(row["codigo"], row["categoria"]);
       listaCategorias.push(categoriaProd);
     }
 
