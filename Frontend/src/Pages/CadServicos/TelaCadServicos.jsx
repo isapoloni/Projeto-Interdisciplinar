@@ -11,8 +11,9 @@ export default function CadServicos(props) {
   const [exibirTabela, setExibirTabela] = useState(true);
   const [servicos, setServicos] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
-  const cookies = new Cookies()
-  const jwtAuth= cookies.get('authorization')
+  const [cpfPessoas, setCpfPessoas] = useState();
+  const cookies = new Cookies();
+  const jwtAuth = cookies.get("authorization");
   const [servicoEdicao, setServicoEdicao] = useState({
     id: "",
     servico: "",
@@ -31,8 +32,10 @@ export default function CadServicos(props) {
   function deletarServico(servico) {
     fetch(urlBackend + "/servicos", {
       method: "DELETE",
-      headers: { "Content-Type": "application/json",
-              "authorization": `${jwtAuth}`},
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${jwtAuth}`,
+      },
       body: JSON.stringify(servico),
     }).then((resposta) => {
       window.alert("Serviço excluído com sucesso!!!");
@@ -40,29 +43,44 @@ export default function CadServicos(props) {
       return resposta.json();
     });
   }
+  // function buscarCpfPessoas() {
+  //   fetch(urlBackend + '/pessoas', {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "authorization": `${jwtAuth}`
+  //     }
+  //   }).then((resposta) => {
+  //     return resposta.json()
+  //   }).then((dados) => {
+  //     if (Array.isArray(dados)) {
+  //       setCpfPessoas(dados)
+  //     }
+  //   });
+  // }
 
-  
-    useEffect(() => {
-    buscar()
+  useEffect(() => {
+    // buscarCpfPessoas();
+    buscar();
   }, []);
-  function buscar(){
+  function buscar() {
     fetch(urlBackend + "/servicos", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "authorization": `${jwtAuth}`
-    }
-  })
-    .then((resposta) => {
-      return resposta.json();
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${jwtAuth}`,
+      },
     })
-    .then((dados) => {
-      if (Array.isArray(dados)) {
-        setServicos(dados);
-      } else {
-        // Tratar erro caso necessário
-      }
-    });
+      .then((resposta) => {
+        return resposta.json();
+      })
+      .then((dados) => {
+        if (Array.isArray(dados)) {
+          setServicos(dados);
+        } else {
+          // Tratar erro caso necessário
+        }
+      });
   }
 
   return (
@@ -86,6 +104,7 @@ export default function CadServicos(props) {
             editar={prepararTela}
             setModoEdicao={setModoEdicao}
             servico={servicoEdicao}
+            cpfPessoas={cpfPessoas}
             buscar={buscar}
           />
         )}

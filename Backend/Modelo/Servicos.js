@@ -7,23 +7,14 @@ export default class Servico {
   #descricao;
   #custo;
   #modelo;
-     
 
-  constructor(
-    id,
-    servico,
-    jornada,
-    descricao,
-    custo,
-    modelo
-  ) {
+  constructor(id, servico, jornada, descricao, custo, modelo) {
     this.#id = id;
     this.#servico = servico;
     this.#jornada = jornada;
     this.#descricao = descricao;
     this.#custo = custo;
     this.#modelo = modelo;
-    
   }
 
   get id() {
@@ -33,8 +24,6 @@ export default class Servico {
   set id(newid) {
     this.#id = newid;
   }
-
-  
 
   get servico() {
     return this.#servico;
@@ -76,8 +65,6 @@ export default class Servico {
     this.#custo = newCusto;
   }
 
- 
-
   toJSON() {
     return {
       id: this.#id,
@@ -85,7 +72,7 @@ export default class Servico {
       jornada: this.#jornada,
       descricao: this.#descricao,
       custo: this.#custo,
-      modelo: this.#modelo
+      modelo: this.#modelo,
     };
   }
 

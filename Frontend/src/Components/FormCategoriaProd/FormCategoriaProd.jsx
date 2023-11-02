@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Form, Button, Col, Row, Stack, } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
-import Cookies from "universal-cookie";
+
 export default function CategoriaForm(props) {
     const [validated, setValidated] = useState(false);
     const [categoria, setCategoria] = useState(props.categoria);
-    const cookies = new Cookies()
-    const jwtAuth= cookies.get('authorization')
+
     function manipularOnChange(e) {
         const elementForm = e.currentTarget;
         const id = elementForm.id;
@@ -19,11 +18,10 @@ export default function CategoriaForm(props) {
         if (form.checkValidity()) {
 
             if (!props.modoEdicao) {
-                fetch(urlBackend + "/categoria", {
+                fetch(urlBackend + "/categoriaProduto", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
-                        "authorization": `${jwtAuth}`
+                        "Content-Type": "application/json"
                     },
                     body: JSON.stringify(categoria)
                 })
@@ -37,26 +35,29 @@ export default function CategoriaForm(props) {
                             novaLista.push(categoria)
                             props.setCategorias(novaLista)
                             props.buscar()
-                            props.exibirTabela(true)
+                            // props.exibirTabela(true)
+                            props.dadosAtualizados()
                         }
                         window.alert(dados.mensagem)
+                        // window.alert('deu bom')
                     })
                     .catch((erro) => {
                         window.alert("Erro ao executar a requisição: " + erro.message)
                     })
             }
             else {
-                fetch(urlBackend + '/categoria', {
+                fetch(urlBackend + '/categoriaProduto', {
                     method: "PUT",
                     headers: {
-                        "Content-Type": "application/json",
-                        "authorization": `${jwtAuth}`
+                        "Content-Type": "application/json"
                     },
                     body: JSON.stringify(categoria)
                 })
                     .then((resposta) => {
 
-                        window.location.reload();
+                        // window.location.reload();
+                        // props.exibirTabela(true)
+                        props.dadosAtualizados()
                         return resposta.json()
 
                     })
@@ -119,20 +120,22 @@ export default function CategoriaForm(props) {
 
                 </Row>
 
-                <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
-                    <Button variant="primary" type="submit">
-                        {props.modoEdicao ? "Atualizar" : "Cadastrar"}
-                    </Button>
-                    <Button
-                        variant="danger"
-                        type="button"
-                        onClick={() => {
-                            props.exibirTabela(true);
-                        }}
-                    >
-                        Voltar
-                    </Button>
-                </Stack>
+                <div className="d-flex justify-content-end mt-3 mb-3">
+                    <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
+                        <Button variant="primary" type="submit">
+                            {props.modoEdicao ? "Atualizar" : "Cadastrar"}
+                        </Button>
+                        <Button
+                            variant="danger"
+                            type="button"
+                            onClick={() => {
+                                props.exibirTabela(true);
+                            }}
+                        >
+                            Voltar
+                        </Button>
+                    </Stack>
+                </div>
             </Form>
         </>
     );
