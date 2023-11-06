@@ -22,6 +22,6 @@ const server = express();
 
   server.use(verifyAccess);
 
-server.listen(3308, "localhost", () => {
-  console.log("Service running on http://localhost:3308 ");
-});
+  server.listen(3308, "localhost", () => {
+    console.log("Service running on http://localhost:3308 ");
+  });
