@@ -12,12 +12,26 @@ export function verifyJWT(req,res,next){
     next()
   })
 }
+const users = [
+  { id:1,
+    user:"admin",
+    password:"admin",
+    role:"admin"
+  },
+  {
+    id:2,
+    user:"user",
+    password:"user",
+    role:"user"
+  }
+]
 //Criação da rota para o login e criação do Token
 verifyAccess.post("/access", (req, res) => {
   const {user,password} = req.body
-  if(user === "admin" && password === "admin"){
-    const token  = jwt.sign({userId:1},secret_key,{expiresIn:"12h"})
-    return res.json({auth:true,token})
+  const foundUser = users.find(u => u.user === user && u.password === password);
+  if(foundUser){
+    const token  = jwt.sign({userId:foundUser.id, role:foundUser.role},secret_key,{expiresIn:"12h"})
+    return res.json({auth:true,token, role:foundUser.role})
   }
   res.status(401).json({auth:false, message: "Credencial inválida"})
 })

@@ -31,15 +31,22 @@ export default function TableHistServico(props) {
       .then((listaServicos) => {
         if (Array.isArray(listaServicos)) {
           const resultadoBusca = listaServicos.filter((histServico) =>
-
-          histServico.servico.toLowerCase().includes(termoBusca.toLowerCase())
+          histServico.prestador.toLowerCase().includes(termoBusca.toLowerCase())
             // histServico.histServico.toLowerCase().includes(termoBusca.toLowerCase())
           );
           props.setHistServicos(resultadoBusca);
         }
       });
   }
-
+  function formatarDataBrasileira(dataISO) {
+    const data = new Date(dataISO);
+    const dia = data.getUTCDate().toString().padStart(2, '0');
+    const mes = (data.getUTCMonth() + 1).toString().padStart(2, '0'); // Adiciona 1 ao mês, pois os meses em JavaScript são baseados em zero
+    const ano = data.getUTCFullYear();
+  
+    return `${dia}/${mes}/${ano}`;
+  }
+  
   return (
     <Container>
       <Button
@@ -48,7 +55,7 @@ export default function TableHistServico(props) {
           props.exibirTabela(false);
         }}
       >
-        Cadastrar serviço
+        Cadastrar serviço com pessoa
       </Button>
 
       <InputGroup className="mt-2">
@@ -82,7 +89,7 @@ export default function TableHistServico(props) {
                 <td>{histServico.id}</td>
                 <td>{histServico.prestador}</td>
                 <td>{histServico.servico}</td>
-                <td>{histServico.serviceData}</td>
+                <td>{formatarDataBrasileira(histServico.serviceData)}</td>
                 <td>{histServico.valor}</td>
                 <td>
                   <Button

@@ -12,13 +12,13 @@ server.use(cors({ origin: "*" }));
 server.use(express.urlencoded({ extended: false }));
 server.use(express.json());
 //Implementação do middleware de verificação JWT
-server.use("/pessoas", routerPessoa);
-server.use("/produto", rotaProduto);
-server.use("/servicos", routerServico);
-server.use("/categoria", rotaCategoriaProd);
-server.use("/histServ", routerHistServ);
-server.use(verifyAccess);
 
+server.use("/pessoas",verifyJWT,routerPessoa);
+server.use("/produto", verifyJWT,rotaProduto);
+server.use("/servicos", verifyJWT,routerServico);
+server.use("/categoria", verifyJWT,rotaCategoriaProd);
+server.use("/histServ",verifyJWT, routerHistServ);
+server.use( verifyAccess);
 server.listen(3308, "localhost", () => {
   console.log("Service running on http://localhost:3308 ");
 });

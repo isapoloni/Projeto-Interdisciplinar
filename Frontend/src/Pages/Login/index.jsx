@@ -20,7 +20,7 @@ function Login() {
         password
       })
     }).then(data => data.json())
-    
+    console.log(data)
     if(data.auth === true){
       cookies.set('authorization', data.token,{
         path:'/'

@@ -79,7 +79,7 @@ export default function HistServicoForm(props) {
             id: servico.id,
             prestador: props.cpfPessoas.filter(pessoaSelecionada => pessoaSelecionada.nome === servico.prestador)[0].cpf,
             servico: props.servicos.filter(servicoSelecionado => servicoSelecionado.servico === servico.servico)[0].id,
-            serviceData: new Intl.DateTimeFormat("pt-BR").format(new Date(servico.serviceData)),
+            serviceData: servico.serviceData,
             valor: servico.valor
 
           }),
