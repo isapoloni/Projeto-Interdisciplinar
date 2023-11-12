@@ -20,24 +20,28 @@ export default function TelaCadPessoa(props) {
     email: "",
     tipo: "",
     profissao1: "",
-    });
-    const cookies = new Cookie()
-    const jwtAuth= cookies.get('authorization')
+  });
+  const cookies = new Cookie()
+  const jwtAuth = cookies.get('authorization')
+
+
   function preparaTela(pessoa) {
     setModoEdicao(true);
     setEditPessoa(pessoa);
     setExibirTabela(false);
   }
- 
+
   function excluirPessoa(pessoa) {
     fetch(urlBackend + "/pessoas", {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" ,
-              "authorization": `${jwtAuth}`},
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      },
       body: JSON.stringify(pessoa),
     }).then((resposta) => {
       window.alert("Pessoa excluída com sucesso!");
-      window.location.reload();
+      // window.location.reload();
       return resposta.json();
     });
   }
@@ -60,6 +64,7 @@ export default function TelaCadPessoa(props) {
         }
       });
   }, []);
+
   return (
     <>
       <Header />

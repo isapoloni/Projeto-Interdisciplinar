@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, FormControl, InputGroup, Stack } from 'react-bootstrap';
+import { Form, Button, FormControl, InputGroup, Stack, Row, Col } from 'react-bootstrap';
 import { urlBackend } from '../../assets/funcoes';
 import { DropdownList } from 'react-widgets';
 import { useNavigate } from "react-router-dom";
@@ -10,19 +10,35 @@ const FormDoacao = (props) => {
     const [pessoasData, setPessoasData] = useState([]);
     const [produtosData, setProdutosData] = useState([]);
     const [doacao, setDoacao] = useState({
-        doador: null, // Alterado para armazenar o objeto do doador completo
+        doador: null,
         dataDoacao: '',
         listaItens: [],
     });
 
-    const navigate = useNavigate();
-    const repoName = "Front-EndFullStackII"; 
+    useEffect(() => {
+        if (props.modoEdicao && props.doacao) {
+            setDoacao((prevDoacao) => ({
+                ...prevDoacao,
+                doador: props.doacao.cpfDoador,
+                dataDoacao: formatarDataParaInput(props.doacao.dataDoacao),
+                listaItens: props.doacao.listaItens,
+            }));
 
-    // Funções para buscar doadores e produtos 
+            setDoadorOptions([...doadorOptions, props.doacao.doador]);
+
+            const produtosDaDoacao = props.doacao.listaItens.map((item) => item.produto.nome);
+            setProdutoOptions([...produtoOptions, ...produtosDaDoacao]);
+        }
+    }, [props.modoEdicao, props.doacao]);
+
+    const formatarDataParaInput = (data) => {
+        const dataObj = new Date(data);
+        return dataObj.toISOString().split('T')[0];
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Requisição GET para buscar pessoas
                 const pessoasResponse = await fetch(urlBackend + '/pessoas', {
                     method: 'GET',
                 });
@@ -31,16 +47,13 @@ const FormDoacao = (props) => {
                     const pessoasData = await pessoasResponse.json();
                     setPessoasData(pessoasData);
 
-                    // Extrai os nomes das pessoas
                     const nomes = pessoasData.map((pessoa) => pessoa.nome);
 
-                    // Atualiza o estado doadorOptions com os nomes
                     setDoadorOptions(nomes);
                 } else {
                     console.error('Erro ao buscar pessoas:', pessoasResponse.statusText);
                 }
 
-                // Requisição GET para buscar produtos
                 const produtosResponse = await fetch(urlBackend + '/produto', {
                     method: 'GET',
                 });
@@ -49,10 +62,8 @@ const FormDoacao = (props) => {
                     const produtosData = await produtosResponse.json();
                     setProdutosData(produtosData);
 
-                    // Extrai os nomes dos produtos
                     const nomesProdutos = produtosData.map((produto) => produto.nome);
 
-                    // Atualiza o estado produtoOptions com os nomes dos produtos
                     setProdutoOptions(nomesProdutos);
                 } else {
                     console.error('Erro ao buscar produtos:', produtosResponse.statusText);
@@ -66,42 +77,33 @@ const FormDoacao = (props) => {
         fetchData();
     }, []);
 
-    // console.log('doadorOptions', doadorOptions)
-    console.log('produtoOptions', produtoOptions)
 
     const handleDoadorChange = (selectedValue) => {
-        // Encontra o objeto do doador correspondente ao nome selecionado
         const doadorSelecionado = pessoasData.find((pessoa) => pessoa.nome === selectedValue);
 
-        // Atualiza o estado doacao com o doador selecionado
         setDoacao({ ...doacao, doador: doadorSelecionado });
     };
 
     const handleProdutoChange = (index, e) => {
-        // Encontra o objeto do produto correspondente ao nome selecionado
         const produtoSelecionado = produtosData.find((produto) => produto.nome === e.target.value);
 
-        // Atualiza a lista de itens no estado da doação com o produto selecionado
         const updatedItens = [...doacao.listaItens];
         updatedItens[index].produto = produtoSelecionado;
         setDoacao({ ...doacao, listaItens: updatedItens });
     };
 
     const handleDataDoacaoChange = (e) => {
-        // Atualiza a data de doação no estado da doação
         setDoacao({ ...doacao, dataDoacao: e.target.value });
     };
 
 
     const handleQuantidadeChange = (index, e) => {
-        // Atualiza a quantidade no estado da doação
         const updatedItens = [...doacao.listaItens];
         updatedItens[index].quantidade = e.target.value;
         setDoacao({ ...doacao, listaItens: updatedItens });
     };
 
     const handleAddItem = () => {
-        // Adiciona um novo item à lista de itens
         setDoacao({
             ...doacao,
             listaItens: [...doacao.listaItens, { produto: '', quantidade: 1 }],
@@ -109,40 +111,36 @@ const FormDoacao = (props) => {
     };
 
     const handleRemoveItem = (index) => {
-        // Remove o item correspondente ao índice da lista
         const updatedItens = [...doacao.listaItens];
         updatedItens.splice(index, 1);
         setDoacao({ ...doacao, listaItens: updatedItens });
-    };
-
-    const handleNavigation = () => {
-        // Navega para a rota desejada
-        navigate(`/${repoName}/Doacao`);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            // Encontrar o CPF do doador selecionado
             const cpfDoadorSelecionado = doacao.doador ? doacao.doador.cpf.replace(/[.-]/g, '') : '';
 
-            // Formatar a lista de itens conforme o novo formato
             const listaItensFormatada = doacao.listaItens.map((item) => ({
                 codigoProduto: item.produto.codigo,
                 quantidade: item.quantidade,
             }));
 
-            // Criar o corpo da requisição
             const requestBody = {
                 dataDoacao: doacao.dataDoacao,
                 cpfDoador: cpfDoadorSelecionado,
                 listaItens: listaItensFormatada,
             };
 
-            // Enviar a requisição POST
-            const response = await fetch(urlBackend + '/doacao', {
-                method: 'POST',
+            const method = props.modoEdicao ? 'PUT' : 'POST';
+
+            const requestUrl = props.modoEdicao
+                ? `${urlBackend}/doacao`
+                : `${urlBackend}/doacao`;
+
+            const response = await fetch(requestUrl, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -150,19 +148,18 @@ const FormDoacao = (props) => {
             });
 
             if (response.ok) {
-                window.alert('Doação enviada com sucesso!');
-                console.log('Doação enviada com sucesso! body:', JSON.stringify(requestBody));
-            
-                // Limpa o formulário após o envio bem-sucedido
+                window.alert(`${props.modoEdicao ? 'Atualização' : 'Criação'} realizada com sucesso!`);
+                console.log(`${props.modoEdicao ? 'Atualização' : 'Criação'} realizada com sucesso! body:`, JSON.stringify(requestBody));
+
                 setDoacao({
                     doador: null,
                     dataDoacao: '',
                     listaItens: [],
                 });
-                props.dadosAtualizados()
+                props.dadosAtualizados();
             } else {
-                window.alert('Erro ao enviar a doação.');
-                console.error('Erro ao enviar a doação.', JSON.stringify(requestBody));
+                window.alert(`Erro ao ${props.modoEdicao ? 'atualizar' : 'cadastrar'} a doação.`);
+                console.error(`Erro ao ${props.modoEdicao ? 'atualizar' : 'cadastrar'} a doação.`, JSON.stringify(requestBody));
             }
         } catch (error) {
             console.error('Erro inesperado:', error);
@@ -171,37 +168,31 @@ const FormDoacao = (props) => {
     };
 
     return (
-        <Form onSubmit={handleSubmit}>
-
-            {/* <Form.Group className="mb-3">
-                <Form.Label>Doador</Form.Label>
-                <InputGroup className="mb-3">
-                    <DropdownList
-                        data={doadorOptions}
-                        value={doacao.doador ? doacao.doador.nome : ''}
-                        onChange={handleDoadorChange}
-                        placeholder="Selecione um doador"
-                    />
-                </InputGroup>
-            </Form.Group> */}
+        <Form
+            onSubmit={handleSubmit}
+            noValidate
+        >
+            <Form.Group className="mb-3 mt-4">
+                <h3>Registro de prestação de doação</h3>
+            </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>Doador</Form.Label>
+                <Form.Label className="mb-2">Doador</Form.Label>
                 <InputGroup className="mb-3">
                     <DropdownList
                         data={doadorOptions}
                         value={doacao.doador ? doacao.doador.nome : null}
                         onChange={(value) => handleDoadorChange(value)}
-                        textField="nome" // Certifique-se de substituir 'nome' pelo campo correto que contém o nome do doador
+                        textField="nome"
                         placeholder="Selecione um doador"
-                        caseSensitive={false} // Ignora a sensibilidade de maiúsculas/minúsculas na pesquisa
-                        filter="contains" // Usa a pesquisa "contains" em vez de "startsWith"
+                        caseSensitive={false}
+                        filter="contains"
                     />
                 </InputGroup>
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>Data da Doação</Form.Label>
+                <Form.Label className="mb-2">Data da Doação</Form.Label>
                 <FormControl
                     type="date"
                     onChange={handleDataDoacaoChange}
@@ -244,24 +235,23 @@ const FormDoacao = (props) => {
             </Form.Group>
 
             <div className="d-flex justify-content-end mt-3 mb-3">
-                <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
-                    <Button
-                        variant="primary"
-                        type="submit"
-                        onSubmit={handleSubmit}
-                        className="ml-3">
-                        Enviar Doação
+                <Stack className="mt-3 mb-3" direction="horizontal" gap={3} >
+                    <Button variant="primary" type="submit">
+                        {props.modoEdicao ? "Atualizar" : "Cadastrar"}
                     </Button>
                     <Button
                         variant="danger"
                         type="button"
-                        onClick={() => props.exibirTabela(true)}>
+                        onClick={() => {
+                            props.exibirTabela(true);
+                        }}
+                    >
                         Voltar
                     </Button>
                 </Stack>
             </div>
 
-            
+
         </Form>
     );
 };

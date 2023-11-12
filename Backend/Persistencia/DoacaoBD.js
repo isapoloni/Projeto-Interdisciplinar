@@ -125,11 +125,6 @@ export default class DoacaoBD {
         try {
             await conexao.beginTransaction();
     
-            // Exclui os itens relacionados à doação
-            const sqlExcluirItens = "DELETE FROM doacao_produto WHERE codigo_doacao = ?";
-            const parametrosExcluirItens = [codigo];
-            await conexao.query(sqlExcluirItens, parametrosExcluirItens);
-    
             // Exclui a doação
             const sqlExcluirDoacao = "DELETE FROM doacao WHERE codigo = ?";
             const parametrosExcluirDoacao = [codigo];
@@ -143,6 +138,37 @@ export default class DoacaoBD {
             // conexao.end();
         }
     }
+
+    async alterar(doacao) {
+        if (doacao instanceof Doacao) {
+            const conexao = await Conect();
+            try {
+                await conexao.beginTransaction();
+    
+                const sqlAtualizarDoacao = "UPDATE doacao SET data_doacao = ?, cpf_doador = ? WHERE codigo = ?";
+                const parametrosAtualizarDoacao = [doacao.dataDoacao, doacao.cpfDoador, doacao.codigo];
+                await conexao.query(sqlAtualizarDoacao, parametrosAtualizarDoacao);
+    
+                const sqlExcluirItens = "DELETE FROM doacao_produto WHERE codigo_doacao = ?";
+                const parametrosExcluirItens = [doacao.codigo];
+                await conexao.query(sqlExcluirItens, parametrosExcluirItens);
+    
+                for (const item of doacao.listaItens) {
+                    const sqlInserirItem = "INSERT INTO doacao_produto(codigo_produto, codigo_doacao, quantidade) VALUES (?,?,?)";
+                    const parametrosInserirItem = [item.produto.codigo, doacao.codigo, item.quantidade];
+                    await conexao.query(sqlInserirItem, parametrosInserirItem);
+                }
+    
+                await conexao.commit();
+            } catch (e) {
+                await conexao.rollback();
+                throw e;
+            } finally {
+                // conexao.end();
+            }
+        }
+    }
+    
     
 
     

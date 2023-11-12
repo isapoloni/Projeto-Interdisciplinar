@@ -13,7 +13,7 @@ export default function HistServicoForm(props) {
   // console.log('cpf' , cpfSelecionado)
   console.log("props", props);
   console.log("modoEdicao", props.modoEdicao);
-//new Date(servico.serviceData).toISOString().split("T")[0]
+  //new Date(servico.serviceData).toISOString().split("T")[0]
   console.log("serv", servico);
   function mascaraMoeda(event) {
     const onlyDigits = event.target.value
@@ -75,7 +75,7 @@ export default function HistServicoForm(props) {
             "Content-Type": "application/json",
             authorization: `${jwtAuth}`,
           },
-          body: JSON.stringify({ 
+          body: JSON.stringify({
             id: servico.id,
             prestador: props.cpfPessoas.filter(pessoaSelecionada => pessoaSelecionada.nome === servico.prestador)[0].cpf,
             servico: props.servicos.filter(servicoSelecionado => servicoSelecionado.servico === servico.servico)[0].id,
@@ -84,7 +84,7 @@ export default function HistServicoForm(props) {
 
           }),
         }).then((resposta) => {
-          window.location.reload();
+          // window.location.reload();
           return resposta.json();
         });
       }
@@ -104,68 +104,69 @@ export default function HistServicoForm(props) {
         onSubmit={manipulaSubmissao}
         variant="light"
       >
-        <Form.Group className="mb-3">
-          <h3>Cadastro de Serviços para Pessoas</h3>
+        <Form.Group className="mb-5 mt-4">
+          <h3>Registro de prestação de serviço</h3>
         </Form.Group>
 
         <Row>
           <Col>
-            <Form.Group>
+            <Form.Group className="mb-3">
               <Form.Label>Prestador</Form.Label>
               <Form.Control
-              value={servico.prestador}
-              as="select"
-              id="prestador"
-              onChange={manipularOnChange}
-              required
-            >
-              <option></option>
-              
-               {props.cpfPessoas.map((pessoa) => (
-                
-                 <option key={pessoa.cpf} value={ props.modoEdicao?
-                  `${pessoa.nome}` :`${pessoa.cpf}`
-                  
-                }>{`${pessoa.nome} - ${pessoa.cpf}`}</option>
-               ))} 
-              
-            </Form.Control>
+                value={servico.prestador}
+                as="select"
+                id="prestador"
+                onChange={manipularOnChange}
+                required
+              >
+                <option></option>
+
+                {props.cpfPessoas.map((pessoa) => (
+
+                  <option key={pessoa.cpf} value={props.modoEdicao ?
+                    `${pessoa.nome}` : `${pessoa.cpf}`
+
+                  }>{`${pessoa.nome} - ${pessoa.cpf}`}</option>
+                ))}
+
+              </Form.Control>
               <Form.Control.Feedback type="invalid">
                 Por favor, informe o nome do prestador!
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
 
-          <Col xs={6}>
-            <Form.Group>
+          <Col>
+            <Form.Group className="mb-3">
               <Form.Label>Serviço</Form.Label>
               <Form.Control
-              value={servico.servico}
-              as="select"
-              id="servico"
-              onChange={manipularOnChange}
-              required
-            >
-              <option></option>
-              
-               {props.servicos.map((servico) => (
-                
-                 <option key={servico.id} value={ props.modoEdicao?
-                 `${servico.servico}` :`${servico.id}`
-                  
-                }>{`${servico.servico} - ${servico.id}`}</option>
-               ))} 
-              
-            </Form.Control>
+                value={servico.servico}
+                as="select"
+                id="servico"
+                onChange={manipularOnChange}
+                required
+              >
+                <option></option>
+
+                {props.servicos.map((servico) => (
+
+                  <option key={servico.id} value={props.modoEdicao ?
+                    `${servico.servico}` : `${servico.id}`
+
+                  }>{`${servico.servico} - ${servico.id}`}</option>
+                ))}
+
+              </Form.Control>
               <Form.Control.Feedback type="invalid">
-              Por favor, informe o nome do serviço!
+                Por favor, informe o nome do serviço!
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
+
         <Row>
-        <Col xs={5}>
-            <Form.Group>
+          <Col>
+            <Form.Group className="mb-3">
               <Form.Label>Data</Form.Label>
               <Form.Control
                 value={!props.modoEdicao ? servico.serviceData : new Date(servico.serviceData).toISOString().split("T")[0]}
@@ -180,7 +181,7 @@ export default function HistServicoForm(props) {
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
-          <Col xs={5}>
+          <Col className="mb-3">
             <Form.Group>
               <Form.Label>Valor </Form.Label>
               <Form.Control
@@ -197,7 +198,7 @@ export default function HistServicoForm(props) {
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
-          
+
 
         </Row>
 

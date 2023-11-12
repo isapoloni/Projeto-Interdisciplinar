@@ -1,4 +1,3 @@
-// Desenvolvido por Isabela Poloni
 
 import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
@@ -39,7 +38,7 @@ export default function CadServicos(props) {
       body: JSON.stringify(servico),
     }).then((resposta) => {
       window.alert("Serviço excluído com sucesso!!!");
-      window.location.reload();
+      // window.location.reload();
       return resposta.json();
     });
   }

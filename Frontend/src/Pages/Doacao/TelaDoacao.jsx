@@ -10,23 +10,18 @@ import TableDoacao from "../../Components/TableDoacao";
 export default function TelaDoacao(props) {
 
     const [exibirTabela, setExibirTabela] = useState(true)
-    const [produtos, setProdutos] = useState([])
-    const [modoEdicao, setModoEdicao] = useState(false)
-    const [produtoEdicao, setProdutoEdicao] = useState({
-        codigo: "",
-        nome: "",
-        metrica: "",
-        descricao: "",
-        codigoCategoria: ""
-    })
-    const [categoria, setCategoria] = useState()
-
     const [doacoes, setDoacoes] = useState([])
+    const [modoEdicao, setModoEdicao] = useState(false)
+    const [doacaoEdicao, setDoacaoEdicao] = useState({
+        doador: '',
+        dataDoacao: '',
+        listaItens: [],
+    })
 
 
-    function prepararTela(produto) {
+    function prepararTela(doacao) {
         setModoEdicao(true);
-        setProdutoEdicao(produto);
+        setDoacaoEdicao(doacao);
         setExibirTabela(false)
     }
 
@@ -60,7 +55,6 @@ export default function TelaDoacao(props) {
                 {
                     exibirTabela ?
                         <TableDoacao
-                            listaProdutos={produtos}
                             listaDoacoes={doacoes}
                             setDoacoes={setDoacoes}
                             exibirTabela={setExibirTabela}
@@ -73,10 +67,10 @@ export default function TelaDoacao(props) {
                             // setProdutos={setProdutos}
                             exibirTabela={setExibirTabela}
                             dadosAtualizados={exibirTabelaEAtualizarDados}
-                            // modoEdicao={modoEdicao}
-                            // editar={prepararTela}
-                            // setModoEdicao={setModoEdicao}
-                            // produto={produtoEdicao}
+                            modoEdicao={modoEdicao}
+                            editar={prepararTela}
+                            setModoEdicao={setModoEdicao}
+                            doacao={doacaoEdicao}
                             // buscarProduto={buscarProduto}
                             // categorias={categoria}
                         />

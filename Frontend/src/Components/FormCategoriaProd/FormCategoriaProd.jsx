@@ -79,8 +79,8 @@ export default function CategoriaForm(props) {
                 onSubmit={manipulaSubmissao}
                 variant="light"
             >
-                <Form.Group className="mb-3">
-                    <h3>Cadastro Categoria de Categorias</h3>
+                <Form.Group className="mb-3 mt-4">
+                    <h3>Cadastro Categoria de Produtos</h3>
                 </Form.Group>
 
                 <Row>
@@ -102,8 +102,8 @@ export default function CategoriaForm(props) {
           </Col> */}
 
                     <Col>
-                        <Form.Group>
-                            <Form.Label>Nome Categoria</Form.Label>
+                        <Form.Group className="mb-3">
+                            <Form.Label className="mb-2">Nome Categoria</Form.Label>
                             <Form.Control
                                 value={categoria.categoria}
                                 type="text"

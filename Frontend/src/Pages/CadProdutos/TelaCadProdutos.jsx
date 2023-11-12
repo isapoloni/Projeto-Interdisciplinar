@@ -1,4 +1,3 @@
-// Desenvolvido por Isabela Poloni
 
 import { useState, useEffect } from "react";
 import TableProduto from "../../Components/TableProduto/TableProduto";
@@ -7,6 +6,7 @@ import ProdutoForm from "../../Components/FormProduto/FormProduto";
 import { urlBackend } from "../../assets/funcoes";
 import Header from "../../Components/Header";
 import Cookie from "universal-cookie";
+
 export default function CadProdutos(props) {
 
   const [exibirTabela, setExibirTabela] = useState(true)
@@ -25,7 +25,6 @@ export default function CadProdutos(props) {
 
   function prepararTela(produto) {
     setModoEdicao(true);
-  
     setProdutoEdicao(produto);
     setExibirTabela(false)
 
@@ -39,7 +38,7 @@ export default function CadProdutos(props) {
       body: JSON.stringify(produto)
     }).then((resposta) => {
       window.alert('Produto excluído com sucesso!!!')
-      window.location.reload();
+      // window.location.reload();
       return resposta.json()
     })
   }

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   Table,
@@ -13,22 +14,38 @@ import {
   TextField,
 } from '@mui/material';
 import { MdModeEdit } from 'react-icons/md';
-import { HiTrash } from 'react-icons/hi';
 import { RiSearchLine } from 'react-icons/ri';
 import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { urlBackend } from '../../assets/funcoes';
+import ConfirmationModal from '../ModalConfirmacao'
 
 export default function TableProduto(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedProduto, setSelectedProduto] = useState(null);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
+
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
+
+  const handleOpenModal = (produto) => {
+    setSelectedProduto(produto);
+    setModalOpen(true);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleConfirmUpdate = () => {
+    props.editar(selectedProduto);
+    handleCloseModal();
   };
 
   function filtrarProdutos(e) {
@@ -62,7 +79,7 @@ export default function TableProduto(props) {
           fullWidth
           type="text"
           id="termoBusca"
-          placeholder="Busque aqui o produto desejado"
+          placeholder="Busque o produto desejado"
           onChange={filtrarProdutos}
           InputProps={{
             startAdornment: (
@@ -98,11 +115,7 @@ export default function TableProduto(props) {
                   <IconButton
                     variant="outlined"
                     style={{ color: '#1683cc' }}
-                    onClick={() => {
-                      if (window.confirm('Deseja atualizar os dados do produto?')) {
-                        props.editar(produto);
-                      }
-                    }}
+                    onClick={() => handleOpenModal(produto)}
                   >
                     <MdModeEdit />
                   </IconButton>
@@ -123,6 +136,12 @@ export default function TableProduto(props) {
               </TableRow>
             ))}
           </TableBody>
+          <ConfirmationModal
+            open={isModalOpen}
+            onClose={handleCloseModal}
+            onConfirm={handleConfirmUpdate}
+            contentText={`Deseja atualizar os dados do produto ${selectedProduto?.nome || 'produto'}?`}
+          />
         </Table>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}

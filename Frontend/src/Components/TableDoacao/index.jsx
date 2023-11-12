@@ -1,16 +1,4 @@
-// Desenvolvido por Isabella Poloni
 
-// import {
-//   Table,
-//   Container,
-//   Button,
-//   InputGroup,
-//   FormControl,
-// } from "react-bootstrap";
-// import { MdModeEdit } from "react-icons/md";
-// import { HiTrash } from "react-icons/hi";
-// import { RiSearchLine } from "react-icons/ri";
-// import { urlBackend } from "../../assets/funcoes";
 
 import React, { useState } from 'react';
 import {
@@ -29,13 +17,48 @@ import {
 import { MdModeEdit } from 'react-icons/md';
 import { HiTrash } from 'react-icons/hi';
 import { RiSearchLine } from 'react-icons/ri';
-import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Container, Button, InputGroup, FormControl, Modal } from 'react-bootstrap';
 import { urlBackend } from '../../assets/funcoes';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import ConfirmationModal from '../ModalConfirmacao'
+
 
 export default function TableDoacao(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [expandedRow, setExpandedRow] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [doacoes, setDoacoes] = useState(props.listaDoacoes);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedDoacao, setSelectedDoacao] = useState(null);
+
+
+  const handleOpenModal = (doacao) => {
+    setSelectedDoacao(doacao);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleConfirmUpdate = () => {
+    props.editar(selectedDoacao);
+    handleCloseModal();
+  };
+
+  const handleDateFilter = () => {
+    const filteredDoacoes = props.listaDoacoes.filter((doacao) => {
+      const dataDoacao = new Date(doacao.dataDoacao);
+      return startDate <= dataDoacao && dataDoacao <= endDate;
+    });
+
+    // Atualize o estado local em vez de props
+    setDoacoes(filteredDoacoes);
+  };
 
   const handleExpand = (doacao) => {
     setExpandedRow(expandedRow === doacao.codigo ? null : doacao.codigo);
@@ -74,11 +97,71 @@ export default function TableDoacao(props) {
     return `${dia}/${mes}/${ano}`;
   }
 
-  
+  const handleDelete = (codigo) => {
+    if (window.confirm("Deseja excluir?")) {
+
+      fetch(urlBackend + '/doacao/' + codigo, {
+        method: "DELETE",
+      })
+        .then((resposta) => {
+          if (resposta.ok) {
+            props.setDoacoes(props.listaDoacoes.filter(doacao => doacao.codigo !== codigo));
+          } else {
+            console.error("Erro ao excluir a doação.");
+          }
+        })
+        .catch((error) => console.error("Erro ao excluir a doação:", error));
+    }
+  };
+
 
   return (
 
     <Container>
+
+      <div>
+        {/* Botão para abrir o modal de seleção de datas */}
+        <Button onClick={() => setModalVisible(true)}>Filtrar por Data</Button>
+
+        {/* Modal para seleção de datas */}
+        <Modal show={modalVisible} onHide={() => setModalVisible(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Selecione o Intervalo de Datas</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              placeholderText="Data Inicial"
+              dateFormat="dd/MM/yyyy"  // Definindo o formato desejado
+            />
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              placeholderText="Data Final"
+              dateFormat="dd/MM/yyyy"  // Definindo o formato desejado
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setModalVisible(false)}>
+              Fechar
+            </Button>
+            <Button variant="primary" onClick={handleDateFilter}>
+              Aplicar Filtro
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* Restante do código... */}
+      </div>
+
       <Button
         className="mb-4"
         onClick={() => {
@@ -93,7 +176,7 @@ export default function TableDoacao(props) {
           fullWidth
           type="text"
           id="termoBusca"
-          placeholder="Busque aqui o doador pelo nome"
+          placeholder="Busque pelo nome do doador ou data da doação"
           onChange={filtrarDoacoesPorCPF}
           InputProps={{
             startAdornment: (
@@ -105,18 +188,6 @@ export default function TableDoacao(props) {
         />
       </InputGroup>
 
-      {/* <InputGroup className="mt-2">
-        <FormControl
-          type="text"
-          id="termoBusca"
-          placeholder="Busque aqui o doador pelo nome"
-          onChange={filtrarDoacoesPorCPF}
-        />
-        <InputGroup.Text>
-          <RiSearchLine />
-        </InputGroup.Text>
-      </InputGroup> */}
-
       <TableContainer component={Paper} className="mt-5">
         <Table size="small" className="custom-table">
           <TableHead>
@@ -124,6 +195,7 @@ export default function TableDoacao(props) {
               <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Doador</TableCell>
               <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Data da Doação</TableCell>
               <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Itens</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -135,6 +207,23 @@ export default function TableDoacao(props) {
                   <TableCell>
                     <IconButton onClick={() => handleExpand(doacao)}>
                       <span style={{ fontSize: '12px', fontWeight: 'bold' }}>Detalhes</span>
+                    </IconButton>
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      variant="outlined"
+                      style={{ color: '#1683cc' }}
+                      onClick={() => handleOpenModal(doacao)}
+                    >
+                      <MdModeEdit />
+                    </IconButton>
+
+                    <IconButton
+                      variant="outlined"
+                      style={{ color: '#cc3116' }}
+                      onClick={() => handleDelete(doacao.codigo)}
+                    >
+                      <HiTrash />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -159,11 +248,18 @@ export default function TableDoacao(props) {
                         </TableBody>
                       </Table>
                     </TableCell>
+
                   </TableRow>
                 )}
               </React.Fragment>
             ))}
           </TableBody>
+          <ConfirmationModal
+            open={isModalOpen}
+            onClose={handleCloseModal}
+            onConfirm={handleConfirmUpdate}
+            contentText={`Deseja atualizar os dados da doação ${selectedDoacao?.doador || 'Doação'}?`}
+          />
         </Table>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
@@ -178,87 +274,4 @@ export default function TableDoacao(props) {
     </Container>
   );
 
-  // return (
-  //   <Container>
-  //     <Button
-  //       className="mb-4"
-  //       onClick={() => {
-  //         props.exibirTabela(false);
-  //       }}
-  //     >
-  //       Nova Doação
-  //     </Button>
-
-  //     <InputGroup className="mt-2">
-  //       <FormControl
-  //         type="text"
-  //         id="termoBusca"
-  //         placeholder="Busque aqui o doador pelo nome"
-  //         onChange={filtrarDoacoesPorCPF}
-  //       />
-  //       <InputGroup.Text>
-  //         <RiSearchLine />
-  //       </InputGroup.Text>
-  //     </InputGroup>
-
-  //     <Table striped bordered hover size="sm" className="mt-5">
-  //       <thead>
-  //         <tr className="text-center">
-  //           {/* <th className="text-center">Código</th> */}
-  //           <th className="text-center">Doador</th>
-  //           <th className="text-center">Data da Doação</th>
-  //           <th className="text-center">Itens</th>
-  //           {/* <th className="text-center">Ações</th> */}
-  //         </tr>
-  //       </thead>
-  //       <tbody>
-  //         {props.listaDoacoes?.map((doacao) => {
-  //           return (
-  //             <tr key={doacao.codigo}>
-  //               {/* <td>{doacao.codigo}</td> */}
-  //               <td>{doacao.cpfDoador.nome}</td>
-  //               <td>{formatarData(doacao.dataDoacao)}</td>
-
-  //               <td>
-  //                 <ul>
-  //                   {doacao.listaItens.map((item, index) => (
-  //                     <li key={index}>
-  //                       {item.produto.nome} - Quantidade: {item.quantidade}
-  //                     </li>
-  //                   ))}
-  //                 </ul>
-  //               </td>
-  //               {/* <td>
-  //                 <Button
-  //                   variant="outline-primary"
-  //                   onClick={() => {
-  //                     if (
-  //                       window.confirm(
-  //                         "Deseja atualizar os dados da doação?"
-  //                       )
-  //                     ) {
-  //                       // Adicione a função para editar doação aqui
-  //                     }
-  //                   }}
-  //                 >
-  //                   <MdModeEdit />
-  //                 </Button>{" "}
-  //                 <Button
-  //                   variant="outline-danger"
-  //                   onClick={() => {
-  //                     if (window.confirm("Deseja excluir?")) {
-  //                       // Adicione a função para excluir doação aqui
-  //                     }
-  //                   }}
-  //                 >
-  //                   <HiTrash />
-  //                 </Button>
-  //               </td> */}
-  //             </tr>
-  //           );
-  //         })}
-  //       </tbody>
-  //     </Table>
-  //   </Container>
-  // );
 }

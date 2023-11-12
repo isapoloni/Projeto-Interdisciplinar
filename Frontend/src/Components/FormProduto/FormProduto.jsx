@@ -86,15 +86,15 @@ export default function ProdutoForm(props) {
         onSubmit={manipulaSubmissao}
         variant="light"
       >
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3 mt-4">
           <h3>Cadastro de Produtos</h3>
         </Form.Group>
 
         <Row>
 
           <Col>
-            <Form.Group>
-              <Form.Label>Nome</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label className="mb-2">Nome</Form.Label>
               <Form.Control
                 value={produto.nome}
                 type="text"
@@ -110,8 +110,8 @@ export default function ProdutoForm(props) {
           </Col>
 
           <Col>
-            <Form.Group>
-              <Form.Label>Unidade</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label className="mb-2">Unidade</Form.Label>
               <Form.Control
                 value={produto.metrica}
                 as="select"
@@ -135,8 +135,8 @@ export default function ProdutoForm(props) {
           </Col>
 
         </Row>
-        <Form.Group>
-          <Form.Label>Descrição</Form.Label>
+        <Form.Group className="mb-3">
+          <Form.Label className="mb-2">Descrição</Form.Label>
           <Form.Control
             value={produto.descricao}
             as="textarea"
@@ -179,8 +179,8 @@ export default function ProdutoForm(props) {
         </Row> */}
 
         <Col>
-          <Form.Group>
-            <Form.Label>Categoria</Form.Label>
+          <Form.Group className="mb-3">
+            <Form.Label className="mb-2">Categoria</Form.Label>
             <DropdownList
               value={props.categorias.find(categoria => categoria.codigo === produto.codigoCategoria)}
               data={props.categorias}

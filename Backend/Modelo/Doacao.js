@@ -76,9 +76,9 @@ export default class Doacao {
         await doacaoBD.alterar(this);
     }
 
-    async remover(id) {
+    async remover(codigo) {
         const doacaoBD = new DoacaoBD();
-        await doacaoBD.excluir(id);
+        await doacaoBD.excluir(codigo);
     }
 
     async consultar(termo) {

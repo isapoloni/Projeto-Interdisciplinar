@@ -3,12 +3,16 @@ import { Form, Button, Col, Row, Stack, FormControl } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
 import { IMaskInput } from "react-imask";
 import Cookie from "universal-cookie";
+
+
 function FormPessoa(props) {
   const [validated, setValidated] = useState(false);
   const [pessoa, setPessoa] = useState(props.pessoa);
+
   console.log(pessoa)
+
   const cookies = new Cookie()
-  const jwtAuth= cookies.get('authorization')
+  const jwtAuth = cookies.get('authorization')
 
   function manipularMudanca(e) {
     const elemForm = e.currentTarget;
@@ -17,8 +21,19 @@ function FormPessoa(props) {
     setPessoa({ ...pessoa, [id]: valor });
   }
 
+  function removePontosTraco(cpf) {
+    return cpf.replace(/[.-]/g, '');
+  }
+
   function handleSubmit(event) {
     const form = event.currentTarget;
+
+    const cpfSemPontosTraco = removePontosTraco(pessoa.cpf);
+    setPessoa({ ...pessoa, cpf: cpfSemPontosTraco });;
+
+    console.log("Dados a serem enviados:", JSON.stringify(pessoa));
+
+
     if (form.checkValidity()) {
       if (!props.modoEdicao) {
         fetch(urlBackend + "/pessoas", {
@@ -48,11 +63,13 @@ function FormPessoa(props) {
       } else {
         fetch(urlBackend + "/pessoas", {
           method: "PUT",
-          headers: { "Content-Type": "application/json" ,
-          "authorization": `${jwtAuth}`},
+          headers: {
+            "Content-Type": "application/json",
+            "authorization": `${jwtAuth}`
+          },
           body: JSON.stringify(pessoa),
         }).then((resposta) => {
-          window.location.reload();
+          // window.location.reload();
           return resposta.json();
         });
       }
@@ -66,13 +83,20 @@ function FormPessoa(props) {
 
   return (
     <>
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group className="mb-5">
+      <Form
+        noValidate
+        validated={validated}
+        onSubmit={handleSubmit}
+        variant="light"
+      >
+
+        <Form.Group className="mb-5 mt-4">
           <h3>Cadastro de Pessoas</h3>
         </Form.Group>
+
         <Row>
           <Form.Group className="mb-3">
-            <Form.Label>Nome</Form.Label>
+            <Form.Label className="mb-2">Nome</Form.Label>
             <Form.Control
               type="text"
               placeholder="Digite o nome da pessoa"
@@ -90,7 +114,7 @@ function FormPessoa(props) {
         <Row>
           <Col>
             <Form.Group className="mb-3">
-              <Form.Label>CPF</Form.Label>
+              <Form.Label className="mb-2">CPF</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="111.111.111-11"
@@ -110,7 +134,7 @@ function FormPessoa(props) {
 
           <Col>
             <Form.Group className="mb-3">
-              <Form.Label>Data de Nascimento</Form.Label>
+              <Form.Label className="mb-2">Data de Nascimento</Form.Label>
               <Form.Control
                 type="date"
                 placeholder="ex: 11/11/1111"
@@ -130,7 +154,7 @@ function FormPessoa(props) {
         <Row>
           <Col>
             <Form.Group className="mb-3">
-              <Form.Label>Endereço</Form.Label>
+              <Form.Label className="mb-2">Endereço</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Digite o endereço completo (Rua/av , número , complemento)"
@@ -147,7 +171,7 @@ function FormPessoa(props) {
           </Col>
           <Col>
             <Form.Group className="mb-3">
-              <Form.Label>Cidade</Form.Label>
+              <Form.Label className="mb-2">Cidade</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Digite a cidade"
@@ -166,7 +190,7 @@ function FormPessoa(props) {
         <Row>
           <Col>
             <Form.Group className="mb-3">
-              <Form.Label>Telefone</Form.Label>
+              <Form.Label className="mb-2">Telefone</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="ex:(11)11111-1111"
@@ -185,7 +209,7 @@ function FormPessoa(props) {
           </Col>
           <Col>
             <Form.Group className="mb-3">
-              <Form.Label>E-Mail</Form.Label>
+              <Form.Label className="mb-2">E-Mail</Form.Label>
               <Form.Control
                 required
                 type="email"
@@ -204,7 +228,7 @@ function FormPessoa(props) {
         <Row>
           <Col>
             <Form.Group className="mb-5">
-              <Form.Label>Tipo de Pessoa</Form.Label>
+              <Form.Label className="mb-2">Tipo de Pessoa</Form.Label>
               <Form.Select
                 required
                 aria-label="Tipo de pessoa"
@@ -226,7 +250,7 @@ function FormPessoa(props) {
           </Col>
           <Col>
             <Form.Group className="mb-3">
-              <Form.Label>Profissão </Form.Label>
+              <Form.Label className="mb-2">Profissão </Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Digite a profissão"
@@ -237,8 +261,8 @@ function FormPessoa(props) {
             </Form.Group>
           </Col>
         </Row>
-       
-  
+
+
         <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
           <Button variant="primary" type="submit" className="mb-3">
             {props.modoEdicao ? "Atualizar" : "Cadastrar"}

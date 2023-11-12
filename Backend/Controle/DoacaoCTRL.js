@@ -114,16 +114,15 @@ export default class DoacaoCTRL {
 
         resposta.type('application/json');
 
-        if (requisicao.method === 'DELETE' && requisicao.is('application/json')) {
+        if (requisicao.method === 'DELETE') {
 
-            const dados = requisicao.body;
-            const codigo = dados.codigo;
+            let codigo = requisicao.params.codigo;
 
             if (codigo) {
 
-                const doacao = new Doacao(codigo);
+                const doacao = new Doacao();
 
-                doacao.remover().then(() => {
+                doacao.remover(codigo).then(() => {
                     resposta.status(200).json({
                         status: true,
                         mensagem: 'Doação excluída com sucesso!'

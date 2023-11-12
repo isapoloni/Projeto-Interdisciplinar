@@ -2,11 +2,18 @@
 
 import {
   Table,
-  Container,
-  Button,
-  InputGroup,
-  FormControl,
-} from "react-bootstrap";
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TablePagination,
+  InputAdornment,
+  TextField,
+} from '@mui/material';
+import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
 import { RiSearchLine } from "react-icons/ri";
@@ -40,6 +47,14 @@ export default function TableHistServico(props) {
       });
   }
 
+  function formatarData(data) {
+    const dataFormatada = new Date(data);
+    const dia = dataFormatada.getDate().toString().padStart(2, '0');
+    const mes = (dataFormatada.getMonth() + 1).toString().padStart(2, '0');
+    const ano = dataFormatada.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  }
+
   return (
     <Container>
       <Button
@@ -52,53 +67,58 @@ export default function TableHistServico(props) {
       </Button>
 
       <InputGroup className="mt-2">
-        <FormControl
+        <TextField
+          fullWidth
           type="text"
           id="termoBusca"
-          placeholder="Busque serviços aqui"
+          placeholder="Busque uma prestação de serviço"
           onChange={filtrarServicos}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <RiSearchLine />
+              </InputAdornment>
+            ),
+          }}
         />
-        <InputGroup.Text>
-          <RiSearchLine />
-        </InputGroup.Text>
       </InputGroup>
 
-      <Table striped bordered hover size="sm" className="mt-5">
-        <thead>
-          <tr className="text-center">
-            <th className="text-center">Código</th>
-            {/* <th className="text-center">Pessoa</th> */}
-            <th className="text-center">Prestador</th>
-            <th className="text-center">Serviço</th>
-            <th className="text-center">Data do Serviço</th>
-            <th className="text-center">Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-          props.listaHistoricoDeServicos?.map((histServico) => {
-            return (
-              <tr key={histServico.id}>
-                <td>{histServico.id}</td>
-                <td>{histServico.prestador}</td>
-                <td>{histServico.servico}</td>
-                <td>{histServico.serviceData}</td>
-                <td>{histServico.valor}</td>
-                <td>
-                  <Button
-                    variant="outline-primary"
+      <TableContainer component={Paper} className="mt-5">
+        <Table striped bordered hover size="sm" className="custom-table">
+          <TableHead>
+            <TableRow className="text-center">
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Código</TableCell>
+              {/* <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Pessoa</TableCell> */}
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Prestador</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Serviço</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Data do Serviço</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Valor</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Ações</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {props.listaHistoricoDeServicos?.map((histServico) => (
+              <TableRow key={histServico.id}>
+                <TableCell>{histServico.id}</TableCell>
+                <TableCell>{histServico.prestador}</TableCell>
+                <TableCell>{histServico.servico}</TableCell>
+                <TableCell>{formatarData(histServico.serviceData)}</TableCell>
+                <TableCell>{histServico.valor}</TableCell>
+                <TableCell>
+                  <IconButton
+                    variant="outlined"
+                    style={{ color: '#1683cc' }}
                     onClick={() => {
-                      if (
-                        window.confirm("Deseja atualizar os dados do serviço?")
-                      ) {
+                      if (window.confirm("Deseja atualizar os dados do serviço?")) {
                         props.editar(histServico);
                       }
                     }}
                   >
                     <MdModeEdit />
-                  </Button>{" "}
-                  <Button
-                    variant="outline-danger"
+                  </IconButton>{" "}
+                  <IconButton
+                    variant="outlined"
+                    style={{ color: '#cc3116' }}
                     onClick={() => {
                       if (window.confirm("Deseja excluir?")) {
                         props.deletar(histServico);
@@ -106,14 +126,13 @@ export default function TableHistServico(props) {
                     }}
                   >
                     <HiTrash />
-                  </Button>
-                </td>
-              </tr>
-            );
-          })
-          }
-        </tbody>
-      </Table>
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Container>
   );
 }

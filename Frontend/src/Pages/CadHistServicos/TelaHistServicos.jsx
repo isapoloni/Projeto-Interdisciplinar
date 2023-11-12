@@ -39,7 +39,7 @@ export default function CadHistServicos(props) {
       body: JSON.stringify(histServ),
     }).then((resposta) => {
       window.alert("Serviço excluído com sucesso!!!");
-      window.location.reload();
+      // window.location.reload();
       return resposta.json();
     });
   }
@@ -104,13 +104,13 @@ export default function CadHistServicos(props) {
       <Header />
       <Container>
         {exibirTabela ? (
-           <TableHistServico
-           listaHistoricoDeServicos={histServ}
-           setHistServicos={setHistServ}
-           exibirTabela={setExibirTabela}
-           editar={prepararTela}
-           deletar={deletarServico}
-         />
+          <TableHistServico
+            listaHistoricoDeServicos={histServ}
+            setHistServicos={setHistServ}
+            exibirTabela={setExibirTabela}
+            editar={prepararTela}
+            deletar={deletarServico}
+          />
         ) : (
           <HistServicoForm
             listaServicos={histServ}
