@@ -22,7 +22,12 @@ function Login() {
     }).then(data => data.json())
     console.log(data)
     if(data.auth === true){
+      cookies.remove('authorization')
+      cookies.remove('role')
       cookies.set('authorization', data.token,{
+        path:'/'
+      })
+      cookies.set('role', data.role,{
         path:'/'
       })
       navigate("/Home");

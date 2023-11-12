@@ -20,6 +20,7 @@ export default function TabelaPessoas(props) {
 
   const cookies = new Cookies()
   const jwtAuth= cookies.get('authorization')
+  console.log(cookies)
     function filtrarPessoas(e) {
     const termoBusca = e.currentTarget.value;
     fetch(urlBackend + "/pessoas", { method: "GET" , headers: { "Content-Type": "application/json", "authorization": `${jwtAuth}` } })

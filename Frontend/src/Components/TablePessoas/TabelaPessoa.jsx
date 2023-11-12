@@ -15,9 +15,14 @@ import { urlBackend } from "../../assets/funcoes";
 import { MdModeEdit } from "react-icons/md";
 import Stack from "react-bootstrap/Stack";
 import Cookies from "universal-cookie";
+import { PessoaContext } from "../../context/pessoaContexot";
+import { useContext } from "react";
 export default function TabelaPessoas(props) {
+  const { pessoas } = useContext(PessoaContext);
+  console.log(pessoas)
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
+  const role = cookies.get("role");
   function filtrarPessoas(e) {
     const termoBusca = e.currentTarget.value;
     fetch(urlBackend + "/pessoas", {
@@ -107,8 +112,11 @@ export default function TabelaPessoas(props) {
                     </Button>
 
                     {""}
+                   
+
                     <Button
-                      variant="outline-danger"
+                      variant={role !== "admin" ? "secondary" : "outline-danger"}
+                      disabled={role !== "admin"}
                       Button
                       onClick={() => {
                         if (window.confirm("Deseja excluir permanentemente?")) {

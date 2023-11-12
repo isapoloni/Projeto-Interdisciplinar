@@ -6,10 +6,11 @@ import TelaCadPessoa from "./Pages/CadPessoas/CadPessoa";
 import CadServicos from "./Pages/CadServicos/TelaCadServicos";
 import CadCategoria from "./Pages/CadCategoria/TelaCadCategoria";
 import CadHistServicos from "./Pages/CadHistServicos/TelaHistServicos";
-
+//Providers
+import {PessoaProvider} from "./context/pessoaContexot"
 function App() {
   return (
-    <>
+    <PessoaProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<Login />} />
@@ -21,7 +22,8 @@ function App() {
           <Route path="/HistoricoServicos" element={<CadHistServicos />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </PessoaProvider>
+
   );
 }
 
