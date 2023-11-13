@@ -12,6 +12,19 @@ export function verifyJWT(req,res,next){
     next()
   })
 }
+export function verifyAccessLevelForDeleteRequest(req,res,next){
+  
+    const token = req.headers["authorization"]
+    jwt.verify(token,secret_key,(err,decoded)=>{
+    if (err) return res.status(401).json({auth:false, message: "Credencial inválida"})
+    if(decoded.role !== "admin" && req.method === 'DELETE'){
+      return res.status(401).json({auth:false, message: "Você precisa ser um administrador para deletar!"})
+    }
+    //req.userId = decoded.userId
+  })
+
+next()
+}
 const users = [
   { id:1,
     user:"admin",
