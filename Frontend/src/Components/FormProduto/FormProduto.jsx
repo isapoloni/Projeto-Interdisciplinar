@@ -8,6 +8,8 @@ export default function ProdutoForm(props) {
   const [produto, setProduto] = useState(props.produto);
   const cookies = new Cookie()
   const jwtAuth= cookies.get('authorization')
+  console.log(props.modoEdicao)
+
 
   function manipularOnChange(e) {
     const elementForm = e.currentTarget;
@@ -180,6 +182,7 @@ export default function ProdutoForm(props) {
             type="button"
             onClick={() => {
               props.exibirTabela(true);
+              props.setModoEdicao(false);
             }}
           >
             Voltar

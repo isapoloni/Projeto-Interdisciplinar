@@ -69,7 +69,7 @@ export default function CadProdutos(props) {
   }
 
   function buscarCategoria() {
-    fetch(urlBackend + '/categoria', {
+    fetch(urlBackend + '/categoriaProduto', {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

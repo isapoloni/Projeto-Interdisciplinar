@@ -4,7 +4,18 @@ import { urlBackend } from "../../assets/funcoes";
 import Cookies from "universal-cookie";
 export default function CategoriaForm(props) {
     const [validated, setValidated] = useState(false);
-    const [categoria, setCategoria] = useState(props.categoria);
+    const [categoria, setCategoria] = useState(props.modoEdicao ? props.categoria: {
+        
+    });
+    const [tipoCategoria,setTipoCategoria] = useState(props.modoEdicao ? props.tipoCategoria : '') 
+    const selectRequestForm ={
+        produto:'categoriaProduto',
+        servico:'catservico'
+    }
+    // console.log(selectRequestForm[tipoCategoria])
+    console.log(props.modoEdicao)
+
+    // console.log(tipoCategoria)
     const cookies = new Cookies()
     const jwtAuth= cookies.get('authorization')
     function manipularOnChange(e) {
@@ -19,7 +30,7 @@ export default function CategoriaForm(props) {
         if (form.checkValidity()) {
 
             if (!props.modoEdicao) {
-                fetch(urlBackend + "/categoria", {
+                fetch(urlBackend + `/${selectRequestForm[tipoCategoria]}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -46,7 +57,7 @@ export default function CategoriaForm(props) {
                     })
             }
             else {
-                fetch(urlBackend + '/categoria', {
+                fetch(urlBackend + `/${selectRequestForm[tipoCategoria]}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -79,7 +90,7 @@ export default function CategoriaForm(props) {
                 variant="light"
             >
                 <Form.Group className="mb-3">
-                    <h3>Cadastro Categoria de Categorias</h3>
+                    <h3>Cadastro de Categorias</h3>
                 </Form.Group>
 
                 <Row>
@@ -116,6 +127,26 @@ export default function CategoriaForm(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Col>
+                    <Col>
+                    <Form.Group>
+                    <Form.Label>Categoria de </Form.Label>
+              <Form.Control
+                value={tipoCategoria}
+                as="select"
+                id="tipoCategoria"
+                disabled={props.modoEdicao ? true : false} 
+                onChange={(e) => setTipoCategoria(e.target.value)}
+                required
+              >
+                <option></option>
+                <option value={'produto'}>Produto</option>
+                <option value={'servico'}>Serviço</option>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                Por favor, informe a qual entidade pertence a categoria!
+              </Form.Control.Feedback>
+            </Form.Group>
+                    </Col>
 
                 </Row>
 
@@ -127,6 +158,7 @@ export default function CategoriaForm(props) {
                         variant="danger"
                         type="button"
                         onClick={() => {
+                            props.setModoEdicao(false)
                             props.exibirTabela(true);
                         }}
                     >

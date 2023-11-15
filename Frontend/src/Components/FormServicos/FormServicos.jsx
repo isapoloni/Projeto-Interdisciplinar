@@ -4,12 +4,11 @@ import { urlBackend } from "../../assets/funcoes";
 import { IMaskInput } from "react-imask";
 import Cookies from "universal-cookie";
 export default function ServicoForm(props) {
-  // console.log(props)
-  console.log("props", props);
+  console.log(props)
 
   const [validated, setValidated] = useState(false);
   const [servico, setServico] = useState(props.servico);
-  console.log("serv", servico);
+  console.log(servico)
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
   // const [cpfSelecionado, setCpfSelecionado] = useState('');
@@ -138,7 +137,7 @@ export default function ServicoForm(props) {
             </Form.Group>
           </Col>
 
-          <Col xs={3}>
+          {/* <Col xs={3}>
             <Form.Group>
               <Form.Label>Jornada de Trabalho</Form.Label>
               <Form.Control
@@ -158,7 +157,7 @@ export default function ServicoForm(props) {
                 Por favor, Selecione uma opção!
               </Form.Control.Feedback>
             </Form.Group>
-          </Col>
+          </Col> */}
         </Row>
         {/* <Row>
           {
@@ -211,7 +210,7 @@ export default function ServicoForm(props) {
         </Form.Group>
 
         <Row>
-          <Col xs={5}>
+          {/* <Col xs={5}>
             <Form.Group>
               <Form.Label>Custo Estimado </Form.Label>
               <Form.Control
@@ -227,10 +226,29 @@ export default function ServicoForm(props) {
                 Por favor, informe o custo estimado!
               </Form.Control.Feedback>
             </Form.Group>
-          </Col>
+          </Col> */}
 
           <Col xs={3}>
-            <Form.Group>
+          <Form.Group>
+                <Form.Label>Categoria</Form.Label>
+                <Form.Control
+                  value={servico.categoria}
+                  as="select"
+                  id="categoria"
+                  onChange={manipularOnChange}
+                  required
+                >
+                  <option></option>
+                  {props.categorias.map((categoria) => (
+                    
+                    <option value={categoria.codigo}>{categoria.categoria}</option>
+                  ))}
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  Por favor, informe a categoria!
+                </Form.Control.Feedback>
+              </Form.Group>
+            {/* <Form.Group>
               <Form.Label>Serviço Remoto?</Form.Label>
               <Form.Control
                 value={servico.modelo}
@@ -246,7 +264,7 @@ export default function ServicoForm(props) {
               <Form.Control.Feedback type="invalid">
                 Por favor, Selecione uma opção!
               </Form.Control.Feedback>
-            </Form.Group>
+            </Form.Group> */}
           </Col>
         </Row>
 

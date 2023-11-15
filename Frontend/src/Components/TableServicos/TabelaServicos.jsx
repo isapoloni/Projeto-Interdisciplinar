@@ -67,11 +67,8 @@ export default function TableServico(props) {
             <th className="text-center">Código</th>
             {/* <th className="text-center">Pessoa</th> */}
             <th className="text-center">Serviço</th>
-            <th className="text-center">Jornada</th>
+            <th className="text-center">Categoria</th>
             <th className="text-center">Descrição</th>
-            <th className="text-center">Custo</th>
-            <th className="text-center">Modelo</th>
-            <th className="text-center">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -81,10 +78,8 @@ export default function TableServico(props) {
                 <td>{servico.id}</td>
                 {/* <td>{servico.cpfPessoa}</td> */}
                 <td>{servico.servico}</td>
-                <td>{servico.jornada}</td>
+                <td>{servico.categoria}</td>
                 <td>{servico.descricao}</td>
-                <td>{servico.custo}</td>
-                <td>{servico.modelo}</td>
                 <td>
                   <Button
                     variant="outline-primary"

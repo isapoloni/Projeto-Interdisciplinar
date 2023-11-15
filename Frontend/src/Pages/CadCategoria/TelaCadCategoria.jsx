@@ -12,6 +12,8 @@ export default function CadCategoria(props) {
 
   const [exibirTabela, setExibirTabela] = useState(true)
   const [categorias, setCategorias] = useState([])
+  const [tipoCategoria,setTipoCategoria] = useState('')
+  const [categoriaServico, setCategoriaServico] = useState([])
   const [modoEdicao, setModoEdicao] = useState(false)
   const [categoriaEdicao, setCategoriaEdicao] = useState({
     codigo: "",
@@ -27,7 +29,7 @@ export default function CadCategoria(props) {
   }
 
   function deletarCategoria(categoria) {
-    fetch(urlBackend + '/categoria', {
+    fetch(urlBackend + '/categoriaProduto', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' ,      
           "authorization": `${jwtAuth}`
@@ -45,7 +47,7 @@ export default function CadCategoria(props) {
   }, []);
 
   function buscar(){
-    fetch(urlBackend + '/categoria', {
+    fetch(urlBackend + '/categoriaProduto', {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -62,6 +64,23 @@ export default function CadCategoria(props) {
   
         }
       });
+    fetch(urlBackend + '/catservico', {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": `${jwtAuth}`
+        }
+      }).then((resposta) => {
+        return resposta.json()
+      }).then((dados) => {
+        if (Array.isArray(dados)) {
+          setCategoriaServico(dados)
+  
+        }
+        else {
+  
+        }
+      });
   }
 
   return (
@@ -72,14 +91,22 @@ export default function CadCategoria(props) {
           exibirTabela ?
             <TableCategoria
               listaCategorias={categorias}
+              tipoCategoria={tipoCategoria}
+              setTipoCategoria={setTipoCategoria}
+              listaCategoriasServico={categoriaServico}
               setCategorias={setCategorias}
               exibirTabela={setExibirTabela}
               editar={prepararTela}
+              modoEdicao={modoEdicao}
+              setModoEdicao={setModoEdicao}
               deletar={deletarCategoria}
             />
             :
             <CategoriaForm
               listaCategorias={categorias}
+              setTipoCategoria={setTipoCategoria}
+              tipoCategoria={tipoCategoria}
+              listaCategoriasServico={categoriaServico}
               setCategorias={setCategorias}
               exibirTabela={setExibirTabela}
               modoEdicao={modoEdicao}

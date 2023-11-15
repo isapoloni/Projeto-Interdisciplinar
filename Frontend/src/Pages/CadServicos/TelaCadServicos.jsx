@@ -12,15 +12,14 @@ export default function CadServicos(props) {
   const [servicos, setServicos] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [cpfPessoas, setCpfPessoas] = useState();
+  const [categoria, setCategoria] = useState()
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
   const [servicoEdicao, setServicoEdicao] = useState({
     id: "",
     servico: "",
-    jornada: "",
     descricao: "",
-    custo: "",
-    modelo: "",
+    categoria: "",
   });
 
   function prepararTela(servico) {
@@ -43,6 +42,24 @@ export default function CadServicos(props) {
       return resposta.json();
     });
   }
+  function buscarCategoria() {
+    fetch(urlBackend + '/catservico', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
+    }).then((resposta) => {
+      return resposta.json()
+    }).then((dados) => {
+      if (Array.isArray(dados)) {
+        setCategoria(dados)
+      }
+      else {
+
+      }
+    });
+  }
   // function buscarCpfPessoas() {
   //   fetch(urlBackend + '/pessoas', {
   //     method: "GET",
@@ -62,6 +79,8 @@ export default function CadServicos(props) {
   useEffect(() => {
     // buscarCpfPessoas();
     buscar();
+    buscarCategoria()
+
   }, []);
   function buscar() {
     fetch(urlBackend + "/servicos", {
@@ -92,11 +111,13 @@ export default function CadServicos(props) {
             listaServicos={servicos}
             setServicos={setServicos}
             exibirTabela={setExibirTabela}
+            setModoEdicao={setModoEdicao}
             editar={prepararTela}
             deletar={deletarServico}
           />
         ) : (
           <ServicoForm
+         
             listaServicos={servicos}
             setServicos={setServicos}
             exibirTabela={setExibirTabela}
@@ -106,6 +127,7 @@ export default function CadServicos(props) {
             servico={servicoEdicao}
             cpfPessoas={cpfPessoas}
             buscar={buscar}
+            categorias={categoria}
           />
         )}
       </Container>
