@@ -1,6 +1,7 @@
 
 
 import React, { useState, useEffect } from 'react';
+import Cookies from "universal-cookie";
 import {
   Table,
   TableBody,
@@ -15,7 +16,7 @@ import {
   TextField
 } from '@mui/material';
 import { MdModeEdit } from 'react-icons/md';
-import { HiTrash , HiDocumentDownload} from 'react-icons/hi';
+import { HiTrash, HiDocumentDownload } from 'react-icons/hi';
 import { RiSearchLine } from 'react-icons/ri';
 import { BsCalendarDateFill } from 'react-icons/bs'
 import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
@@ -28,6 +29,9 @@ import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 
 export default function TableDoacao(props) {
+  const cookies = new Cookies();
+  const jwtAuth = cookies.get("authorization");
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [expandedRow, setExpandedRow] = useState(null);
@@ -48,7 +52,7 @@ export default function TableDoacao(props) {
       { label: 'Produto', key: 'listaItens[0].produto.nome' },
       { label: 'Quantidade', key: 'listaItens[0].quantidade' },
     ];
-  
+
     const dataToDownload = doacoes.map(doacao => {
       console.log('doacao', doacao)
       const rowData = {};
@@ -58,12 +62,12 @@ export default function TableDoacao(props) {
           : column.key.includes('listaItens') && doacao.listaItens && doacao.listaItens[0]
             ? doacao.listaItens.map(item => item[column.key.split('.')[1]]).join(', ')
             : doacao[column.key];
-  
+
         rowData[column.label] = value;
       });
       return rowData;
     });
-  
+
     const worksheet = XLSX.utils.json_to_sheet(dataToDownload, { header: columns.map(column => column.label) });
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Doacoes');
@@ -71,15 +75,21 @@ export default function TableDoacao(props) {
     const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     saveAs(data, 'doacoes.xlsx');
   };
-  
-  
+
+
 
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = () => {
-    fetch(urlBackend + '/doacao', { method: 'GET' })
+    fetch(urlBackend + '/doacao', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
+    })
       .then((resposta) => resposta.json())
       .then((listaDoacoes) => {
         if (Array.isArray(listaDoacoes)) {
@@ -132,7 +142,13 @@ export default function TableDoacao(props) {
   function filtrarDoacoesPorCPF(e) {
     const termoBusca = e.currentTarget.value;
 
-    fetch(urlBackend + "/doacao", { method: "GET" })
+    fetch(urlBackend + "/doacao", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
+    })
       .then((resposta) => resposta.json())
       .then((listaDoacoes) => {
         if (Array.isArray(listaDoacoes)) {
@@ -164,6 +180,10 @@ export default function TableDoacao(props) {
 
       fetch(urlBackend + '/doacao/' + codigo, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": `${jwtAuth}`
+        }
       })
         .then((resposta) => {
           if (resposta.ok) {

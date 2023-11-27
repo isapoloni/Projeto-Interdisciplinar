@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import Cookies from "universal-cookie";
 import { Form, Button, FormControl, InputGroup, Stack, Row, Col } from 'react-bootstrap';
 import { urlBackend } from '../../assets/funcoes';
 import { DropdownList } from 'react-widgets';
 import { useNavigate } from "react-router-dom";
 
 const FormDoacao = (props) => {
+    const cookies = new Cookies();
+    const jwtAuth = cookies.get("authorization");
+
     const [doadorOptions, setDoadorOptions] = useState([]);
     const [produtoOptions, setProdutoOptions] = useState([]);
     const [pessoasData, setPessoasData] = useState([]);
@@ -41,6 +45,10 @@ const FormDoacao = (props) => {
             try {
                 const pessoasResponse = await fetch(urlBackend + '/pessoas', {
                     method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": `${jwtAuth}`
+                    }
                 });
 
                 if (pessoasResponse.ok) {
@@ -56,6 +64,10 @@ const FormDoacao = (props) => {
 
                 const produtosResponse = await fetch(urlBackend + '/produto', {
                     method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": `${jwtAuth}`
+                    }
                 });
 
                 if (produtosResponse.ok) {
@@ -128,7 +140,7 @@ const FormDoacao = (props) => {
             }));
 
             const requestBody = {
-                codigo: props.doacao ? props.doacao.codigo : null, 
+                codigo: props.doacao ? props.doacao.codigo : null,
                 dataDoacao: doacao.dataDoacao,
                 cpfDoador: cpfDoadorSelecionado,
                 listaItens: listaItensFormatada,
@@ -137,13 +149,14 @@ const FormDoacao = (props) => {
             const method = props.modoEdicao ? 'PUT' : 'POST';
 
             const requestUrl = props.modoEdicao
-                ? `${urlBackend}/doacao` 
+                ? `${urlBackend}/doacao`
                 : `${urlBackend}/doacao`;
 
             const response = await fetch(requestUrl, {
                 method: method,
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
+                    "authorization": `${jwtAuth}`
                 },
                 body: JSON.stringify(requestBody),
             });
