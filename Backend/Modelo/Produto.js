@@ -1,4 +1,4 @@
-import ProdutoBDPid from "../Persistencia/ProdutoBdPid.js";
+import ProdutoBDPid from "../Persistencia/ProdutoBD.js";
 
 export default class Produto {
     #codigo;
@@ -96,7 +96,7 @@ export default class Produto {
 
     async consultar(termo) {
         const produtoBD = new ProdutoBDPid();
-        const produtos = await produtoBD.consutlar(termo);
+        const produtos = await produtoBD.consultar(termo);
         return produtos;
     }
 

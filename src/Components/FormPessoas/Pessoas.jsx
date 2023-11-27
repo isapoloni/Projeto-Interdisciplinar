@@ -36,6 +36,7 @@ function FormPessoa(props) {
     setPessoa({ ...pessoa, [id]: valor });
   }
 
+
   function handleSubmit(event) {
     const form = event.currentTarget;
     console.log("entrei aqui");

@@ -1,13 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
-import CadProdutos from "./Pages/CadProdutos/TelaCadProdutos";
+import CadCategoriaProduto from "./Pages/CadCategoriaProduto/TelaCadCategoria";
 import TelaCadPessoa from "./Pages/CadPessoas/CadPessoa";
 import CadServicos from "./Pages/CadServicos/TelaCadServicos";
-import CadCategoria from "./Pages/CadCategoria/TelaCadCategoria";
 import CadHistServicos from "./Pages/CadHistServicos/TelaHistServicos";
 //Providers
 import {PessoaProvider} from "./context/pessoaContexot"
+import CadDoacao from './Pages/Doacao/TelaDoacao'
+import CadProdutos from './Pages/CadProdutos/TelaCadProdutos'
+
 function App() {
   return (
     <PessoaProvider>
@@ -20,6 +22,7 @@ function App() {
           <Route path="/CadastroServicos" element={<CadServicos />} />
           <Route path="/CadastroCategoria" element={<CadCategoria />} />
           <Route path="/HistoricoServicos" element={<CadHistServicos />} />
+          <Route path="/Doacoes" element={<CadDoacao/>} />
         </Routes>
       </BrowserRouter>
     </PessoaProvider>

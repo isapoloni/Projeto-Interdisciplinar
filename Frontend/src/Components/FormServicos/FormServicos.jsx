@@ -95,7 +95,7 @@ export default function ServicoForm(props) {
           },
           body: JSON.stringify({ ...servico }),
         }).then((resposta) => {
-          window.location.reload();
+          // window.location.reload();
           return resposta.json();
         });
       }
@@ -115,14 +115,14 @@ export default function ServicoForm(props) {
         onSubmit={manipulaSubmissao}
         variant="light"
       >
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3 mt-4">
           <h3>Cadastro de Serviços</h3>
         </Form.Group>
 
         <Row>
           <Col>
-            <Form.Group>
-              <Form.Label>Serviço</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label className="mb-2">Serviço</Form.Label>
               <Form.Control
                 value={servico.servico}
                 type="text"
@@ -193,8 +193,8 @@ export default function ServicoForm(props) {
           //Here
           }
         </Row> */}
-        <Form.Group>
-          <Form.Label>Descrição</Form.Label>
+        <Form.Group className="mb-3">
+          <Form.Label className="mb-2">Descrição</Form.Label>
           <Form.Control
             value={servico.descricao}
             as="textarea"

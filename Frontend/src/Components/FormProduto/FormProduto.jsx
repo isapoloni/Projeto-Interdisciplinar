@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Form, Button, Col, Row, Stack, } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
+import { useNavigate } from "react-router-dom";
+import { DropdownList } from 'react-widgets';
+import 'react-widgets/styles.css';
 import Cookie from "universal-cookie";
 
 export default function ProdutoForm(props) {
   const [validated, setValidated] = useState(false);
   const [produto, setProduto] = useState(props.produto);
   const cookies = new Cookie()
-  const jwtAuth= cookies.get('authorization')
+  const jwtAuth = cookies.get('authorization')
   console.log(props.modoEdicao)
 
 
@@ -40,26 +43,30 @@ export default function ProdutoForm(props) {
               novaLista.push(produto)
               props.setProdutos(novaLista)
               props.buscarProduto()
-              props.exibirTabela(true)
+              props.dadosAtualizados()
             }
             window.alert(dados.mensagem)
+            console.log('Corpo da requisição:', JSON.stringify(produto));
+            console.log('caiu aqui', dados)
           })
           .catch((erro) => {
+            console.log('Corpo da requisição:', JSON.stringify(produto));
             window.alert("Erro ao executar a requisição: " + erro.message)
+            console.log('deu ruim', erro)
+            console.log('dados', dados)
           })
       }
       else {
         fetch(urlBackend + '/produto', {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
-            "authorization": `${jwtAuth}`
+            "Content-Type": "application/json"
           },
           body: JSON.stringify(produto)
         })
           .then((resposta) => {
-
-            window.location.reload();
+            console.log('Corpo da requisição:', JSON.stringify(produto));
+            props.dadosAtualizados()
             return resposta.json()
 
           })
@@ -81,15 +88,15 @@ export default function ProdutoForm(props) {
         onSubmit={manipulaSubmissao}
         variant="light"
       >
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3 mt-4">
           <h3>Cadastro de Produtos</h3>
         </Form.Group>
 
         <Row>
-          
+
           <Col>
-            <Form.Group>
-              <Form.Label>Nome</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label className="mb-2">Nome</Form.Label>
               <Form.Control
                 value={produto.nome}
                 type="text"
@@ -105,8 +112,8 @@ export default function ProdutoForm(props) {
           </Col>
 
           <Col>
-            <Form.Group>
-              <Form.Label>Unidade</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label className="mb-2">Unidade</Form.Label>
               <Form.Control
                 value={produto.metrica}
                 as="select"
@@ -130,8 +137,8 @@ export default function ProdutoForm(props) {
           </Col>
 
         </Row>
-        <Form.Group>
-          <Form.Label>Descrição</Form.Label>
+        <Form.Group className="mb-3">
+          <Form.Label className="mb-2">Descrição</Form.Label>
           <Form.Control
             value={produto.descricao}
             as="textarea"
@@ -146,7 +153,7 @@ export default function ProdutoForm(props) {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Row>
+        {/* <Row>
           {
 
             <Col>
@@ -161,7 +168,7 @@ export default function ProdutoForm(props) {
                 >
                   <option></option>
                   {props.categorias.map((categoria) => (
-                    
+
                     <option value={categoria.codigo}>{categoria.categoria}</option>
                   ))}
                 </Form.Control>
@@ -169,25 +176,49 @@ export default function ProdutoForm(props) {
                   Por favor, informe a categoria!
                 </Form.Control.Feedback>
               </Form.Group>
-            </Col>}
+            </Col>
+          }
+        </Row> */}
 
-        </Row>
+        <Col>
+          <Form.Group className="mb-3">
+            <Form.Label className="mb-2">Categoria</Form.Label>
+            <DropdownList
+              value={props.categorias.find(categoria => categoria.codigo === produto.codigoCategoria)}
+              data={props.categorias}
+              textField="categoria"
+              valueField="codigo"
+              onChange={(value) => {
+                const codigoCategoriaSelecionada = value && value.codigo;
+                setProduto({ ...produto, codigoCategoria: codigoCategoriaSelecionada });
+              }}
+              placeholder="Selecione ou busque uma categoria"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Por favor, informe a categoria!
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
 
-        <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
-          <Button variant="primary" type="submit">
-            {props.modoEdicao ? "Atualizar" : "Cadastrar"}
-          </Button>
-          <Button
-            variant="danger"
-            type="button"
-            onClick={() => {
-              props.exibirTabela(true);
-              props.setModoEdicao(false);
-            }}
-          >
-            Voltar
-          </Button>
-        </Stack>
+
+        <div className="d-flex justify-content-end mt-3 mb-3">
+          <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
+            <Button variant="primary" type="submit">
+              {props.modoEdicao ? "Atualizar" : "Cadastrar"}
+            </Button>
+            <Button
+              variant="danger"
+              type="button"
+              onClick={() => {
+                props.exibirTabela(true);
+                props.setModoEdicao(false);
+              }}
+            >
+              Voltar
+            </Button>
+          </Stack>
+        </div>
       </Form>
     </>
   );

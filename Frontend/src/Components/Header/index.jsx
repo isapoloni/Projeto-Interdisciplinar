@@ -83,6 +83,10 @@ export default function Header() {
                       Cadastro Categoria
                     </NavLink>
                     <hr />
+                    <NavLink id="navlink" to="/Doacoes">
+                      Doações
+                    </NavLink>
+                    <hr />
                     <NavLink id="navlink" to="/HistoricoServicos">
                       Histórico de Servicos
                     </NavLink>

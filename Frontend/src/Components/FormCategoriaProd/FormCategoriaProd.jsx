@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, Button, Col, Row, Stack, } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
-import Cookies from "universal-cookie";
+
 export default function CategoriaForm(props) {
     const [validated, setValidated] = useState(false);
     const [categoria, setCategoria] = useState(props.modoEdicao ? props.categoria: {
@@ -31,10 +31,10 @@ export default function CategoriaForm(props) {
 
             if (!props.modoEdicao) {
                 fetch(urlBackend + `/${selectRequestForm[tipoCategoria]}`, {
+
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
-                        "authorization": `${jwtAuth}`
+                        "Content-Type": "application/json"
                     },
                     body: JSON.stringify(categoria)
                 })
@@ -48,9 +48,11 @@ export default function CategoriaForm(props) {
                             novaLista.push(categoria)
                             props.setCategorias(novaLista)
                             props.buscar()
-                            props.exibirTabela(true)
+                            // props.exibirTabela(true)
+                            props.dadosAtualizados()
                         }
                         window.alert(dados.mensagem)
+                        // window.alert('deu bom')
                     })
                     .catch((erro) => {
                         window.alert("Erro ao executar a requisição: " + erro.message)
@@ -58,16 +60,18 @@ export default function CategoriaForm(props) {
             }
             else {
                 fetch(urlBackend + `/${selectRequestForm[tipoCategoria]}`, {
+
                     method: "PUT",
                     headers: {
-                        "Content-Type": "application/json",
-                        "authorization": `${jwtAuth}`
+                        "Content-Type": "application/json"
                     },
                     body: JSON.stringify(categoria)
                 })
                     .then((resposta) => {
 
-                        window.location.reload();
+                        // window.location.reload();
+                        // props.exibirTabela(true)
+                        props.dadosAtualizados()
                         return resposta.json()
 
                     })
@@ -89,7 +93,8 @@ export default function CategoriaForm(props) {
                 onSubmit={manipulaSubmissao}
                 variant="light"
             >
-                <Form.Group className="mb-3">
+
+                <Form.Group className="mb-3 mt-4">
                     <h3>Cadastro de Categorias</h3>
                 </Form.Group>
 
@@ -112,8 +117,8 @@ export default function CategoriaForm(props) {
           </Col> */}
 
                     <Col>
-                        <Form.Group>
-                            <Form.Label>Nome Categoria</Form.Label>
+                        <Form.Group className="mb-3">
+                            <Form.Label className="mb-2">Nome Categoria</Form.Label>
                             <Form.Control
                                 value={categoria.categoria}
                                 type="text"
@@ -150,7 +155,9 @@ export default function CategoriaForm(props) {
 
                 </Row>
 
-                <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
+
+                <div className="d-flex justify-content-end mt-3 mb-3">
+                     <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
                     <Button variant="primary" type="submit">
                         {props.modoEdicao ? "Atualizar" : "Cadastrar"}
                     </Button>
@@ -165,6 +172,7 @@ export default function CategoriaForm(props) {
                         Voltar
                     </Button>
                 </Stack>
+                </div>
             </Form>
         </>
     );

@@ -1,12 +1,19 @@
-// Desenvolvido por Isabella Poloni
+
 
 import {
   Table,
-  Container,
-  Button,
-  InputGroup,
-  FormControl,
-} from "react-bootstrap";
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TablePagination,
+  InputAdornment,
+  TextField,
+} from '@mui/material';
+import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
 import { RiSearchLine } from "react-icons/ri";
@@ -14,6 +21,7 @@ import { urlBackend } from "../../assets/funcoes";
 import Cookies from "universal-cookie";
 
 export default function TableServico(props) {
+
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
   function filtrarServicos(e) {
@@ -50,51 +58,57 @@ export default function TableServico(props) {
       </Button>
 
       <InputGroup className="mt-2">
-        <FormControl
+        <TextField
+          fullWidth
           type="text"
           id="termoBusca"
-          placeholder="Busque serviços aqui"
+          placeholder="Busque o serviço desejado"
           onChange={filtrarServicos}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <RiSearchLine />
+              </InputAdornment>
+            ),
+          }}
         />
-        <InputGroup.Text>
-          <RiSearchLine />
-        </InputGroup.Text>
       </InputGroup>
 
-      <Table striped bordered hover size="sm" className="mt-5">
-        <thead>
-          <tr className="text-center">
-            <th className="text-center">Código</th>
-            {/* <th className="text-center">Pessoa</th> */}
-            <th className="text-center">Serviço</th>
-            <th className="text-center">Categoria</th>
-            <th className="text-center">Descrição</th>
-          </tr>
-        </thead>
-        <tbody>
-          {props.listaServicos?.map((servico) => {
-            return (
-              <tr key={servico.id}>
-                <td>{servico.id}</td>
-                {/* <td>{servico.cpfPessoa}</td> */}
-                <td>{servico.servico}</td>
-                <td>{servico.categoria}</td>
-                <td>{servico.descricao}</td>
-                <td>
-                  <Button
-                    variant="outline-primary"
+
+      <TableContainer component={Paper} className="mt-5">
+        <Table striped bordered hover size="sm" className="custom-table">
+          <TableHead>
+            <TableRow className="text-center">
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Código</TableCell>
+              {/* <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Pessoa</TableCell> */}
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Serviço</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Categoria</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Descrição</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {props.listaServicos?.map((servico) => (
+              <TableRow key={servico.id}>
+                <TableCell>{servico.id}</TableCell>
+                {/* <TableCell>{servico.cpfPessoa}</TableCell> */}
+                <TableCell>{servico.servico}</TableCell>
+                <TableCell>{servico.categoria}</TableCell>
+                <TableCell>{servico.descricao}</TableCell>
+                <TableCell>
+                  <IconButton
+                    variant="outlined"
+                    style={{ color: '#1683cc' }}
                     onClick={() => {
-                      if (
-                        window.confirm("Deseja atualizar os dados do serviço?")
-                      ) {
+                      if (window.confirm("Deseja atualizar os dados do serviço?")) {
                         props.editar(servico);
                       }
                     }}
                   >
                     <MdModeEdit />
-                  </Button>{" "}
-                  <Button
-                    variant="outline-danger"
+                  </IconButton>{" "}
+                  <IconButton
+                    variant="outlined"
+                    style={{ color: '#cc3116' }}
                     onClick={() => {
                       if (window.confirm("Deseja excluir?")) {
                         props.deletar(servico);
@@ -102,13 +116,13 @@ export default function TableServico(props) {
                     }}
                   >
                     <HiTrash />
-                  </Button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Container>
   );
 }
