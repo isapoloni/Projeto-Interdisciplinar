@@ -79,6 +79,8 @@ export default class DoacaoCTRL {
             const dataDoacao = dados.dataDoacao;
             const listaItens = dados.listaItens;
 
+            console.log('dados', dados)
+
             if (codigo && cpfDoador && dataDoacao && listaItens) {
 
                 const doacao = new Doacao(codigo, cpfDoador, dataDoacao, listaItens);

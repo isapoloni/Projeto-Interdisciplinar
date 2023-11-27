@@ -128,6 +128,7 @@ const FormDoacao = (props) => {
             }));
 
             const requestBody = {
+                codigo: props.doacao ? props.doacao.codigo : null, 
                 dataDoacao: doacao.dataDoacao,
                 cpfDoador: cpfDoadorSelecionado,
                 listaItens: listaItensFormatada,
@@ -136,7 +137,7 @@ const FormDoacao = (props) => {
             const method = props.modoEdicao ? 'PUT' : 'POST';
 
             const requestUrl = props.modoEdicao
-                ? `${urlBackend}/doacao`
+                ? `${urlBackend}/doacao` 
                 : `${urlBackend}/doacao`;
 
             const response = await fetch(requestUrl, {
