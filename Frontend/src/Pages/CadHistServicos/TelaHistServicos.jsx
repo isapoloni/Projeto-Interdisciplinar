@@ -7,6 +7,8 @@ import Header from "../../Components/Header";
 import Cookies from "universal-cookie";
 import TableHistServico from "../../Components/TableHistServicos/TabelaHistServicos";
 import HistServicoForm from "../../Components/FormHistServicos/FormHistServicos";
+
+
 export default function CadHistServicos(props) {
   const [exibirTabela, setExibirTabela] = useState(true);
   const [histServ, setHistServ] = useState([]);

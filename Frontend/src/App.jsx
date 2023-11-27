@@ -20,7 +20,7 @@ function App() {
           <Route path="/CadastroProduto" element={<CadProdutos />} />
           <Route path="/CadastroPessoas" element={<TelaCadPessoa />} />
           <Route path="/CadastroServicos" element={<CadServicos />} />
-          <Route path="/CadastroCategoria" element={<CadCategoria />} />
+          <Route path="/CadastroCategoria" element={<CadCategoriaProduto />} />
           <Route path="/HistoricoServicos" element={<CadHistServicos />} />
           <Route path="/Doacoes" element={<CadDoacao/>} />
         </Routes>

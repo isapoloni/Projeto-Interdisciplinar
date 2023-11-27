@@ -6,9 +6,12 @@ import { urlBackend } from "../../assets/funcoes";
 import Header from "../../Components/Header";
 import FormDoacao from "../../Components/FormDoacao";
 import TableDoacao from "../../Components/TableDoacao";
+import Cookies from "universal-cookie";
 
 export default function TelaDoacao(props) {
 
+    const cookies = new Cookies();
+    const jwtAuth = cookies.get("authorization");
     const [exibirTabela, setExibirTabela] = useState(true)
     const [doacoes, setDoacoes] = useState([])
     const [modoEdicao, setModoEdicao] = useState(false)
@@ -31,7 +34,11 @@ export default function TelaDoacao(props) {
 
     function buscarDoacao() {
         fetch(urlBackend + '/doacao', {
-            method: "GET"
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `${jwtAuth}`
+            }
         }).then((resposta) => {
             return resposta.json();
         }).then((dados) => {
@@ -46,7 +53,7 @@ export default function TelaDoacao(props) {
         setExibirTabela(true);
         buscarDoacao();
     }
-    
+
 
     return (
         <>
@@ -59,7 +66,7 @@ export default function TelaDoacao(props) {
                             setDoacoes={setDoacoes}
                             exibirTabela={setExibirTabela}
                             editar={prepararTela}
-                            // deletar={deletarProduto}
+                        // deletar={deletarProduto}
                         />
                         :
                         <FormDoacao
@@ -71,8 +78,8 @@ export default function TelaDoacao(props) {
                             editar={prepararTela}
                             setModoEdicao={setModoEdicao}
                             doacao={doacaoEdicao}
-                            // buscarProduto={buscarProduto}
-                            // categorias={categoria}
+                        // buscarProduto={buscarProduto}
+                        // categorias={categoria}
                         />
 
                 }

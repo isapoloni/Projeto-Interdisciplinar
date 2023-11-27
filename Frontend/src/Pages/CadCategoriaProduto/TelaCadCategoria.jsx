@@ -1,4 +1,3 @@
-// Desenvolvido por Isabela Poloni
 
 import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
@@ -6,6 +5,7 @@ import CategoriaForm from "../../Components/FormCategoriaProd/FormCategoriaProd"
 import TableCategoria from "../../Components/TableCategoriaProd/TableCategoriaProd";
 import { urlBackend } from "../../assets/funcoes";
 import Header from "../../Components/Header";
+import Cookies from "universal-cookie";
 
 export default function CadCategoriaProduto(props) {
 
@@ -18,6 +18,9 @@ export default function CadCategoriaProduto(props) {
     codigo: "",
     categoria: ""
   })
+
+  const cookies = new Cookies();
+  const jwtAuth = cookies.get("authorization");
 
   function prepararTela(categoria) {
     setModoEdicao(true);
