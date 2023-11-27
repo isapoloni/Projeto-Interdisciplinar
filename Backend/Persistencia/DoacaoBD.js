@@ -140,6 +140,7 @@ export default class DoacaoBD {
     }
 
     async alterar(doacao) {
+        console.log('doacao', doacao.listaItens)
         if (doacao instanceof Doacao) {
             const conexao = await Conect();
             try {
@@ -155,7 +156,7 @@ export default class DoacaoBD {
     
                 for (const item of doacao.listaItens) {
                     const sqlInserirItem = "INSERT INTO doacao_produto(codigo_produto, codigo_doacao, quantidade) VALUES (?,?,?)";
-                    const parametrosInserirItem = [item.produto.codigo, doacao.codigo, item.quantidade];
+                    const parametrosInserirItem = [item.codigoProduto, doacao.codigo, item.quantidade];
                     await conexao.query(sqlInserirItem, parametrosInserirItem);
                 }
     
@@ -169,7 +170,5 @@ export default class DoacaoBD {
         }
     }
     
-    
-
-    
+      
 }
