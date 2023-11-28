@@ -27,6 +27,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ConfirmationModal from '../ModalConfirmacao/index'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
+import get from 'lodash.get';
 
 export default function TableDoacao(props) {
   const cookies = new Cookies();
@@ -44,39 +45,60 @@ export default function TableDoacao(props) {
   const [filtersApplied, setFiltersApplied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [downloadTableVisible, setDownloadTableVisible] = useState(false);
+  const [originalDoacoes, setOriginalDoacoes] = useState([]);
 
   const handleDownload = () => {
     const columns = [
+      { label: 'Código da Doação', key: 'codigo' },
       { label: 'Nome do Doador', key: 'cpfDoador.nome' },
       { label: 'Data da Doação', key: 'dataDoacao', format: 'date' },
-      { label: 'Produto', key: 'listaItens[0].produto.nome' },
-      { label: 'Quantidade', key: 'listaItens[0].quantidade' },
+      { label: 'Produto', key: 'produto' },
+      { label: 'Quantidade', key: 'quantidade' },
     ];
-
-    const dataToDownload = doacoes.map(doacao => {
-      console.log('doacao', doacao)
-      const rowData = {};
-      columns.forEach(column => {
-        const value = column.format === 'date'
-          ? formatarData(doacao[column.key])
-          : column.key.includes('listaItens') && doacao.listaItens && doacao.listaItens[0]
-            ? doacao.listaItens.map(item => item[column.key.split('.')[1]]).join(', ')
-            : doacao[column.key];
-
-        rowData[column.label] = value;
-      });
-      return rowData;
+  
+    const dataToDownload = [];
+    const doacoesToUse = filtersApplied ? doacoes : originalDoacoes;
+  
+    doacoesToUse.forEach(doacao => {
+      if (doacao.listaItens && doacao.listaItens.length > 0) {
+        doacao.listaItens.forEach(item => {
+          const rowData = {
+            'Código da Doação': doacao.codigo,
+            'Nome do Doador': doacao.cpfDoador.nome,
+            'Data da Doação': formatarData(doacao.dataDoacao),
+            'Produto': item.produto.nome,
+            'Quantidade': item.quantidade,
+          };
+          dataToDownload.push(rowData);
+        });
+      } else {
+        const rowData = {
+          'Código da Doação': doacao.codigo,
+          'Nome do Doador': doacao.cpfDoador.nome,
+          'Data da Doação': formatarData(doacao.dataDoacao),
+          'Produto': '',
+          'Quantidade': '',
+        };
+        dataToDownload.push(rowData);
+      }
     });
+  
+    const worksheet = XLSX.utils.json_to_sheet(dataToDownload);
 
-    const worksheet = XLSX.utils.json_to_sheet(dataToDownload, { header: columns.map(column => column.label) });
+    const maxColLengths = columns.map(col => ({
+      width: dataToDownload.reduce((acc, row) => Math.max(acc, String(row[col.key] || '').length), col.label.length)
+    }));
+    
+    worksheet['!cols'] = maxColLengths;
+    
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Doacoes');
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     saveAs(data, 'doacoes.xlsx');
   };
-
-
+  
+  
 
   useEffect(() => {
     loadData();
@@ -94,6 +116,7 @@ export default function TableDoacao(props) {
       .then((listaDoacoes) => {
         if (Array.isArray(listaDoacoes)) {
           setDoacoes(listaDoacoes);
+          setOriginalDoacoes(listaDoacoes); 
           setFiltersApplied(false);
         }
       });
@@ -261,9 +284,10 @@ export default function TableDoacao(props) {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={clearFilters} disabled={!filtersApplied}>
+            {/* <Button variant="secondary" onClick={clearFilters} disabled={!filtersApplied}>
               Limpar Filtro
-            </Button>
+            </Button> */}
+
             <Button variant="primary" onClick={handleDateFilter}>
               Aplicar Filtro
             </Button>

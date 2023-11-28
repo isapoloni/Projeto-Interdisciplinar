@@ -60,7 +60,8 @@ export default function ProdutoForm(props) {
         fetch(urlBackend + '/produto', {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "authorization": `${jwtAuth}`
           },
           body: JSON.stringify(produto)
         })

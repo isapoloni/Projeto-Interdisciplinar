@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Cookies from "universal-cookie";
+import ConfirmationModal from '../ModalConfirmacao/index'
 import {
   Table,
   TableBody,
@@ -20,6 +22,7 @@ import { HiTrash } from 'react-icons/hi';
 import { Container, Button } from 'react-bootstrap';
 
 export default function TableCategoria(props) {
+
   // const [categorias, setCategorias] = useState(props.listaCategorias);
   // console.log(props)
   console.log(props.modoEdicao)

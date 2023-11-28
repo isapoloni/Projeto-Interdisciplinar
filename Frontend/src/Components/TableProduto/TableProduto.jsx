@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import Cookie from "universal-cookie";
 import {
   Table,
   TableBody,
@@ -20,6 +21,9 @@ import { urlBackend } from '../../assets/funcoes';
 import ConfirmationModal from '../ModalConfirmacao'
 
 export default function TableProduto(props) {
+  const cookies = new Cookie()
+  const jwtAuth = cookies.get('authorization')
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -50,7 +54,13 @@ export default function TableProduto(props) {
 
   function filtrarProdutos(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/produto", { method: "GET" })
+    fetch(urlBackend + "/produto", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      },
+    })
       .then((resposta) => {
         return resposta.json();
       })
