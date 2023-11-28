@@ -31,20 +31,11 @@ export default class ServicosCTRL {
       const data = request.body;
 
       const servico = data.servico;
-      const jornada = data.jornada;
+      const categoria = data.categoria;
       const descricao = data.descricao;
-      const custo = data.custo;
-      const modelo = data.modelo;
 
-      if (servico && jornada && descricao && custo && modelo) {
-        const servicos = new Servico(
-          0,
-          servico,
-          jornada,
-          descricao,
-          custo,
-          modelo
-        );
+      if (servico && categoria && descricao) {
+        const servicos = new Servico(0, servico, categoria, descricao);
         servicos
           .gravar()
           .then(() => {
@@ -79,20 +70,11 @@ export default class ServicosCTRL {
       const data = request.body;
       const id = data.id;
       const servico = data.servico;
-      const jornada = data.jornada;
+      const categoria = data.categoria;
       const descricao = data.descricao;
-      const custo = data.custo;
-      const modelo = data.modelo;
 
-      if (id && servico && jornada && descricao && custo && modelo) {
-        const servicos = new Servico(
-          id,
-          servico,
-          jornada,
-          descricao,
-          custo,
-          modelo
-        );
+      if (id && servico && categoria && descricao) {
+        const servicos = new Servico(id, servico, categoria, descricao);
         servicos
           .atualizar()
           .then(() => {

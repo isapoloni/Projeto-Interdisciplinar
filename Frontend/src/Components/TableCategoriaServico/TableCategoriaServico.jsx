@@ -1,3 +1,5 @@
+// Desenvolvido por Isabella Poloni
+
 import React, { useState } from 'react';
 import {
   Table,
@@ -20,10 +22,11 @@ import { HiTrash } from 'react-icons/hi';
 import { Container, Button } from 'react-bootstrap';
 import Cookies from "universal-cookie";
 
-export default function TableCategoria(props) {
+export default function TableCategoriaServico(props) {
+  console.log(props)
+  console.log(props.modoEdicao)
   const cookies = new Cookies()
   const jwtAuth= cookies.get('authorization')
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -35,14 +38,12 @@ export default function TableCategoria(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  
   function filtrarCategorias(e) {
     const termoBusca = e.currentTarget.value;
-    fetch(urlBackend + "/categoriaProduto", { method: "GET", headers: { "Content-Type": "application/json", "authorization": ` ${jwtAuth}` } })
+    fetch(urlBackend + "/catservico", { method: "GET", headers: { "Content-Type": "application/json", "authorization": ` ${jwtAuth}` } })
       .then((resposta) => {
         return resposta.json();
       })
-
       .then((listaCategorias) => {
         if (Array.isArray(listaCategorias)) {
           const resultadoBusca = listaCategorias.filter((categoria) =>
@@ -52,8 +53,6 @@ export default function TableCategoria(props) {
         }
       });
   }
-
-  
 
   return (
     <Container>
@@ -65,7 +64,7 @@ export default function TableCategoria(props) {
           // props.setModoEdicao(false)
         }}
       >
-        Cadastrar Categoria de Produto
+        Cadastrar Categoria de Serviço
       </Button>
 
       <TextField

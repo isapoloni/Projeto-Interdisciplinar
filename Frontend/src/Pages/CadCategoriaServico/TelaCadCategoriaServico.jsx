@@ -1,36 +1,39 @@
+// Desenvolvido por Isabela Poloni
 
 import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
-import CategoriaForm from "../../Components/FormCategoriaProd/FormCategoriaProd"
-import TableCategoria from "../../Components/TableCategoriaProd/TableCategoriaProd";
+import  CategoriaServicoForm from "../../Components/FormCategoriaServico/FormCategoriaServico"
+import TableCategoriaServico from "../../Components/TableCategoriaServico/TableCategoriaServico";
 import { urlBackend } from "../../assets/funcoes";
 import Header from "../../Components/Header";
 import Cookies from "universal-cookie";
 
-export default function CadCategoriaProduto(props) {
+export default function CadCategoriaServico(props) {
 
   const [exibirTabela, setExibirTabela] = useState(true)
   const [categorias, setCategorias] = useState([])
+  const [tipoCategoria,setTipoCategoria] = useState('')
+  const [categoriaServico, setCategoriaServico] = useState([])
   const [modoEdicao, setModoEdicao] = useState(false)
   const [categoriaEdicao, setCategoriaEdicao] = useState({
     codigo: "",
     categoria: ""
   })
-
-  const cookies = new Cookies();
-  const jwtAuth = cookies.get("authorization");
-
+  const cookies = new Cookies()
+  const jwtAuth= cookies.get('authorization')
   function prepararTela(categoria) {
     setModoEdicao(true);
     setCategoriaEdicao(categoria);
     setExibirTabela(false)
+
   }
 
   function deletarCategoria(categoria) {
-    fetch(urlBackend + '/categoriaProduto', {
+    fetch(urlBackend + '/catservico', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' ,
-      "authorization": `${jwtAuth}`},
+      headers: { 'Content-Type': 'application/json' ,      
+          "authorization": `${jwtAuth}`
+    },
       body: JSON.stringify(categoria)
     }).then((resposta) => {
       window.alert('Categoria excluído com sucesso!!!')
@@ -40,12 +43,8 @@ export default function CadCategoriaProduto(props) {
   }
 
 
-  useEffect(() => {
-    buscar()
-  }, []);
-
   function buscar(){
-    fetch(urlBackend + '/categoriaProduto', {
+    fetch(urlBackend + '/catservico', {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -61,8 +60,11 @@ export default function CadCategoriaProduto(props) {
         else {
   
         }
-      })
+      });
   }
+  useEffect(() => {
+    buscar()
+  }, []);
   function exibirTabelaEAtualizarDados() {
     setExibirTabela(true);
     buscar();
@@ -73,8 +75,11 @@ export default function CadCategoriaProduto(props) {
       <Container>
         {
           exibirTabela ?
-            <TableCategoria
+            <TableCategoriaServico
               listaCategorias={categorias}
+              tipoCategoria={tipoCategoria}
+              setTipoCategoria={setTipoCategoria}
+              listaCategoriasServico={categoriaServico}
               setCategorias={setCategorias}
               exibirTabela={setExibirTabela}
               editar={prepararTela}
@@ -83,8 +88,11 @@ export default function CadCategoriaProduto(props) {
               deletar={deletarCategoria}
             />
             :
-            <CategoriaForm
+            <CategoriaServicoForm
               listaCategorias={categorias}
+              setTipoCategoria={setTipoCategoria}
+              tipoCategoria={tipoCategoria}
+              listaCategoriasServico={categoriaServico}
               setCategorias={setCategorias}
               exibirTabela={setExibirTabela}
               modoEdicao={modoEdicao}
@@ -93,7 +101,9 @@ export default function CadCategoriaProduto(props) {
               categoria={categoriaEdicao}
               buscar={buscar}
               dadosAtualizados={exibirTabelaEAtualizarDados}
+
             />
+
         }
       </Container>
     </>
