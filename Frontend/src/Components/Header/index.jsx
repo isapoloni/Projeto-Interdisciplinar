@@ -6,8 +6,13 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link, NavLink } from "react-router-dom";
 import "./styled.css";
 import Logo from "../../assets/logo-igreja.png";
+import { useState } from "react";
 
 export default function Header() {
+  const [expanded, setExpanded] = useState(false);	
+  function handleExpandClick() {
+    setExpanded(!expanded);
+  }
   return (
     <>
       {[false].map((expand) => (
@@ -79,10 +84,35 @@ export default function Header() {
                       Cadastro Servicos
                     </NavLink>
                     <hr />
-                    <NavLink id="navlink" to="/CadastroCategoria">
+                    <NavLink onClick={handleExpandClick} style={{ cursor: "pointer" }} id="navlink">
                       Cadastro Categoria
                     </NavLink>
                     <hr />
+                    {
+                      expanded ? (
+                       <ul>
+                        <li>
+                        <NavLink  id="navlink" to="/CadastroCatProduto">
+                      Categoria de Produto
+                    </NavLink></li> 
+                    <hr />
+                        <li>
+                        <NavLink id="navlink" to="/CadastroCatServico">
+                      Categoria de Serviço
+                    </NavLink>
+                        </li>
+                        <hr />
+                       </ul>
+                      )
+                      :
+                      (
+                       <div></div>
+  
+                      )
+                    }
+                  
+                  
+                   
                     <NavLink id="navlink" to="/Doacoes">
                       Doações
                     </NavLink>

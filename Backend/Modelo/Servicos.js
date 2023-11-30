@@ -3,18 +3,14 @@ import ServicoBD from "../Persistencia/ServicoBD.js";
 export default class Servico {
   #id;
   #servico;
-  #jornada;
   #descricao;
-  #custo;
-  #modelo;
+  #categoria;
 
-  constructor(id, servico, jornada, descricao, custo, modelo) {
+  constructor(id, servico, categoria, descricao) {
     this.#id = id;
     this.#servico = servico;
-    this.#jornada = jornada;
     this.#descricao = descricao;
-    this.#custo = custo;
-    this.#modelo = modelo;
+    this.#categoria = categoria;
   }
 
   get id() {
@@ -33,20 +29,12 @@ export default class Servico {
     this.#servico = newServico;
   }
 
-  get modelo() {
-    return this.#modelo;
+  get categoria() {
+    return this.#categoria;
   }
 
-  set modelo(newModelo) {
-    this.#modelo = newModelo;
-  }
-
-  get jornada() {
-    return this.#jornada;
-  }
-
-  set jornada(newJornada) {
-    this.#jornada = newJornada;
+  set categoria(newcategoria) {
+    this.#categoria = newcategoria;
   }
 
   get descricao() {
@@ -57,22 +45,12 @@ export default class Servico {
     this.#descricao = newDescricao;
   }
 
-  get custo() {
-    return this.#custo;
-  }
-
-  set custo(newCusto) {
-    this.#custo = newCusto;
-  }
-
   toJSON() {
     return {
       id: this.#id,
       servico: this.#servico,
-      jornada: this.#jornada,
       descricao: this.#descricao,
-      custo: this.#custo,
-      modelo: this.#modelo,
+      categoria: this.#categoria,
     };
   }
 

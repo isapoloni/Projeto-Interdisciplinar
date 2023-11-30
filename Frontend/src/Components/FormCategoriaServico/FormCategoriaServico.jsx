@@ -3,14 +3,14 @@ import { Form, Button, Col, Row, Stack, } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
 import Cookies from "universal-cookie";
 
-export default function CategoriaForm(props) {
+export default function CategoriaServicoForm(props) {
     const [validated, setValidated] = useState(false);
     const [categoria, setCategoria] = useState(props.modoEdicao ? props.categoria: {
+        
     });
-    // console.log(selectRequestForm[tipoCategoria])
+
     console.log(props.modoEdicao)
 
-    // console.log(tipoCategoria)
     const cookies = new Cookies()
     const jwtAuth= cookies.get('authorization')
     function manipularOnChange(e) {
@@ -25,7 +25,7 @@ export default function CategoriaForm(props) {
         if (form.checkValidity()) {
 
             if (!props.modoEdicao) {
-                fetch(urlBackend + `/categoriaProduto`, {
+                fetch(urlBackend + `/catservico`, {
 
                     method: "POST",
                     headers: {
@@ -55,7 +55,8 @@ export default function CategoriaForm(props) {
                     })
             }
             else {
-                fetch(urlBackend + `/categoriaProduto`, {
+                fetch(urlBackend + `/catservico`, {
+
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -91,7 +92,7 @@ export default function CategoriaForm(props) {
             >
 
                 <Form.Group className="mb-3 mt-4">
-                    <h3>Cadastro de Categoria de Produtos</h3>
+                    <h3>Cadastro de Categorias</h3>
                 </Form.Group>
 
                 <Row>
@@ -128,6 +129,8 @@ export default function CategoriaForm(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Col>
+                   
+
                 </Row>
 
 

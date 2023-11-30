@@ -9,6 +9,7 @@ import CadHistServicos from "./Pages/CadHistServicos/TelaHistServicos";
 import {PessoaProvider} from "./context/pessoaContexot"
 import CadDoacao from './Pages/Doacao/TelaDoacao'
 import CadProdutos from './Pages/CadProdutos/TelaCadProdutos'
+import CadCategoriaServico from "./Pages/CadCategoriaServico/TelaCadCategoriaServico";
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
           <Route path="/CadastroProduto" element={<CadProdutos />} />
           <Route path="/CadastroPessoas" element={<TelaCadPessoa />} />
           <Route path="/CadastroServicos" element={<CadServicos />} />
-          <Route path="/CadastroCategoria" element={<CadCategoriaProduto />} />
+          <Route path="/CadastroCatProduto" element={<CadCategoriaProduto />} />
+          <Route path="/CadastroCatServico" element={<CadCategoriaServico />} />
           <Route path="/HistoricoServicos" element={<CadHistServicos />} />
           <Route path="/Doacoes" element={<CadDoacao/>} />
         </Routes>

@@ -4,6 +4,7 @@ import { Form, Button, FormControl, InputGroup, Stack, Row, Col } from 'react-bo
 import { urlBackend } from '../../assets/funcoes';
 import { DropdownList } from 'react-widgets';
 import { useNavigate } from "react-router-dom";
+import Cookies from 'universal-cookie';
 
 const FormDoacao = (props) => {
     const cookies = new Cookies();
@@ -18,7 +19,8 @@ const FormDoacao = (props) => {
         dataDoacao: '',
         listaItens: [],
     });
-
+    
+    
     useEffect(() => {
         if (props.modoEdicao && props.doacao) {
             setDoacao((prevDoacao) => ({
@@ -46,8 +48,8 @@ const FormDoacao = (props) => {
                 const pessoasResponse = await fetch(urlBackend + '/pessoas', {
                     method: 'GET',
                     headers: {
-                        "Content-Type": "application/json",
-                        "authorization": `${jwtAuth}`
+                        'Content-Type': 'application/json',
+                        'authorization': `${jwtAuth}`
                     }
                 });
 
@@ -65,8 +67,8 @@ const FormDoacao = (props) => {
                 const produtosResponse = await fetch(urlBackend + '/produto', {
                     method: 'GET',
                     headers: {
-                        "Content-Type": "application/json",
-                        "authorization": `${jwtAuth}`
+                        'Content-Type': 'application/json',
+                        'authorization': `${jwtAuth}`
                     }
                 });
 
