@@ -20,7 +20,6 @@ import Stack from '@mui/material/Stack';
 import { urlBackend } from '../../assets/funcoes';
 import { HiTrash } from 'react-icons/hi';
 import { Container, Button } from 'react-bootstrap';
-import Cookies from "universal-cookie";
 
 export default function TableCategoria(props) {
 

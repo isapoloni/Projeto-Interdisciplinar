@@ -4,7 +4,6 @@ import { Form, Button, FormControl, InputGroup, Stack, Row, Col } from 'react-bo
 import { urlBackend } from '../../assets/funcoes';
 import { DropdownList } from 'react-widgets';
 import { useNavigate } from "react-router-dom";
-import Cookies from 'universal-cookie';
 
 const FormDoacao = (props) => {
     const cookies = new Cookies();
