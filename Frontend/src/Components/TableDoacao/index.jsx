@@ -22,6 +22,7 @@ import { urlBackend } from '../../assets/funcoes';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ConfirmationModal from '../ModalConfirmacao'
+import Cookies from 'universal-cookie';
 
 
 export default function TableDoacao(props) {
@@ -34,7 +35,8 @@ export default function TableDoacao(props) {
   const [doacoes, setDoacoes] = useState(props.listaDoacoes);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedDoacao, setSelectedDoacao] = useState(null);
-
+  const cookies = new Cookies();
+  const jwtAuth = cookies.get("authorization");
 
   const handleOpenModal = (doacao) => {
     setSelectedDoacao(doacao);
@@ -77,7 +79,7 @@ export default function TableDoacao(props) {
   function filtrarDoacoesPorCPF(e) {
     const termoBusca = e.currentTarget.value;
 
-    fetch(urlBackend + "/doacao", { method: "GET" })
+    fetch(urlBackend + "/doacao", { method: "GET" , headers: { "Content-Type": "application/json", "authorization": `${jwtAuth}` } })
       .then((resposta) => resposta.json())
       .then((listaDoacoes) => {
         if (Array.isArray(listaDoacoes)) {
@@ -102,6 +104,11 @@ export default function TableDoacao(props) {
 
       fetch(urlBackend + '/doacao/' + codigo, {
         method: "DELETE",
+
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': `${jwtAuth}`,
+      },
       })
         .then((resposta) => {
           if (resposta.ok) {

@@ -3,6 +3,7 @@ import { Form, Button, FormControl, InputGroup, Stack, Row, Col } from 'react-bo
 import { urlBackend } from '../../assets/funcoes';
 import { DropdownList } from 'react-widgets';
 import { useNavigate } from "react-router-dom";
+import Cookies from 'universal-cookie';
 
 const FormDoacao = (props) => {
     const [doadorOptions, setDoadorOptions] = useState([]);
@@ -14,7 +15,8 @@ const FormDoacao = (props) => {
         dataDoacao: '',
         listaItens: [],
     });
-
+    const cookies = new Cookies();
+    const jwtAuth = cookies.get("authorization");
     useEffect(() => {
         if (props.modoEdicao && props.doacao) {
             setDoacao((prevDoacao) => ({
@@ -41,6 +43,10 @@ const FormDoacao = (props) => {
             try {
                 const pessoasResponse = await fetch(urlBackend + '/pessoas', {
                     method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': `${jwtAuth}`
+                    }
                 });
 
                 if (pessoasResponse.ok) {
@@ -56,6 +62,10 @@ const FormDoacao = (props) => {
 
                 const produtosResponse = await fetch(urlBackend + '/produto', {
                     method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': `${jwtAuth}`
+                    }
                 });
 
                 if (produtosResponse.ok) {
@@ -143,6 +153,7 @@ const FormDoacao = (props) => {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
+                    'authorization': `${jwtAuth}`,
                 },
                 body: JSON.stringify(requestBody),
             });
