@@ -16,6 +16,7 @@ import {
 import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
+import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
 import { RiSearchLine } from "react-icons/ri";
 import { urlBackend } from "../../assets/funcoes";
 import Cookies from "universal-cookie";
@@ -38,7 +39,7 @@ export default function TableHistServico(props) {
       .then((listaServicos) => {
         if (Array.isArray(listaServicos)) {
           const resultadoBusca = listaServicos.filter((histServico) =>
-          histServico.prestador.toLowerCase().includes(termoBusca.toLowerCase())
+            histServico.prestador.toLowerCase().includes(termoBusca.toLowerCase())
             // histServico.histServico.toLowerCase().includes(termoBusca.toLowerCase())
           );
           props.setHistServicos(resultadoBusca);
@@ -50,21 +51,22 @@ export default function TableHistServico(props) {
     const dia = data.getUTCDate().toString().padStart(2, '0');
     const mes = (data.getUTCMonth() + 1).toString().padStart(2, '0'); // Adiciona 1 ao mês, pois os meses em JavaScript são baseados em zero
     const ano = data.getUTCFullYear();
-  
+
     return `${dia}/${mes}/${ano}`;
   }
-  
+
   return (
     <Container>
-      <Button
-        className="mb-4"
-        onClick={() => {
-          props.exibirTabela(false);
-        }}
-      >
-        Cadastrar serviço com pessoa
-      </Button>
-
+      <div className="button-container">
+        <Button
+          className="button-cadastro"
+          onClick={() => {
+            props.exibirTabela(false);
+          }}
+        >
+          <AiFillPlusCircle style={{ marginRight: '8px' }} /> Resgistrar Serviço
+        </Button>
+      </div>
       <InputGroup className="mt-2">
         <TextField
           fullWidth

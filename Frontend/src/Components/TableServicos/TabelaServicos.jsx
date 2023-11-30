@@ -16,6 +16,7 @@ import {
 import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { MdModeEdit } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
+import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
 import { RiSearchLine } from "react-icons/ri";
 import { urlBackend } from "../../assets/funcoes";
 import Cookies from "universal-cookie";
@@ -48,15 +49,16 @@ export default function TableServico(props) {
 
   return (
     <Container>
-      <Button
-        className="mb-4"
-        onClick={() => {
-          props.exibirTabela(false);
-        }}
-      >
-        Cadastrar serviço
-      </Button>
-
+      <div className="button-container">
+        <Button
+          className="button-cadastro"
+          onClick={() => {
+            props.exibirTabela(false);
+          }}
+        >
+          <AiFillPlusCircle style={{ marginRight: '8px' }} /> Cadastrar serviço
+        </Button>
+      </div>
       <InputGroup className="mt-2">
         <TextField
           fullWidth

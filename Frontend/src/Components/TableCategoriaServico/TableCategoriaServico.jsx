@@ -19,6 +19,7 @@ import { RiSearchLine } from 'react-icons/ri';
 import Stack from '@mui/material/Stack';
 import { urlBackend } from '../../assets/funcoes';
 import { HiTrash } from 'react-icons/hi';
+import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
 import { Container, Button } from 'react-bootstrap';
 import Cookies from "universal-cookie";
 
@@ -26,7 +27,7 @@ export default function TableCategoriaServico(props) {
   console.log(props)
   console.log(props.modoEdicao)
   const cookies = new Cookies()
-  const jwtAuth= cookies.get('authorization')
+  const jwtAuth = cookies.get('authorization')
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -56,16 +57,17 @@ export default function TableCategoriaServico(props) {
 
   return (
     <Container>
-      <Button
-        className="mb-4"
-        onClick={() => {
-  
-          props.exibirTabela(false);
-          // props.setModoEdicao(false)
-        }}
-      >
-        Cadastrar Categoria de Serviço
-      </Button>
+      <div className="button-container">
+        <Button
+          className="button-cadastro"
+          onClick={() => {
+            props.exibirTabela(false);
+            // props.setModoEdicao(false)
+          }}
+        >
+          <AiFillPlusCircle style={{ marginRight: '8px' }} /> Cadastrar Categoria de Serviço
+        </Button>
+      </div>
 
       <TextField
         fullWidth
@@ -102,7 +104,7 @@ export default function TableCategoriaServico(props) {
                     <Stack direction="row" spacing={2} justifyContent="center">
                       <IconButton
                         variant="outlined"
-                        style={{ color: '#1683cc' }} 
+                        style={{ color: '#1683cc' }}
                         onClick={() => {
                           if (window.confirm('Deseja atualizar os dados da categoria?')) {
                             props.editar(categoria);
@@ -114,11 +116,11 @@ export default function TableCategoriaServico(props) {
 
                       <IconButton
                         variant="outlined"
-                        style={{ color: '#cc3116' }} 
+                        style={{ color: '#cc3116' }}
                         onClick={() => {
                           if (window.confirm('Deseja excluir?')) {
                             props.deletar(categoria);
-                        
+
                           }
                         }}
                       >

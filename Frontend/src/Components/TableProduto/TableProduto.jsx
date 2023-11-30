@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { MdModeEdit } from 'react-icons/md';
 import { RiSearchLine } from 'react-icons/ri';
+import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
 import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { urlBackend } from '../../assets/funcoes';
 import ConfirmationModal from '../ModalConfirmacao'
@@ -75,15 +76,16 @@ export default function TableProduto(props) {
   }
   return (
     <Container>
-      <Button
-        className="mb-4"
-        onClick={() => {
-          props.exibirTabela(false);
-        }}
-      >
-        Cadastrar produto
-      </Button>
-
+      <div className="button-container">
+        <Button
+          className="button-cadastro"
+          onClick={() => {
+            props.exibirTabela(false);
+          }}
+        >
+          <AiFillPlusCircle style={{ marginRight: '8px' }} /> Cadastrar Produto
+        </Button>
+      </div>
       <InputGroup className="mt-2">
         <TextField
           fullWidth
@@ -105,23 +107,23 @@ export default function TableProduto(props) {
         <Table striped bordered hover size="sm" className="custom-table">
           <TableHead>
             <TableRow className="text-center">
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Código</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Nome</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Unidade</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Descrição</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Categoria</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}>Ações</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Código</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Nome</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Unidade</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Descrição</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Categoria</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}align="center">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {props.listaProdutos?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((produto) => (
               <TableRow key={produto.codigo}>
-                <TableCell>{produto.codigo}</TableCell>
-                <TableCell>{produto.nome}</TableCell>
-                <TableCell>{produto.metrica}</TableCell>
-                <TableCell>{produto.descricao}</TableCell>
-                <TableCell>{produto.categoria}</TableCell>
-                <TableCell>
+                <TableCell align="center">{produto.codigo}</TableCell>
+                <TableCell align="center">{produto.nome}</TableCell>
+                <TableCell align="center">{produto.metrica}</TableCell>
+                <TableCell align="center">{produto.descricao}</TableCell>
+                <TableCell align="center">{produto.categoria}</TableCell>
+                <TableCell align="center">
                   <IconButton
                     variant="outlined"
                     style={{ color: '#1683cc' }}

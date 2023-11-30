@@ -137,6 +137,7 @@ export default function TableDoacao(props) {
       setModalVisible(false);
     } else {
       setFiltersApplied(false);
+      setDoacoes(originalDoacoes);
     }
   };
 
@@ -144,7 +145,7 @@ export default function TableDoacao(props) {
     setStartDate(null);
     setEndDate(null);
     setFiltersApplied(false);
-    setDoacoes(props.listaDoacoes);
+    setDoacoes(originalDoacoes);
     document.getElementById("termoBusca").value = "";
   };
 
@@ -234,22 +235,22 @@ export default function TableDoacao(props) {
     <Container>
       <div className="button-container">
         <Button
-          className="nova-doacao-button"
+          className="button-cadastro"
           onClick={() => {
             props.exibirTabela(false);
           }}
         >
           <AiFillPlusCircle style={{ marginRight: '8px' }} /> Nova Doação
         </Button>
-        <Button className='buttonFiltrar' onClick={() => setModalVisible(true)}>
+        <Button className='button-filtrar' onClick={() => setModalVisible(true)}>
           <BsCalendarDateFill style={{ marginRight: '8px' }} /> Filtrar por Data
         </Button>
-        <Button variant="success" onClick={handleDownload}>
+        <Button className="button-download" onClick={handleDownload}>
           <HiDocumentDownload style={{ marginRight: '8px' }} /> Download
         </Button>
         {filtersApplied && (
-          <Button variant="secondary" onClick={clearFilters}>
-            <AiOutlineClear style={{ marginRight: '8px', color: 'white' }} /> Limpar Filtro
+          <Button className='button-limpar-filtro' onClick={clearFilters}>
+            <AiOutlineClear id='icon-limpar' style={{ marginRight: '8px', color: 'gray' }} /> Limpar Filtro
           </Button>
         )}
 
@@ -284,9 +285,9 @@ export default function TableDoacao(props) {
             />
           </Modal.Body>
           <Modal.Footer>
-            {/* <Button variant="secondary" onClick={clearFilters} disabled={!filtersApplied}>
+            <Button  className='button-limpar-filtro' onClick={clearFilters} disabled={!filtersApplied}>
               Limpar Filtro
-            </Button> */}
+            </Button>
 
             <Button variant="primary" onClick={handleDateFilter}>
               Aplicar Filtro

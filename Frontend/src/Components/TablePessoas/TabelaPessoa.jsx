@@ -16,12 +16,15 @@ import {
 import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { RiSearchLine } from "react-icons/ri";
 import { HiTrash } from "react-icons/hi";
+import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
 import { urlBackend } from "../../assets/funcoes";
 import { MdModeEdit } from "react-icons/md";
 import Stack from "react-bootstrap/Stack";
 import Cookies from "universal-cookie";
 import { PessoaContext } from "../../context/pessoaContexot";
 import { useContext } from "react";
+
+
 export default function TabelaPessoas(props) {
   const { pessoas } = useContext(PessoaContext);
   console.log(pessoas)
@@ -76,15 +79,16 @@ export default function TabelaPessoas(props) {
 
   return (
     <Container>
-      <Button
-        variant="primary"
-        className="mb-4"
-        onClick={() => {
-          props.exibirTabela(false);
-        }}
-      >
-        Novo Cadastro
-      </Button>
+      <div className="button-container">
+        <Button
+          className="button-cadastro"
+          onClick={() => {
+            props.exibirTabela(false);
+          }}
+        >
+          <AiFillPlusCircle style={{ marginRight: '8px' }} /> Cadastrar Pessoa
+        </Button>
+      </div>
 
       <InputGroup className="mt-2">
         <TextField
@@ -107,31 +111,31 @@ export default function TabelaPessoas(props) {
         <Table striped bordered hover size="sm" className="custom-table">
           <TableHead>
             <TableRow class="text-center">
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}>Nome</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}>CPF</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}>Data de Nascimento</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }} align="center">Nome</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }} align="center">CPF</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }} align="center">Data de Nascimento</TableCell>
               {/* <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}>Tipo</TableCell> */}
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}>Profissão</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}>Detalhes</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}>Ações</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }} align="center">Profissão</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }} align="center">Detalhes</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }} align="center">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {props.listaPessoas?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pessoa) => (
               <React.Fragment key={pessoa.nome}>
                 <TableRow>
-                  <TableCell style={{ textAlign: 'center' }}>{pessoa.nome}</TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>{formatarCpf(pessoa.cpf)}</TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>{formatarData(pessoa.nascimento)}</TableCell>
-                  {/* <TableCell style={{ textAlign: 'center' }}>{pessoa.tipo}</TableCell> */}
-                  <TableCell style={{ textAlign: 'center' }}>{pessoa.profissao1}</TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>
+                  <TableCell align="center">{pessoa.nome}</TableCell>
+                  <TableCell align="center">{formatarCpf(pessoa.cpf)}</TableCell>
+                  <TableCell align="center">{formatarData(pessoa.nascimento)}</TableCell>
+                  {/* <TableCell align="center">{pessoa.tipo}</TableCell> */}
+                  <TableCell align="center">{pessoa.profissao1}</TableCell>
+                  <TableCell align="center">
                     <IconButton onClick={() => handleExpand(pessoa)}>
                       <span style={{ fontSize: '12px', fontWeight: 'bold' }}>Detalhes</span>
                     </IconButton>
                   </TableCell>
 
-                  <TableCell style={{ textAlign: 'center' }}>
+                  <TableCell align="center">
                     <Stack direction="horizontal" gap={1}>
                       <IconButton
                         variant="outlined"

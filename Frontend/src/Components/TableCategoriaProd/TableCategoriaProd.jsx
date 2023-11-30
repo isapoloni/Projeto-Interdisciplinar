@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { MdModeEdit } from 'react-icons/md';
 import { RiSearchLine } from 'react-icons/ri';
+import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
 import Stack from '@mui/material/Stack';
 import { urlBackend } from '../../assets/funcoes';
 import { HiTrash } from 'react-icons/hi';
@@ -28,7 +29,7 @@ export default function TableCategoria(props) {
   console.log(props.modoEdicao)
   // console.log(props.setModoEdicao)
   const cookies = new Cookies()
-  const jwtAuth= cookies.get('authorization')
+  const jwtAuth = cookies.get('authorization')
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -41,7 +42,7 @@ export default function TableCategoria(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  
+
   function filtrarCategorias(e) {
     const termoBusca = e.currentTarget.value;
     fetch(urlBackend + "/categoriaProduto", { method: "GET", headers: { "Content-Type": "application/json", "authorization": ` ${jwtAuth}` } })
@@ -59,21 +60,21 @@ export default function TableCategoria(props) {
       });
   }
 
-  
+
 
   return (
     <Container>
-      <Button
-        className="mb-4"
-        onClick={() => {
-  
-          props.exibirTabela(false);
-          // props.setModoEdicao(false)
-        }}
-      >
-        Cadastrar Categoria de Produto
-      </Button>
-
+      <div className="button-container">
+        <Button
+          className="button-cadastro"
+          onClick={() => {
+            props.exibirTabela(false);
+            // props.setModoEdicao(false)
+          }}
+        >
+           <AiFillPlusCircle style={{ marginRight: '8px' }} /> Cadastrar Categoria de Produto
+        </Button>
+      </div>
       <TextField
         fullWidth
         type="text"
@@ -109,7 +110,7 @@ export default function TableCategoria(props) {
                     <Stack direction="row" spacing={2} justifyContent="center">
                       <IconButton
                         variant="outlined"
-                        style={{ color: '#1683cc' }} 
+                        style={{ color: '#1683cc' }}
                         onClick={() => {
                           if (window.confirm('Deseja atualizar os dados da categoria?')) {
                             props.editar(categoria);
@@ -121,11 +122,11 @@ export default function TableCategoria(props) {
 
                       <IconButton
                         variant="outlined"
-                        style={{ color: '#cc3116' }} 
+                        style={{ color: '#cc3116' }}
                         onClick={() => {
                           if (window.confirm('Deseja excluir?')) {
                             props.deletar(categoria);
-                        
+
                           }
                         }}
                       >
