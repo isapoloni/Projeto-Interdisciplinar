@@ -81,7 +81,7 @@ export default function Header() {
                     </NavLink>
                     <hr />
                     <NavLink id="navlink" to="/CadastroServicos">
-                      Cadastro Servicos
+                      Cadastro Serviços
                     </NavLink>
                     <hr />
                     <NavLink onClick={handleExpandClick} style={{ cursor: "pointer" }} id="navlink">
@@ -110,9 +110,6 @@ export default function Header() {
   
                       )
                     }
-                  
-                  
-                   
                     <NavLink id="navlink" to="/Doacoes">
                       Doações
                     </NavLink>

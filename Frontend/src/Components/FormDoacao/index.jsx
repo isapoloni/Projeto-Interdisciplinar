@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from "universal-cookie";
-import { Form, Button, FormControl, InputGroup, Stack, Row, Col } from 'react-bootstrap';
+import { Form, Button, FormControl, InputGroup, Stack } from 'react-bootstrap';
 import { urlBackend } from '../../assets/funcoes';
 import { DropdownList } from 'react-widgets';
 import { useNavigate } from "react-router-dom";
@@ -18,8 +18,7 @@ const FormDoacao = (props) => {
         dataDoacao: '',
         listaItens: [],
     });
-    
-    
+
     useEffect(() => {
         if (props.modoEdicao && props.doacao) {
             setDoacao((prevDoacao) => ({
@@ -93,13 +92,11 @@ const FormDoacao = (props) => {
 
     const handleDoadorChange = (selectedValue) => {
         const doadorSelecionado = pessoasData.find((pessoa) => pessoa.nome === selectedValue);
-
         setDoacao({ ...doacao, doador: doadorSelecionado });
     };
 
     const handleProdutoChange = (index, e) => {
         const produtoSelecionado = produtosData.find((produto) => produto.nome === e.target.value);
-
         const updatedItens = [...doacao.listaItens];
         updatedItens[index].produto = produtoSelecionado;
         setDoacao({ ...doacao, listaItens: updatedItens });
@@ -108,7 +105,6 @@ const FormDoacao = (props) => {
     const handleDataDoacaoChange = (e) => {
         setDoacao({ ...doacao, dataDoacao: e.target.value });
     };
-
 
     const handleQuantidadeChange = (index, e) => {
         const updatedItens = [...doacao.listaItens];
@@ -134,7 +130,6 @@ const FormDoacao = (props) => {
 
         try {
             const cpfDoadorSelecionado = doacao.doador ? doacao.doador.cpf.replace(/[.-]/g, '') : '';
-
             const listaItensFormatada = doacao.listaItens.map((item) => ({
                 codigoProduto: item.produto.codigo,
                 quantidade: item.quantidade,
@@ -148,10 +143,7 @@ const FormDoacao = (props) => {
             };
 
             const method = props.modoEdicao ? 'PUT' : 'POST';
-
-            const requestUrl = props.modoEdicao
-                ? `${urlBackend}/doacao`
-                : `${urlBackend}/doacao`;
+            const requestUrl = props.modoEdicao ? `${urlBackend}/doacao` : `${urlBackend}/doacao`;
 
             const response = await fetch(requestUrl, {
                 method: method,
@@ -163,9 +155,6 @@ const FormDoacao = (props) => {
             });
 
             if (response.ok) {
-                window.alert(`${props.modoEdicao ? 'Atualização' : 'Criação'} realizada com sucesso!`);
-                console.log(`${props.modoEdicao ? 'Atualização' : 'Criação'} realizada com sucesso! body:`, JSON.stringify(requestBody));
-
                 setDoacao({
                     doador: null,
                     dataDoacao: '',
@@ -173,12 +162,11 @@ const FormDoacao = (props) => {
                 });
                 props.dadosAtualizados();
             } else {
-                window.alert(`Erro ao ${props.modoEdicao ? 'atualizar' : 'cadastrar'} a doação.`);
-                console.error(`Erro ao ${props.modoEdicao ? 'atualizar' : 'cadastrar'} a doação.`, JSON.stringify(requestBody));
+                console.error('Erro ao cadastrar/atualizar doação:', response.statusText);
             }
         } catch (error) {
             console.error('Erro inesperado:', error);
-            window.alert('Erro inesperado:', error, JSON.stringify(requestBody));
+            window.alert('Erro inesperado:', error);
         }
     };
 
@@ -259,14 +247,13 @@ const FormDoacao = (props) => {
                         type="button"
                         onClick={() => {
                             props.exibirTabela(true);
+
                         }}
                     >
                         Voltar
                     </Button>
                 </Stack>
             </div>
-
-
         </Form>
     );
 };
