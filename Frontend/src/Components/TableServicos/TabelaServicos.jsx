@@ -15,14 +15,15 @@ import {
 } from '@mui/material';
 import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { MdModeEdit } from "react-icons/md";
-import { HiTrash } from "react-icons/hi";
+import { HiDocumentDownload, HiTrash } from "react-icons/hi";
 import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
 import { RiSearchLine } from "react-icons/ri";
 import { urlBackend } from "../../assets/funcoes";
 import Cookies from "universal-cookie";
-
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 export default function TableServico(props) {
-
+  console.log(props)
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
   function filtrarServicos(e) {
@@ -47,6 +48,43 @@ export default function TableServico(props) {
       });
   }
 
+  const handleDownload = () => {
+    const columns = [
+      { label: 'Código do serviço', key: 'codigo' },
+      { label: 'Nome do serviço', key: 'nome' },
+      { label: 'Categoria do serviço', key: 'categoria' },
+      { label: 'Descrição do serviço', key: 'descricao' },
+    ];
+    console.log('coluns',columns)
+    const dataToDownload = [];
+    const servicoToUse = props.listaServicos;
+    console.log('servicoToUse',servicoToUse)
+    if(servicoToUse.length > 0){
+      servicoToUse.map((servico)=>{
+        const rowData = {
+          'Código do serviço': servico.id,
+          'Nome do serviço': servico.servico,
+          'Categoria do serviço': servico.categoria,
+          'Descrição do serviço': servico.descricao,
+        };
+        console.log('rowData',rowData)
+        dataToDownload.push(rowData);
+      })
+    }
+    const worksheet = XLSX.utils.json_to_sheet(dataToDownload);
+
+    const maxColLengths = columns.map(col => ({
+      width: dataToDownload.reduce((acc, row) => Math.max(acc, String(row[col.key] || '').length), col.label.length)
+    }));
+    
+    worksheet['!cols'] = maxColLengths;
+    
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Serviços');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(data, 'serviços.xlsx');
+  };
   return (
     <Container>
       <div className="button-container">
@@ -57,6 +95,9 @@ export default function TableServico(props) {
           }}
         >
           <AiFillPlusCircle style={{ marginRight: '8px' }} /> Cadastrar serviço
+        </Button>
+        <Button className="button-download" onClick={handleDownload}>
+          <HiDocumentDownload style={{ marginRight: '8px' }} /> Download
         </Button>
       </div>
       <InputGroup className="mt-2">
@@ -127,4 +168,7 @@ export default function TableServico(props) {
       </TableContainer>
     </Container>
   );
-}
+  }
+    
+  
+

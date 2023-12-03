@@ -13,17 +13,29 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material';
-import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Container, Button, InputGroup, FormControl ,Modal} from 'react-bootstrap';
 import { MdModeEdit } from "react-icons/md";
-import { HiTrash } from "react-icons/hi";
+import { HiDocumentDownload, HiTrash } from "react-icons/hi";
 import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
 import { RiSearchLine } from "react-icons/ri";
 import { urlBackend } from "../../assets/funcoes";
 import Cookies from "universal-cookie";
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { BsCalendarDateFill } from 'react-icons/bs';
+import DatePicker from 'react-datepicker';
 
+import { useEffect, useState } from 'react';
 export default function TableHistServico(props) {
+  // console.log(props)
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
+  const [filtersApplied, setFiltersApplied] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [histServ, setHistServ] = useState([]);
+
   function filtrarServicos(e) {
     const termoBusca = e.currentTarget.value;
     fetch(urlBackend + "/histServ", {
@@ -54,11 +66,96 @@ export default function TableHistServico(props) {
 
     return `${dia}/${mes}/${ano}`;
   }
+  const handleDownload = () => {
+    const columns = [
+      { label: 'Código do serviço', key: 'codigo' },
+      { label: 'Nome do Prestador', key: 'prestador', format: 'categoria' },
+      { label: 'Nome do serviço', key: 'nome' },
+      { label: 'Data do serviço', key: 'serviceData', format: 'date' },
+      { label: 'Valor do serviço', key: 'valor' },
+    ];
+    // console.log('coluns',columns)
+    const dataToDownload = [];
+    const servicoToUse = filtersApplied ? histServ: props.listaHistoricoDeServicos;
+    // console.log('servicoToUse',servicoToUse)
+    if(servicoToUse && servicoToUse.length > 0){
+      servicoToUse.map((servico)=>{
+        const rowData = {
+          'Código do serviço': servico.id,
+          'Nome do Prestador': servico.prestador,
+          'Nome do serviço': servico.servico,
+          'Data do serviço': servico.serviceData,
+          'Valor do serviço': servico.valor,
+        };
+        // console.log(servico.serviceData)
+        dataToDownload.push(rowData);
+      })
+    }
+    const worksheet = XLSX.utils.json_to_sheet(dataToDownload);
 
+    const maxColLengths = columns.map(col => ({
+      width: dataToDownload.reduce((acc, row) => Math.max(acc, String(row[col.key] || '').length), col.label.length)
+    }));
+    
+    worksheet['!cols'] = maxColLengths;
+    
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorioServiços');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(data, 'HistorioServiços.xlsx');
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = () => {
+    fetch(urlBackend + '/histServ', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
+    })
+      .then((resposta) => resposta.json())
+      .then((listaHistServ) => {
+        if (Array.isArray(listaHistServ)) {
+          setHistServ(listaHistServ);
+          setFiltersApplied(false);
+        }
+      });
+  };
+  const handleDateFilter = () => {
+    applyFilters();
+  };
+
+  const applyFilters = () => {
+    if (startDate && endDate) {
+      const filteredServicos = histServ.filter((services) => {
+        const serviceData = new Date(services.serviceData);
+        return startDate <= serviceData && serviceData <= endDate;
+      });
+      console.log(filteredServicos)
+      setHistServ(filteredServicos);
+      setFiltersApplied(true);
+      setModalVisible(false);
+    } else {
+      setFiltersApplied(false);
+      setHistServ(props.listaHistoricoDeServicos);
+    }
+  };
+
+  const clearFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setFiltersApplied(false);
+    setHistServ(props.listaHistoricoDeServicos);
+    document.getElementById("termoBusca").value = "";
+  };
   return (
     <Container>
       <div className="button-container">
-        <Button
+      <Button
           className="button-cadastro"
           onClick={() => {
             props.exibirTabela(false);
@@ -66,6 +163,58 @@ export default function TableHistServico(props) {
         >
           <AiFillPlusCircle style={{ marginRight: '8px' }} /> Resgistrar Serviço
         </Button>
+        <Button className="button-download" onClick={handleDownload}>
+          <HiDocumentDownload style={{ marginRight: '8px' }} /> Download
+        </Button>
+        <Button className='button-filtrar' onClick={() => setModalVisible(true)}>
+          <BsCalendarDateFill style={{ marginRight: '8px' }} /> Filtrar por Data
+        </Button>
+        {filtersApplied && (
+          <Button className='button-limpar-filtro' onClick={clearFilters}>
+            <AiOutlineClear id='icon-limpar' style={{ marginRight: '8px', color: 'gray' }} /> Limpar Filtro
+          </Button>
+        )}
+
+        <Modal show={modalVisible} onHide={() => setModalVisible(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Selecione o Intervalo de Datas</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              Para refazer uma nova filtragem, por favor, limpe o filtro atual utilizando o botão "Limpar Filtro".
+            </p>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              placeholderText="Data Inicial"
+              dateFormat="dd/MM/yyyy"
+              className="form-control"
+            />
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              placeholderText="Data Final"
+              dateFormat="dd/MM/yyyy"
+              className="form-control"
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button  className='button-limpar-filtro' onClick={clearFilters} disabled={!filtersApplied}>
+              Limpar Filtro
+            </Button>
+
+            <Button variant="primary" onClick={handleDateFilter}>
+              Aplicar Filtro
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
       <InputGroup className="mt-2">
         <TextField
@@ -98,7 +247,7 @@ export default function TableHistServico(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.listaHistoricoDeServicos?.map((histServico) => (
+            {histServ.map((histServico) => (
               <TableRow key={histServico.id}>
                 <TableCell>{histServico.id}</TableCell>
                 <TableCell>{histServico.prestador}</TableCell>
