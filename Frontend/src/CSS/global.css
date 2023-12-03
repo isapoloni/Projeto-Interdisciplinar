@@ -69,6 +69,17 @@
   border-color: gray;
 }
 
+.button-help {
+  background-color: gray;
+  border-color: gray;
+}
+
+.button-help:hover {
+  background-color: rgb(155, 155, 155);
+  border-color: rgb(155, 155, 155);
+}
+
+
 #tabela-download {
   margin-top: 20px;
   border-collapse: collapse;
@@ -85,3 +96,7 @@
   background-color: #f2f2f2;
 }
 
+
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper {
+  width: 30%;
+}

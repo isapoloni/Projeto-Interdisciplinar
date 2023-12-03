@@ -19,15 +19,18 @@ import { MdModeEdit } from 'react-icons/md';
 import { HiTrash, HiDocumentDownload } from 'react-icons/hi';
 import { RiSearchLine } from 'react-icons/ri';
 import { BsCalendarDateFill } from 'react-icons/bs'
-import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
+import { AiFillPlusCircle, AiOutlineClear, AiFillQuestionCircle } from 'react-icons/ai'
 import { Container, Button, InputGroup, FormControl, Modal } from 'react-bootstrap';
 import { urlBackend } from '../../assets/funcoes';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ConfirmationModal from '../ModalConfirmacao/index'
+import ExclusaoSucessoModal from '../ModalSucesso/index'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import get from 'lodash.get';
+import PainelAjuda from '../PainelAjuda/index'
+
 
 export default function TableDoacao(props) {
   const cookies = new Cookies();
@@ -46,6 +49,28 @@ export default function TableDoacao(props) {
   const [downloaded, setDownloaded] = useState(false);
   const [downloadTableVisible, setDownloadTableVisible] = useState(false);
   const [originalDoacoes, setOriginalDoacoes] = useState([]);
+  const [helpPanelVisible, setHelpPanelVisible] = useState(false);
+  const [selectedDoacaoToDelete, setSelectedDoacaoToDelete] = useState(null);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [exclusaoSucessoModalVisible, setExclusaoSucessoModalVisible] = useState(false);
+
+
+  const openDeleteModal = (doacao) => {
+    setSelectedDoacaoToDelete(doacao.codigo);
+    setDeleteModalOpen(true);
+  };
+  const closeDeleteModal = () => {
+    setSelectedDoacaoToDelete(null);
+    setDeleteModalOpen(false);
+  };
+
+  const openHelpPanel = () => {
+    setHelpPanelVisible(true);
+  };
+
+  const closeHelpPanel = () => {
+    setHelpPanelVisible(false);
+  };
 
   const handleDownload = () => {
     const columns = [
@@ -55,10 +80,10 @@ export default function TableDoacao(props) {
       { label: 'Produto', key: 'produto' },
       { label: 'Quantidade', key: 'quantidade' },
     ];
-  
+
     const dataToDownload = [];
     const doacoesToUse = filtersApplied ? doacoes : originalDoacoes;
-  
+
     doacoesToUse.forEach(doacao => {
       if (doacao.listaItens && doacao.listaItens.length > 0) {
         doacao.listaItens.forEach(item => {
@@ -82,23 +107,23 @@ export default function TableDoacao(props) {
         dataToDownload.push(rowData);
       }
     });
-  
+
     const worksheet = XLSX.utils.json_to_sheet(dataToDownload);
 
     const maxColLengths = columns.map(col => ({
       width: dataToDownload.reduce((acc, row) => Math.max(acc, String(row[col.key] || '').length), col.label.length)
     }));
-    
+
     worksheet['!cols'] = maxColLengths;
-    
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Doacoes');
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     saveAs(data, 'doacoes.xlsx');
   };
-  
-  
+
+
 
   useEffect(() => {
     loadData();
@@ -116,7 +141,7 @@ export default function TableDoacao(props) {
       .then((listaDoacoes) => {
         if (Array.isArray(listaDoacoes)) {
           setDoacoes(listaDoacoes);
-          setOriginalDoacoes(listaDoacoes); 
+          setOriginalDoacoes(listaDoacoes);
           setFiltersApplied(false);
         }
       });
@@ -197,27 +222,30 @@ export default function TableDoacao(props) {
   const handleConfirmUpdate = () => {
     props.editar(selectedDoacao);
     handleCloseModal();
+    setExclusaoSucessoModalVisible(true);
   };
 
   const handleDelete = (codigo) => {
-    if (window.confirm("Deseja excluir?")) {
-
-      fetch(urlBackend + '/doacao/' + codigo, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "authorization": `${jwtAuth}`
+    // Realizar a requisição DELETE
+    fetch(urlBackend + '/doacao/' + codigo, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      }
+    })
+      .then((resposta) => {
+        if (resposta.ok) {
+          // Atualizar a lista de doações após a exclusão
+          loadData();
+          // Exibir o modal de exclusão bem-sucedida
+          setExclusaoSucessoModalVisible(true);
+        } else {
+          console.error("Erro ao excluir a doação.");
         }
       })
-        .then((resposta) => {
-          if (resposta.ok) {
-            props.setDoacoes(props.listaDoacoes.filter(doacao => doacao.codigo !== codigo));
-          } else {
-            console.error("Erro ao excluir a doação.");
-          }
-        })
-        .catch((error) => console.error("Erro ao excluir a doação:", error));
-    }
+      .catch((error) => console.error("Erro ao excluir a doação:", error));
+
   };
 
 
@@ -240,7 +268,7 @@ export default function TableDoacao(props) {
             props.exibirTabela(false);
           }}
         >
-          <AiFillPlusCircle style={{ marginRight: '8px' }} /> Nova Doação
+          <AiFillPlusCircle style={{ marginRight: '8px' }} /> Registrar Doação
         </Button>
         <Button className='button-filtrar' onClick={() => setModalVisible(true)}>
           <BsCalendarDateFill style={{ marginRight: '8px' }} /> Filtrar por Data
@@ -248,6 +276,10 @@ export default function TableDoacao(props) {
         <Button className="button-download" onClick={handleDownload}>
           <HiDocumentDownload style={{ marginRight: '8px' }} /> Download
         </Button>
+        <Button className="button-help" onClick={openHelpPanel}>
+          <AiFillQuestionCircle style={{ marginRight: '8px' }} /> Ajuda
+        </Button>
+        {helpPanelVisible && <PainelAjuda onClose={closeHelpPanel} />}
         {filtersApplied && (
           <Button className='button-limpar-filtro' onClick={clearFilters}>
             <AiOutlineClear id='icon-limpar' style={{ marginRight: '8px', color: 'gray' }} /> Limpar Filtro
@@ -285,7 +317,7 @@ export default function TableDoacao(props) {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button  className='button-limpar-filtro' onClick={clearFilters} disabled={!filtersApplied}>
+            <Button className='button-limpar-filtro' onClick={clearFilters} disabled={!filtersApplied}>
               Limpar Filtro
             </Button>
 
@@ -351,7 +383,7 @@ export default function TableDoacao(props) {
                       <IconButton
                         variant="outlined"
                         style={{ color: '#cc3116' }}
-                        onClick={() => handleDelete(doacao.codigo)}
+                        onClick={() => openDeleteModal(doacao)}
                       >
                         <HiTrash />
                       </IconButton>
@@ -388,7 +420,25 @@ export default function TableDoacao(props) {
             onClose={handleCloseModal}
             onConfirm={handleConfirmUpdate}
             contentText={`Deseja atualizar os dados da doação ${selectedDoacao?.doador || 'Doação'}?`}
+            title="Confirmar Atualização"
           />
+          <ConfirmationModal
+            open={isDeleteModalOpen}
+            onClose={closeDeleteModal}
+            onConfirm={() => {
+              closeDeleteModal();
+              // Realizar a requisição DELETE
+              handleDelete(selectedDoacaoToDelete);
+            }}
+            contentText={`Deseja excluir a doação ${selectedDoacao?.doador || 'Doação'}?`}
+            title="Confirmar Exclusão"
+          />
+          {exclusaoSucessoModalVisible && (
+            <ExclusaoSucessoModal
+              show={exclusaoSucessoModalVisible}
+              onClose={() => setExclusaoSucessoModalVisible(false)}
+            />
+          )}
         </Table>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}

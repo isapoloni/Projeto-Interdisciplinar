@@ -1,12 +1,12 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 
-export default  function ConfirmationModal({ open, onClose, onConfirm, contentText }) {
+export default function ConfirmationModal({ open, onClose, onConfirm, contentText, title }) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Confirmar Atualização</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-      <DialogContentText>{contentText}</DialogContentText>
+        <DialogContentText>{contentText}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancelar</Button>
@@ -17,4 +17,3 @@ export default  function ConfirmationModal({ open, onClose, onConfirm, contentTe
     </Dialog>
   );
 }
-
