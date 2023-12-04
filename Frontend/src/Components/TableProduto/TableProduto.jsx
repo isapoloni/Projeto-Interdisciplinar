@@ -29,6 +29,7 @@ export default function TableProduto(props) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedProduto, setSelectedProduto] = useState(null);
+  const produtosOrdenados = props.listaProdutos?.sort((a, b) => b.codigo - a.codigo) || [];
 
   // const handleChangePage = (event, newPage) => {
   //   setPage(newPage);
@@ -74,6 +75,10 @@ export default function TableProduto(props) {
         }
       });
   }
+
+
+
+
   return (
     <Container>
       <div className="button-container">
@@ -116,7 +121,7 @@ export default function TableProduto(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.listaProdutos?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((produto) => (
+          {produtosOrdenados.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((produto) => (
               <TableRow key={produto.codigo}>
                 <TableCell align="center">{produto.codigo}</TableCell>
                 <TableCell align="center">{produto.nome}</TableCell>

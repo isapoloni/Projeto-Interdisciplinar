@@ -28,7 +28,7 @@ export default function ProdutoForm(props) {
     // Adicionando validação específica para o campo de categoria
     if (!produto.codigoCategoria) {
       setCategoriaValidated(true);
-      console.log("entrei no erro"); // Adicionando console.log para indicar o erro
+      console.log("entrei no erro");
     } else {
       setCategoriaValidated(false);
     }
@@ -41,52 +41,99 @@ export default function ProdutoForm(props) {
       const codigoCategoriaSelecionada = value && value.codigo;
       setProduto({ ...produto, codigoCategoria: codigoCategoriaSelecionada });
 
-      if (!props.modoEdicao) {
-        fetch(urlBackend + "/produto", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "authorization": `${jwtAuth}`
-          },
-          body: JSON.stringify(produto)
-        })
-          .then((resposta) => resposta.json())
-          .then((dados) => {
-            if (dados.status) {
-              props.setModoEdicao(false);
-              let novaLista = props.listaProdutos;
-              novaLista.push(produto);
-              props.setProdutos(novaLista);
-              props.buscarProduto();
-              props.dadosAtualizados();
-            }
-            window.alert(dados.mensagem);
-            console.log('Corpo da requisição:', JSON.stringify(produto));
-            console.log('caiu aqui', dados);
-          })
-          .catch((erro) => {
-            console.log('Corpo da requisição:', JSON.stringify(produto));
-            window.alert("Erro ao executar a requisição: " + erro.message);
-            console.log('deu ruim', erro);
-            console.log('dados', dados);
-          });
-      } else {
-        fetch(urlBackend + '/produto', {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "authorization": `${jwtAuth}`
-          },
-          body: JSON.stringify(produto)
-        })
-          .then((resposta) => {
-            console.log('Corpo da requisição:', JSON.stringify(produto));
-            props.dadosAtualizados();
-            return resposta.json();
-          });
-      }
+      const confirmacaoMensagem = props.modoEdicao ? "Deseja realmente atualizar o produto?" : "Deseja realmente cadastrar o produto?";
+      const confirmacaoAcao = window.confirm(confirmacaoMensagem);
 
-      setValidated(false);
+      if (confirmacaoAcao) {
+        if (!props.modoEdicao) {
+          fetch(urlBackend + "/produto", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": `${jwtAuth}`
+            },
+            body: JSON.stringify(produto)
+          })
+            .then((resposta) => resposta.json())
+            .then((dados) => {
+              if (dados.status) {
+                const confirmacaoCadastro = window.confirm("Produto cadastrado com sucesso!");
+                if (confirmacaoCadastro) {
+                  props.exibirTabela(true);
+
+                  // Atualiza os produtos no componente pai
+                  fetch(urlBackend + "/produto", {
+                    method: "GET",
+                    headers: {
+                      "Content-Type": "application/json",
+                      "authorization": `${jwtAuth}`
+                    },
+                  })
+                    .then((resposta) => resposta.json())
+                    .then((listaProdutosAtualizada) => {
+                      if (Array.isArray(listaProdutosAtualizada)) {
+                        props.atualizarProdutos(listaProdutosAtualizada);
+                      }
+                    })
+                    .catch((erro) => {
+                      console.error("Erro ao buscar dados atualizados:", erro);
+                    });
+                } else {
+                  // Adicione a lógica para redirecionar ou fazer algo após a confirmação
+                }
+              }
+              // window.alert(dados.mensagem);
+              console.log('Corpo da requisição:', JSON.stringify(produto));
+              console.log('caiu aqui', dados);
+            })
+            .catch((erro) => {
+              console.log('Corpo da requisição:', JSON.stringify(produto));
+              window.alert("Erro ao executar a requisição: " + erro.message);
+              console.log('deu ruim', erro);
+              console.log('dados', dados);
+            });
+        } else {
+          fetch(urlBackend + '/produto', {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": `${jwtAuth}`
+            },
+            body: JSON.stringify(produto)
+          })
+            .then((resposta) => {
+              console.log('Corpo da requisição:', JSON.stringify(produto));
+              const confirmacaoAtualizacao = window.confirm("Produto atualizado com sucesso!");
+              if (confirmacaoAtualizacao) {
+                props.exibirTabela(true);
+
+                // Atualiza os produtos no componente pai
+                fetch(urlBackend + "/produto", {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `${jwtAuth}`
+                  },
+                })
+                  .then((resposta) => resposta.json())
+                  .then((listaProdutosAtualizada) => {
+                    if (Array.isArray(listaProdutosAtualizada)) {
+                      props.atualizarProdutos(listaProdutosAtualizada);
+                    }
+                  })
+                  .catch((erro) => {
+                    console.error("Erro ao buscar dados atualizados:", erro);
+                  });
+              } else {
+                // Adicione a lógica para redirecionar ou fazer algo após a confirmação
+              }
+              props.dadosAtualizados();
+              return resposta.json();
+            });
+        }
+
+        setValidated(false);
+      }
     } else {
       setValidated(true);
     }
@@ -94,6 +141,9 @@ export default function ProdutoForm(props) {
     evento.preventDefault();
     evento.stopPropagation();
   }
+
+
+
 
 
 
@@ -218,14 +268,14 @@ export default function ProdutoForm(props) {
               />
             </div>
             <Form.Control.Feedback type="invalid">
-              Por favor, selecione uma categoria.
+              Por favor, selecione uma categoria!
             </Form.Control.Feedback>
 
-            {categoriaValidated && (
+            {/* {categoriaValidated && (
               <div className="error-message" style={{ color: "red", position: "absolute", bottom: "-20px" }}>
                 Por favor, informe uma categoria.
               </div>
-            )}
+            )} */}
           </Form.Group>
         </Col>
 
