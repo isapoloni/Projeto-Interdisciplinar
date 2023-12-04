@@ -112,7 +112,7 @@ export default function TableProduto(props) {
               <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Unidade</TableCell>
               <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Descrição</TableCell>
               <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Categoria</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}align="center">Ações</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -127,7 +127,11 @@ export default function TableProduto(props) {
                   <IconButton
                     variant="outlined"
                     style={{ color: '#1683cc' }}
-                    onClick={() => handleOpenModal(produto)}
+                    onClick={() => {
+                      if (window.confirm("Deseja atualizar os dados do produto?")) {
+                        props.editar(produto);
+                      }
+                    }}
                   >
                     <MdModeEdit />
                   </IconButton>
@@ -152,6 +156,7 @@ export default function TableProduto(props) {
             open={isModalOpen}
             onClose={handleCloseModal}
             onConfirm={handleConfirmUpdate}
+            title={'Confirmar Atualização'}
             contentText={`Deseja atualizar os dados do produto ${selectedProduto?.nome || 'produto'}?`}
           />
         </Table>

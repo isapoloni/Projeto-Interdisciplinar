@@ -9,9 +9,10 @@ import Cookie from "universal-cookie";
 export default function ProdutoForm(props) {
   const [validated, setValidated] = useState(false);
   const [produto, setProduto] = useState(props.produto);
+  const [categoriaValidated, setCategoriaValidated] = useState(false);
+
   const cookies = new Cookie()
   const jwtAuth = cookies.get('authorization')
-  console.log(props.modoEdicao)
 
 
   function manipularOnChange(e) {
@@ -23,7 +24,23 @@ export default function ProdutoForm(props) {
 
   function manipulaSubmissao(evento) {
     const form = evento.currentTarget;
-    if (form.checkValidity()) {
+
+    // Adicionando validação específica para o campo de categoria
+    if (!produto.codigoCategoria) {
+      setCategoriaValidated(true);
+      console.log("entrei no erro"); // Adicionando console.log para indicar o erro
+    } else {
+      setCategoriaValidated(false);
+    }
+
+    // Verificando a validação do formulário
+    if (form.checkValidity() && !categoriaValidated) {
+      // Chamar manualmente o onChange para garantir que seja acionado ao selecionar uma opção
+      const selectedCategoria = props.categorias.find(categoria => categoria.codigo === produto.codigoCategoria);
+      const value = selectedCategoria || null;
+      const codigoCategoriaSelecionada = value && value.codigo;
+      setProduto({ ...produto, codigoCategoria: codigoCategoriaSelecionada });
+
       if (!props.modoEdicao) {
         fetch(urlBackend + "/produto", {
           method: "POST",
@@ -33,30 +50,27 @@ export default function ProdutoForm(props) {
           },
           body: JSON.stringify(produto)
         })
-          .then((resposta) => {
-            return resposta.json()
-          })
+          .then((resposta) => resposta.json())
           .then((dados) => {
             if (dados.status) {
-              props.setModoEdicao(false)
+              props.setModoEdicao(false);
               let novaLista = props.listaProdutos;
-              novaLista.push(produto)
-              props.setProdutos(novaLista)
-              props.buscarProduto()
-              props.dadosAtualizados()
+              novaLista.push(produto);
+              props.setProdutos(novaLista);
+              props.buscarProduto();
+              props.dadosAtualizados();
             }
-            window.alert(dados.mensagem)
+            window.alert(dados.mensagem);
             console.log('Corpo da requisição:', JSON.stringify(produto));
-            console.log('caiu aqui', dados)
+            console.log('caiu aqui', dados);
           })
           .catch((erro) => {
             console.log('Corpo da requisição:', JSON.stringify(produto));
-            window.alert("Erro ao executar a requisição: " + erro.message)
-            console.log('deu ruim', erro)
-            console.log('dados', dados)
-          })
-      }
-      else {
+            window.alert("Erro ao executar a requisição: " + erro.message);
+            console.log('deu ruim', erro);
+            console.log('dados', dados);
+          });
+      } else {
         fetch(urlBackend + '/produto', {
           method: "PUT",
           headers: {
@@ -67,19 +81,22 @@ export default function ProdutoForm(props) {
         })
           .then((resposta) => {
             console.log('Corpo da requisição:', JSON.stringify(produto));
-            props.dadosAtualizados()
-            return resposta.json()
-
-          })
+            props.dadosAtualizados();
+            return resposta.json();
+          });
       }
-      setValidated(false)
-    } else {
 
-      setValidated(true)
+      setValidated(false);
+    } else {
+      setValidated(true);
     }
+
     evento.preventDefault();
     evento.stopPropagation();
   }
+
+
+
 
   return (
     <>
@@ -182,23 +199,33 @@ export default function ProdutoForm(props) {
         </Row> */}
 
         <Col>
-          <Form.Group className="mb-3">
+          <Form.Group className="mb-3 position-relative">
             <Form.Label className="mb-2">Categoria</Form.Label>
-            <DropdownList
-              value={props.categorias.find(categoria => categoria.codigo === produto.codigoCategoria)}
-              data={props.categorias}
-              textField="categoria"
-              valueField="codigo"
-              onChange={(value) => {
-                const codigoCategoriaSelecionada = value && value.codigo;
-                setProduto({ ...produto, codigoCategoria: codigoCategoriaSelecionada });
-              }}
-              placeholder="Selecione ou busque uma categoria"
-              required
-            />
+            <div className={`rw-widget-input ${categoriaValidated ? "is-invalid" : ""}`} style={{ position: "relative" }}>
+              <DropdownList
+                className={categoriaValidated ? "is-invalid" : ""}
+                value={props.categorias.find(categoria => categoria.codigo === produto.codigoCategoria)}
+                data={props.categorias}
+                textField="categoria"
+                valueField="codigo"
+                onChange={(value) => {
+                  const codigoCategoriaSelecionada = value && value.codigo;
+                  setProduto({ ...produto, codigoCategoria: codigoCategoriaSelecionada });
+                  setCategoriaValidated(false);
+                }}
+                placeholder={categoriaValidated ? "Por favor, escolha uma categoria!" : "Selecione ou busque uma categoria"}
+                required
+              />
+            </div>
             <Form.Control.Feedback type="invalid">
-              Por favor, informe a categoria!
+              Por favor, selecione uma categoria.
             </Form.Control.Feedback>
+
+            {categoriaValidated && (
+              <div className="error-message" style={{ color: "red", position: "absolute", bottom: "-20px" }}>
+                Por favor, informe uma categoria.
+              </div>
+            )}
           </Form.Group>
         </Col>
 

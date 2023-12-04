@@ -29,7 +29,7 @@ import ExclusaoSucessoModal from '../ModalSucesso/index'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import get from 'lodash.get';
-import {PainelAjudaDoacao} from '../PainelAjuda/index'
+import { PainelAjudaDoacao } from '../PainelAjuda/index'
 
 
 export default function TableDoacao(props) {
@@ -60,11 +60,15 @@ export default function TableDoacao(props) {
   });
 
 
-  console.log('selectedDoacao',selectedDoacao)
+
   const openDeleteModal = (doacao) => {
-    setSelectedDoacaoToDelete(doacao.codigo);
-    setDeleteModalOpen(true);
+    const confirmDelete = window.confirm("Deseja excluir a doação?");
+    if (confirmDelete) {
+      handleDelete(doacao.codigo);
+      loadData()
+    }
   };
+
   const closeDeleteModal = () => {
     setSelectedDoacaoToDelete(null);
     setDeleteModalOpen(false);
@@ -226,13 +230,14 @@ export default function TableDoacao(props) {
   };
 
   const handleConfirmUpdate = () => {
-    props.editar(selectedDoacao);
-    handleCloseModal();
-    setExclusaoSucessoModalVisible(true);
+    const confirmUpdate = window.confirm("Deseja atualizar os dados da doação?");
+    if (confirmUpdate) {
+      props.editar(selectedDoacao);
+      window.alert("Dados da doação atualizados com sucesso!");
+    }
   };
 
   const handleDelete = (codigo) => {
-    // Realizar a requisição DELETE
     fetch(urlBackend + '/doacao/' + codigo, {
       method: "DELETE",
       headers: {
@@ -242,10 +247,8 @@ export default function TableDoacao(props) {
     })
       .then((resposta) => {
         if (resposta.ok) {
-          // Atualizar a lista de doações após a exclusão
           loadData();
-          // Exibir o modal de exclusão bem-sucedida
-          setExclusaoSucessoModalVisible(true);
+          window.alert("Doação excluída com sucesso!");
         } else {
           console.error("Erro ao excluir a doação.");
         }
@@ -394,7 +397,11 @@ export default function TableDoacao(props) {
                       <IconButton
                         variant="outlined"
                         style={{ color: '#1683cc' }}
-                        onClick={() => handleOpenModal(doacao)}
+                        onClick={() => {
+                          if (window.confirm("Deseja atualizar os dados da doação?")) {
+                            props.editar(doacao);
+                          }
+                        }}
                       >
                         <MdModeEdit />
                       </IconButton>

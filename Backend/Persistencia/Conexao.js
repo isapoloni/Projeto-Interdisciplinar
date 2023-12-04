@@ -8,7 +8,7 @@ export default async function Conectar() {
     host: "localhost",
     user: "root",
     password: "",
-    database: "backend",
+    database: "new-backend-pid",
   });
   global.conexao = conexao;
   return conexao;

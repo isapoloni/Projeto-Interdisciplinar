@@ -1,29 +1,18 @@
+// SucessoModal.js
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { BsCheckCircle } from 'react-icons/bs'; // Importe o ícone de sucesso
+import { BsCheckCircle } from 'react-icons/bs';
 
-const ExclusaoSucessoModal = ({ show, onClose, tipoSucesso }) => {
-  let titulo = '';
-  let mensagem = '';
+const SucessoModal = ({ show, onClose, tipoSucesso }) => {
+  let titulo, mensagem;
 
-  switch (tipoSucesso) {
-    case 'exclusao':
-      titulo = 'Doação Excluída com Sucesso';
-      mensagem = 'A doação foi excluída com sucesso!';
-      break;
-    case 'edicao':
-      titulo = 'Doação Editada com Sucesso';
-      mensagem = 'A doação foi editada com sucesso!';
-      break;
-    case 'cadastro':
-      titulo = 'Doação Cadastrada com Sucesso';
-      mensagem = 'A doação foi cadastrada com sucesso!';
-      break;
-    default:
-      titulo = 'Sucesso';
-      mensagem = 'Operação realizada com sucesso!';
-      break;
-  }
+  if (tipoSucesso === 'cadastro') {
+    titulo = 'Cadastro Bem-Sucedido';
+    mensagem = 'Seu produto foi cadastrado com sucesso!';
+  } else if (tipoSucesso === 'edicao') {
+    titulo = 'Atualização Bem-Sucedida';
+    mensagem = 'Seu produto foi atualizado com sucesso!';
+  } // Adicione mais casos conforme necessário
 
   return (
     <Modal show={show} onHide={onClose}>
@@ -45,4 +34,4 @@ const ExclusaoSucessoModal = ({ show, onClose, tipoSucesso }) => {
   );
 };
 
-export default ExclusaoSucessoModal;
+export default SucessoModal;

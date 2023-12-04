@@ -100,3 +100,8 @@
 .css-1160xiw-MuiPaper-root-MuiDrawer-paper {
   width: 30%;
 }
+
+
+.rw-widget-input.is-invalid {
+  border-color: red;
+}
