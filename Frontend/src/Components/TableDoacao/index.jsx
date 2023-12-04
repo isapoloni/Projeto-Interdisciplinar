@@ -53,8 +53,14 @@ export default function TableDoacao(props) {
   const [selectedDoacaoToDelete, setSelectedDoacaoToDelete] = useState(null);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [exclusaoSucessoModalVisible, setExclusaoSucessoModalVisible] = useState(false);
+  const [doacao, setDoacao] = useState({
+    doador: null,
+    dataDoacao: '',
+    listaItens: [],
+  });
 
 
+  console.log('selectedDoacao',selectedDoacao)
   const openDeleteModal = (doacao) => {
     setSelectedDoacaoToDelete(doacao.codigo);
     setDeleteModalOpen(true);
@@ -257,6 +263,13 @@ export default function TableDoacao(props) {
     return `${dia}/${mes}/${ano}`;
   }
 
+  const resetForm = () => {
+    setDoacao({
+      doador: null,
+      dataDoacao: '',
+      listaItens: [],
+    });
+  };
 
 
   return (
@@ -265,6 +278,12 @@ export default function TableDoacao(props) {
         <Button
           className="button-cadastro"
           onClick={() => {
+            setDoacao({
+              doador: null,
+              dataDoacao: '',
+              listaItens: [],
+            });
+            setSelectedDoacao(null); // Adiciona esta linha para redefinir o estado
             props.exibirTabela(false);
           }}
         >
@@ -419,7 +438,7 @@ export default function TableDoacao(props) {
             open={isModalOpen}
             onClose={handleCloseModal}
             onConfirm={handleConfirmUpdate}
-            contentText={`Deseja atualizar os dados da doação ${selectedDoacao?.doador || 'Doação'}?`}
+            contentText={`Deseja atualizar os dados da doação?`}
             title="Confirmar Atualização"
           />
           <ConfirmationModal
@@ -427,10 +446,9 @@ export default function TableDoacao(props) {
             onClose={closeDeleteModal}
             onConfirm={() => {
               closeDeleteModal();
-              // Realizar a requisição DELETE
               handleDelete(selectedDoacaoToDelete);
             }}
-            contentText={`Deseja excluir a doação ${selectedDoacao?.doador || 'Doação'}?`}
+            contentText={`Deseja excluir a doação ?`}
             title="Confirmar Exclusão"
           />
           {exclusaoSucessoModalVisible && (

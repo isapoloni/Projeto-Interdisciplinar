@@ -4,6 +4,9 @@ import { Form, Button, FormControl, InputGroup, Stack } from 'react-bootstrap';
 import { urlBackend } from '../../assets/funcoes';
 import { DropdownList } from 'react-widgets';
 import { useNavigate } from "react-router-dom";
+import ConfirmationModal from '../ModalConfirmacao/index';
+import ExclusaoSucessoModal from '../ModalSucesso/index'
+import ErroModal from '../ModalErro/index';
 
 const FormDoacao = (props) => {
     const cookies = new Cookies();
@@ -18,6 +21,72 @@ const FormDoacao = (props) => {
         dataDoacao: '',
         listaItens: [],
     });
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [showSucessoModal, setShowSucessoModal] = useState(false);
+    const [showErroModal, setShowErroModal] = useState(false);
+    const [mensagemErro, setMensagemErro] = useState('');
+    const [formValido, setFormValido] = useState(true);
+
+    const handleOpenErroModal = (mensagem) => {
+        setMensagemErro(mensagem);
+        setShowErroModal(true);
+    };
+
+
+    const handleAbrirSucessoModal = () => {
+        setShowSucessoModal(true);
+    };
+
+    const handleFecharSucessoModal = () => {
+        setShowSucessoModal(false);
+        props.exibirTabela(true); // Adicione essa linha para exibir a tabela ao fechar o modal de sucesso
+    };
+
+    const handleConfirm = async () => {
+        setShowConfirmationModal(false);
+
+        try {
+            const cpfDoadorSelecionado = doacao.doador ? doacao.doador.cpf.replace(/[.-]/g, '') : '';
+            const listaItensFormatada = doacao.listaItens.map((item) => ({
+                codigoProduto: item.produto.codigo,
+                quantidade: item.quantidade,
+            }));
+
+            const requestBody = {
+                codigo: props.doacao ? props.doacao.codigo : null,
+                dataDoacao: doacao.dataDoacao,
+                cpfDoador: cpfDoadorSelecionado,
+                listaItens: listaItensFormatada,
+            };
+
+            const method = props.modoEdicao ? 'PUT' : 'POST';
+            const requestUrl = props.modoEdicao ? `${urlBackend}/doacao` : `${urlBackend}/doacao`;
+
+            const response = await fetch(requestUrl, {
+                method: method,
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `${jwtAuth}`
+                },
+                body: JSON.stringify(requestBody),
+            });
+
+            if (response.ok) {
+                await handleSubmit();
+                handleAbrirSucessoModal();
+            } else {
+                console.error('Erro ao cadastrar/atualizar doação:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Erro inesperado:', error);
+        }
+    };
+
+
+    const handleOpenConfirmationModal = () => {
+        setShowConfirmationModal(true);
+    };
+
 
     useEffect(() => {
         if (props.modoEdicao && props.doacao) {
@@ -126,33 +195,23 @@ const FormDoacao = (props) => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-
         try {
-            const cpfDoadorSelecionado = doacao.doador ? doacao.doador.cpf.replace(/[.-]/g, '') : '';
-            const listaItensFormatada = doacao.listaItens.map((item) => ({
-                codigoProduto: item.produto.codigo,
-                quantidade: item.quantidade,
-            }));
-
-            const requestBody = {
-                codigo: props.doacao ? props.doacao.codigo : null,
-                dataDoacao: doacao.dataDoacao,
-                cpfDoador: cpfDoadorSelecionado,
-                listaItens: listaItensFormatada,
-            };
-            const method = props.modoEdicao ? 'PUT' : 'POST';
-            const requestUrl = props.modoEdicao ? `${urlBackend}/doacao` : `${urlBackend}/doacao`;
-
-            const response = await fetch(requestUrl, {
-                method: method,
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `${jwtAuth}`
-                },
-                body: JSON.stringify(requestBody),
-            });
-
+            // Validar se todos os campos obrigatórios estão preenchidos
+            if (!doacao.doador || !doacao.dataDoacao || doacao.listaItens.length === 0) {
+                handleOpenErroModal('Por favor, preencha todos os campos obrigatórios.');
+                setFormValido(false);
+                return;
+            }
+    
+            // Validar se cada item da lista possui produto e quantidade
+            if (doacao.listaItens.some(item => !item.produto || !item.quantidade)) {
+                handleOpenErroModal('Por favor, preencha todos os campos obrigatórios na lista de itens.');
+                setFormValido(false);
+                return;
+            }
+    
+            const response = await fetch(/* ... */);
+    
             if (response.ok) {
                 setDoacao({
                     doador: null,
@@ -160,14 +219,16 @@ const FormDoacao = (props) => {
                     listaItens: [],
                 });
                 props.dadosAtualizados();
+                props.exibirTabela(true);
             } else {
-                console.error('Erro ao cadastrar/atualizar doação:', response.statusText);
+                handleOpenErroModal(`Erro ao cadastrar/atualizar doação: ${response.statusText}`);
             }
         } catch (error) {
-            console.error('Erro inesperado:', error);
-            window.alert('Erro inesperado:', error);
+            handleOpenErroModal('Erro inesperado: ' + error.message);
         }
     };
+
+
 
     return (
         <Form
@@ -175,7 +236,7 @@ const FormDoacao = (props) => {
             noValidate
         >
             <Form.Group className="mb-3 mt-4">
-                <h3>Registro de prestação de doação</h3>
+                <h3>Registro de Doação</h3>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -199,6 +260,7 @@ const FormDoacao = (props) => {
                     type="date"
                     onChange={handleDataDoacaoChange}
                     value={doacao.dataDoacao}
+                    isInvalid={!formValido && !doacao.dataDoacao}
                 />
             </Form.Group>
 
@@ -223,6 +285,7 @@ const FormDoacao = (props) => {
                                     onChange={(e) => handleQuantidadeChange(index, e)}
                                     value={item.quantidade}
                                     className="ml-3"
+                                    isInvalid={!formValido && !doacao.dataDoacao}
                                 />
                             </div>
                             <Button variant="danger" onClick={() => handleRemoveItem(index)}>
@@ -237,8 +300,9 @@ const FormDoacao = (props) => {
             </Form.Group>
 
             <div className="d-flex justify-content-end mt-3 mb-3">
-                <Stack className="mt-3 mb-3" direction="horizontal" gap={3} >
-                    <Button variant="primary" type="submit">
+                <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
+                    <Button variant="primary" type="button" onClick={handleOpenConfirmationModal} disabled={!formValido}
+>
                         {props.modoEdicao ? "Atualizar" : "Cadastrar"}
                     </Button>
                     <Button
@@ -246,13 +310,21 @@ const FormDoacao = (props) => {
                         type="button"
                         onClick={() => {
                             props.exibirTabela(true);
-
                         }}
                     >
                         Voltar
                     </Button>
                 </Stack>
             </div>
+            <ConfirmationModal
+                open={showConfirmationModal}
+                onClose={() => setShowConfirmationModal(false)}
+                onConfirm={handleConfirm}
+                contentText="Deseja confirmar a ação?"
+                title="Confirmação"
+            />
+            <ExclusaoSucessoModal show={showSucessoModal} onClose={handleFecharSucessoModal} tipoSucesso={props.modoEdicao ? 'edicao' : 'cadastro'} />
+            <ErroModal show={showErroModal} onClose={() => setShowErroModal(false)} mensagemErro={mensagemErro} />
         </Form>
     );
 };
