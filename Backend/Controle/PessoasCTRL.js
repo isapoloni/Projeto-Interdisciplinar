@@ -37,7 +37,6 @@ export default class PessoasCTRL {
       const cidade = data.cidade;
       const telefone = data.telefone;
       const email = data.email;
-      const tipo = data.tipo;
       const profissao1 = data.profissao1;       
       if (
         cpf &&
@@ -47,7 +46,6 @@ export default class PessoasCTRL {
         cidade &&
         telefone &&
         email &&
-        tipo &&
         profissao1     
             
       ) {
@@ -59,7 +57,6 @@ export default class PessoasCTRL {
         cidade,
         telefone,
         email,
-        tipo,
         profissao1    
         );
         pessoa
@@ -102,7 +99,6 @@ export default class PessoasCTRL {
       const cidade = data.cidade;
       const telefone = data.telefone;
       const email = data.email;
-      const tipo = data.tipo;
       const profissao1 = data.profissao1;  
       if (
         cpf &&
@@ -112,7 +108,6 @@ export default class PessoasCTRL {
         cidade &&
         telefone &&
         email &&
-        tipo &&
         profissao1  
       ) {
         const pessoas = new Pessoas(
@@ -123,7 +118,6 @@ export default class PessoasCTRL {
         cidade,
         telefone,
         email,
-        tipo,
         profissao1  
         );
         pessoas

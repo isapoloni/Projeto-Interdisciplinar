@@ -136,7 +136,6 @@ export default function TabelaPessoas(props) {
                   </TableCell>
 
                   <TableCell align="center">
-                    <Stack direction="horizontal" gap={1}>
                       <IconButton
                         variant="outlined"
                         style={{ color: '#1683cc' }}
@@ -147,8 +146,8 @@ export default function TabelaPessoas(props) {
                         }}
                       >
                         <MdModeEdit />
-                      </IconButton>{" "}
-                      <IconButton
+                      </IconButton>
+                      {/* <IconButton
                         variant={role !== "admin" ? "secondary" : "outline-danger"}
                         disabled={role !== "admin"}
                         Button
@@ -160,8 +159,7 @@ export default function TabelaPessoas(props) {
                         style={{ color: '#cc3116' }}                  
                       >
                         <HiTrash />
-                      </IconButton>
-                    </Stack>
+                      </IconButton> */}
                   </TableCell>
                 </TableRow>
 
