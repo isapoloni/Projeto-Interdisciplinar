@@ -141,7 +141,6 @@ const FormDoacao = (props) => {
                 cpfDoador: cpfDoadorSelecionado,
                 listaItens: listaItensFormatada,
             };
-
             const method = props.modoEdicao ? 'PUT' : 'POST';
             const requestUrl = props.modoEdicao ? `${urlBackend}/doacao` : `${urlBackend}/doacao`;
 

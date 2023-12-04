@@ -29,7 +29,7 @@ import ExclusaoSucessoModal from '../ModalSucesso/index'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import get from 'lodash.get';
-import PainelAjuda from '../PainelAjuda/index'
+import {PainelAjudaDoacao} from '../PainelAjuda/index'
 
 
 export default function TableDoacao(props) {
@@ -279,7 +279,7 @@ export default function TableDoacao(props) {
         <Button className="button-help" onClick={openHelpPanel}>
           <AiFillQuestionCircle style={{ marginRight: '8px' }} /> Ajuda
         </Button>
-        {helpPanelVisible && <PainelAjuda onClose={closeHelpPanel} />}
+        {helpPanelVisible && <PainelAjudaDoacao onClose={closeHelpPanel} />}
         {filtersApplied && (
           <Button className='button-limpar-filtro' onClick={clearFilters}>
             <AiOutlineClear id='icon-limpar' style={{ marginRight: '8px', color: 'gray' }} /> Limpar Filtro
