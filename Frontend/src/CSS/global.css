@@ -100,3 +100,15 @@
 .css-1160xiw-MuiPaper-root-MuiDrawer-paper {
   width: 30%;
 }
+.pintarDeVermelho > div{
+  border-color: red;
+}
+.pintarDeCinza> div{
+  border-color: #ccc;
+}
+.pintarDeVermelho2{
+  border-color: red;
+}
+.pintarDeCinza2{
+  border-color: #ccc;
+}

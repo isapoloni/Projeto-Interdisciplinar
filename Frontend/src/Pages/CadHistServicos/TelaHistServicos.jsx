@@ -30,7 +30,17 @@ export default function CadHistServicos(props) {
     setServicoEdicao(histServ);
     setExibirTabela(false);
   }
+  function limparForm(histServ) {
+    setModoEdicao(false);
+    setServicoEdicao({
+      id: "",
+      prestador: "",
+      servico: "",
+      serviceData: "",
+      valor: "",
+    });
 
+  }
   function deletarServico(histServ) {
     fetch(urlBackend + "/histServ", {
       method: "DELETE",
@@ -110,7 +120,11 @@ export default function CadHistServicos(props) {
             listaHistoricoDeServicos={histServ}
             setHistServicos={setHistServ}
             exibirTabela={setExibirTabela}
+            modoEdicao={modoEdicao}
             editar={prepararTela}
+            limparForm={limparForm}
+            servico={servicoEdicao}
+            setModoEdicao={setModoEdicao}
             deletar={deletarServico}
           />
         ) : (
