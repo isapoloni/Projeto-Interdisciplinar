@@ -27,7 +27,7 @@ import DatePicker from 'react-datepicker';
 import { useEffect, useState } from 'react';
 import {PainelAjudaServico} from '../PainelAjuda';
 export default function TableHistServico(props) {
-  // console.log(props)
+  console.log(props)
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
   const [filtersApplied, setFiltersApplied] = useState(false);
@@ -46,7 +46,7 @@ export default function TableHistServico(props) {
 
   function filtrarServicos(e) {
     const termoBusca = e.currentTarget.value;
-    console.log(termoBusca)
+    // console.log(termoBusca)
     fetch(urlBackend + "/histServ", {
       method: "GET",
       headers: {
@@ -145,7 +145,7 @@ export default function TableHistServico(props) {
         const serviceData = new Date(services.serviceData);
         return startDate <= serviceData && serviceData <= endDate;
       });
-      console.log(filteredServicos)
+      // console.log(filteredServicos)
       setHistServ(filteredServicos);
       setFiltersApplied(true);
       setModalVisible(false);
@@ -169,6 +169,9 @@ export default function TableHistServico(props) {
           className="button-cadastro"
           onClick={() => {
             props.exibirTabela(false);
+            props.setModoEdicao(false)
+            props.limparForm()
+            setHistServ([]);
           }}
         >
           <AiFillPlusCircle style={{ marginRight: '8px' }} /> Resgistrar Serviço
@@ -286,6 +289,7 @@ export default function TableHistServico(props) {
                     onClick={() => {
                       if (window.confirm("Deseja excluir?")) {
                         props.deletar(histServico);
+                        loadData()
                       }
                     }}
                   >
