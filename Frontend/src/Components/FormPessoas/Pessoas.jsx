@@ -35,50 +35,91 @@ function FormPessoa(props) {
 
 
     if (form.checkValidity()) {
-      if (!props.modoEdicao) {
-        fetch(urlBackend + "/pessoas", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "authorization": `${jwtAuth}`
-          },
-          body: JSON.stringify(pessoa),
-        })
-          .then((resposta) => {
-            return resposta.json();
-          })
-          .then((dados) => {
-            if (dados.status) {
-              props.setModoEdicao(false);
-              let novaLista = props.listaPessoas;
-              novaLista.push(pessoa);
-              props.setPessoas(novaLista);
-              props.exibirTabela(true);
-            }
-            window.alert(dados.mensagem);
-          })
-          .catch((erro) => {
-            window.alert("Erro ao executar a requisição :" + erro.message);
-          });
-      } else {
-        fetch(urlBackend + "/pessoas", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "authorization": `${jwtAuth}`
-          },
-          body: JSON.stringify(pessoa),
-        }).then((resposta) => {
-          // window.location.reload();
-          return resposta.json();
-        });
-      }
+      const confirmacaoMensagem = props.modoEdicao
+        ? "Deseja realmente atualizar a pessoa?"
+        : "Deseja realmente cadastrar a pessoa?";
 
-      setValidated(false);
+      const confirmacaoAcao = window.confirm(confirmacaoMensagem);
+
+      if (confirmacaoAcao) {
+        if (!props.modoEdicao) {
+          fetch(urlBackend + "/pessoas", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": `${jwtAuth}`
+            },
+            body: JSON.stringify(pessoa),
+          })
+            .then((resposta) => resposta.json())
+            .then((dados) => {
+              if (dados.status) {
+                const confirmacaoCadastro = window.confirm("Pessoa cadastrada com sucesso!");
+                if (confirmacaoCadastro) {
+                  props.exibirTabela(true);
+                  fetchDadosAtualizados();
+                } else {
+                  // Adicione a lógica para redirecionar ou fazer algo após a confirmação
+                }
+              }
+              // window.alert(dados.mensagem);
+            })
+            .catch((erro) => {
+              window.alert("Erro ao executar a requisição :" + erro.message);
+            });
+        } else {
+          fetch(urlBackend + "/pessoas", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": `${jwtAuth}`
+            },
+            body: JSON.stringify(pessoa),
+          })
+            .then((resposta) => resposta.json())
+            .then((dados) => {
+              if (dados.status) {
+                const confirmacaoAtualizacao = window.confirm("Pessoa atualizada com sucesso!");
+                if (confirmacaoAtualizacao) {
+                  props.exibirTabela(true);
+                  fetchDadosAtualizados();
+                } else {
+                  // Adicione a lógica para redirecionar ou fazer algo após a confirmação
+                }
+              }
+              // window.alert(dados.mensagem);
+            })
+            .catch((erro) => {
+              window.alert("Erro ao executar a requisição :" + erro.message);
+            });
+        }
+
+        setValidated(false);
+      }
     } else {
       setValidated(true);
     }
     event.preventDefault();
+  }
+
+  function fetchDadosAtualizados() {
+    // Buscar os dados atualizados da tabela de pessoas
+    fetch(urlBackend + "/pessoas", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `${jwtAuth}`
+      },
+    })
+      .then((resposta) => resposta.json())
+      .then((listaPessoasAtualizada) => {
+        if (Array.isArray(listaPessoasAtualizada)) {
+          props.setPessoas(listaPessoasAtualizada);
+        }
+      })
+      .catch((erro) => {
+        console.error("Erro ao buscar dados atualizados:", erro);
+      });
   }
 
   return (
@@ -226,7 +267,7 @@ function FormPessoa(props) {
         </Row>
 
         <Row>
-          <Col>
+          {/* <Col>
             <Form.Group className="mb-5">
               <Form.Label className="mb-2">Tipo de Pessoa</Form.Label>
               <Form.Select
@@ -247,7 +288,7 @@ function FormPessoa(props) {
                 Selecione um tipo de pessoa!
               </Form.Control.Feedback>
             </Form.Group>
-          </Col>
+          </Col> */}
           <Col>
             <Form.Group className="mb-3">
               <Form.Label className="mb-2">Profissão </Form.Label>

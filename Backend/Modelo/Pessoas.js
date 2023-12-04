@@ -8,7 +8,6 @@ export default class Pessoas {
   #cidade;
   #telefone;
   #email;
-  #tipo;
   #profissao1;     
 
   constructor(
@@ -19,7 +18,6 @@ export default class Pessoas {
     cidade,
     telefone,
     email,
-    tipo,
     profissao1   
   ) {
     this.#cpf = cpf;
@@ -29,7 +27,6 @@ export default class Pessoas {
     this.#cidade = cidade;
     this.#telefone = telefone;
     this.#email = email;
-    this.#tipo = tipo;
     this.#profissao1 = profissao1;
    
    
@@ -51,14 +48,6 @@ export default class Pessoas {
 
   set email(newEmail) {
     this.#email = newEmail;
-  }
-
-  get tipo() {
-    return this.#tipo;
-  }
-
-  set tipo(newTipo) {
-    this.#tipo = newTipo;
   }
 
   get nome() {
@@ -125,7 +114,6 @@ export default class Pessoas {
     cidade:this.#cidade,
     telefone:this.#telefone,
     email:this.#email,
-    tipo:this.#tipo,
     profissao1:this.#profissao1
     };
   }

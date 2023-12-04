@@ -112,3 +112,8 @@
 .pintarDeCinza2{
   border-color: #ccc;
 }
+
+
+.rw-widget-input.is-invalid {
+  border-color: red;
+}

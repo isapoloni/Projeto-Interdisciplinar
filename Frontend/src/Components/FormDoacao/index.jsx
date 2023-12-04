@@ -26,9 +26,35 @@ const FormDoacao = (props) => {
     const [showErroModal, setShowErroModal] = useState(false);
     const [mensagemErro, setMensagemErro] = useState('');
     const [formValido, setFormValido] = useState(true);
+    const [validated, setValidated] = useState(false);
+
+    const [erroDoador, setErroDoador] = useState('');
+    const [erroDataDoacao, setErroDataDoacao] = useState('');
+    const [erroItens, setErroItens] = useState('');
+
 
     const handleOpenErroModal = (mensagem) => {
         setMensagemErro(mensagem);
+
+        // Adicione lógica para identificar qual campo está faltando
+        if (!doacao.doador) {
+            setErroDoador('Por favor, selecione um doador.');
+        } else {
+            setErroDoador('');
+        }
+
+        if (!doacao.dataDoacao) {
+            setErroDataDoacao('Por favor, selecione uma data de doação.');
+        } else {
+            setErroDataDoacao('');
+        }
+
+        if (doacao.listaItens.length === 0 || doacao.listaItens.some(item => !item.produto || !item.quantidade)) {
+            setErroItens('Por favor, preencha todos os campos obrigatórios na lista de itens.');
+        } else {
+            setErroItens('');
+        }
+
         setShowErroModal(true);
     };
 
@@ -39,52 +65,131 @@ const FormDoacao = (props) => {
 
     const handleFecharSucessoModal = () => {
         setShowSucessoModal(false);
-        props.exibirTabela(true); // Adicione essa linha para exibir a tabela ao fechar o modal de sucesso
+        props.exibirTabela(true);
     };
+
+    // const handleConfirm = async () => {
+    //     setShowConfirmationModal(false);
+
+    //     try {
+    //         const cpfDoadorSelecionado = doacao.doador ? doacao.doador.cpf.replace(/[.-]/g, '') : '';
+    //         const listaItensFormatada = doacao.listaItens.map((item) => ({
+    //             codigoProduto: item.produto.codigo,
+    //             quantidade: item.quantidade,
+    //         }));
+
+    //         const requestBody = {
+    //             codigo: props.doacao ? props.doacao.codigo : null,
+    //             dataDoacao: doacao.dataDoacao,
+    //             cpfDoador: cpfDoadorSelecionado,
+    //             listaItens: listaItensFormatada,
+    //         };
+
+    //         const method = props.modoEdicao ? 'PUT' : 'POST';
+    //         const requestUrl = props.modoEdicao ? `${urlBackend}/doacao` : `${urlBackend}/doacao`;
+
+    //         const response = await fetch(requestUrl, {
+    //             method: method,
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "authorization": `${jwtAuth}`
+    //             },
+    //             body: JSON.stringify(requestBody),
+    //         });
+
+    //         if (response.ok) {
+    //             await handleSubmit();
+    //             handleAbrirSucessoModal();
+    //         } else {
+    //             console.error('Erro ao cadastrar/atualizar doação:', response.statusText);
+    //         }
+    //     } catch (error) {
+    //         // console.error('Erro inesperado:', error);
+    //     }
+    // };
 
     const handleConfirm = async () => {
         setShowConfirmationModal(false);
 
-        try {
-            const cpfDoadorSelecionado = doacao.doador ? doacao.doador.cpf.replace(/[.-]/g, '') : '';
-            const listaItensFormatada = doacao.listaItens.map((item) => ({
-                codigoProduto: item.produto.codigo,
-                quantidade: item.quantidade,
-            }));
+        // Limpar mensagens de erro
+        setErroDoador('');
+        setErroDataDoacao('');
+        setErroItens('');
 
-            const requestBody = {
-                codigo: props.doacao ? props.doacao.codigo : null,
-                dataDoacao: doacao.dataDoacao,
-                cpfDoador: cpfDoadorSelecionado,
-                listaItens: listaItensFormatada,
-            };
+        // Validar campo doador
+        if (!doacao.doador || !doacao.doador.nome) {
+            setErroDoador('Por favor, selecione um doador.');
+        }
 
-            const method = props.modoEdicao ? 'PUT' : 'POST';
-            const requestUrl = props.modoEdicao ? `${urlBackend}/doacao` : `${urlBackend}/doacao`;
+        // Validar campo data de doação
+        if (!doacao.dataDoacao) {
+            setErroDataDoacao('Por favor, selecione uma data de doação.');
+        }
 
-            const response = await fetch(requestUrl, {
-                method: method,
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `${jwtAuth}`
-                },
-                body: JSON.stringify(requestBody),
-            });
+        // Verificar se há itens na lista e se todos estão preenchidos corretamente
+        if (doacao.listaItens.length === 0 || doacao.listaItens.some(item => !item.produto || !item.quantidade)) {
+            setErroItens('Por favor, preencha todos os campos obrigatórios na lista de itens.');
+        }
 
-            if (response.ok) {
-                await handleSubmit();
-                handleAbrirSucessoModal();
-            } else {
-                console.error('Erro ao cadastrar/atualizar doação:', response.statusText);
+        // Verificar se há algum erro
+        const haErro = !!erroDoador || !!erroDataDoacao || !!erroItens;
+
+        if (!haErro) {
+            // Restante do código para a confirmação
+            try {
+                const cpfDoadorSelecionado = doacao.doador ? doacao.doador.cpf.replace(/[.-]/g, '') : '';
+                const listaItensFormatada = doacao.listaItens.map((item) => ({
+                    codigoProduto: item.produto.codigo,
+                    quantidade: item.quantidade,
+                }));
+
+                const requestBody = {
+                    codigo: props.doacao ? props.doacao.codigo : null,
+                    dataDoacao: doacao.dataDoacao,
+                    cpfDoador: cpfDoadorSelecionado,
+                    listaItens: listaItensFormatada,
+                };
+
+                const method = props.modoEdicao ? 'PUT' : 'POST';
+                const requestUrl = props.modoEdicao ? `${urlBackend}/doacao` : `${urlBackend}/doacao`;
+
+                const response = await fetch(requestUrl, {
+                    method: method,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": `${jwtAuth}`
+                    },
+                    body: JSON.stringify(requestBody),
+                });
+
+                if (response.ok) {
+                    await handleSubmit();
+                    const mensagemSucesso = props.modoEdicao ? 'Doação atualizada com sucesso!' : 'Doação registrada com sucesso!';
+                    window.alert(mensagemSucesso);
+                    props.exibirTabela(true);
+                } else {
+                    console.error('Erro ao cadastrar/atualizar doação:', response.statusText);
+                }
+            } catch (error) {
+                // Tratar erros, se necessário
+                console.error('Erro inesperado:', error);
             }
-        } catch (error) {
-            // console.error('Erro inesperado:', error);
+        } else {
+            console.log('Input vazio ou com erro');
+            handleOpenErroModal('Por favor, preencha todos os campos obrigatórios corretamente.');
         }
     };
 
 
+
+
     const handleOpenConfirmationModal = () => {
-        setShowConfirmationModal(true);
+        const confirmacao = window.confirm("Deseja confirmar a ação?");
+        if (confirmacao) {
+            handleConfirm();
+        } else {
+            setShowConfirmationModal(false);
+        }
     };
 
 
@@ -159,10 +264,17 @@ const FormDoacao = (props) => {
     }, []);
 
 
+    // const handleDoadorChange = (selectedValue) => {
+    //     const doadorSelecionado = pessoasData.find((pessoa) => pessoa.nome === selectedValue);
+    //     setDoacao({ ...doacao, doador: doadorSelecionado });
+    // };
+
     const handleDoadorChange = (selectedValue) => {
         const doadorSelecionado = pessoasData.find((pessoa) => pessoa.nome === selectedValue);
         setDoacao({ ...doacao, doador: doadorSelecionado });
+        setErroDoador(''); // Limpar mensagem de erro
     };
+
 
     const handleProdutoChange = (index, e) => {
         const produtoSelecionado = produtosData.find((produto) => produto.nome === e.target.value);
@@ -171,9 +283,15 @@ const FormDoacao = (props) => {
         setDoacao({ ...doacao, listaItens: updatedItens });
     };
 
+    // const handleDataDoacaoChange = (e) => {
+    //     setDoacao({ ...doacao, dataDoacao: e.target.value });
+    // };
+
     const handleDataDoacaoChange = (e) => {
         setDoacao({ ...doacao, dataDoacao: e.target.value });
+        setErroDataDoacao(''); // Limpar mensagem de erro
     };
+
 
     const handleQuantidadeChange = (index, e) => {
         const updatedItens = [...doacao.listaItens];
@@ -181,12 +299,21 @@ const FormDoacao = (props) => {
         setDoacao({ ...doacao, listaItens: updatedItens });
     };
 
+    // const handleAddItem = () => {
+    //     setDoacao({
+    //         ...doacao,
+    //         listaItens: [...doacao.listaItens, { produto: '', quantidade: 1 }],
+    //     });
+    // };
+
     const handleAddItem = () => {
         setDoacao({
             ...doacao,
             listaItens: [...doacao.listaItens, { produto: '', quantidade: 1 }],
         });
+        setErroItens('');
     };
+
 
     const handleRemoveItem = (index) => {
         const updatedItens = [...doacao.listaItens];
@@ -196,22 +323,20 @@ const FormDoacao = (props) => {
 
     const handleSubmit = async (e) => {
         try {
-            // Validar se todos os campos obrigatórios estão preenchidos
             if (!doacao.doador || !doacao.dataDoacao || doacao.listaItens.length === 0) {
                 handleOpenErroModal('Por favor, preencha todos os campos obrigatórios.');
                 setFormValido(false);
                 return;
             }
-    
-            // Validar se cada item da lista possui produto e quantidade
+
             if (doacao.listaItens.some(item => !item.produto || !item.quantidade)) {
                 handleOpenErroModal('Por favor, preencha todos os campos obrigatórios na lista de itens.');
                 setFormValido(false);
                 return;
             }
-    
+
             const response = await fetch(/* ... */);
-    
+
             if (response.ok) {
                 setDoacao({
                     doador: null,
@@ -224,7 +349,6 @@ const FormDoacao = (props) => {
                 handleOpenErroModal(`Erro ao cadastrar/atualizar doação: ${response.statusText}`);
             }
         } catch (error) {
-            // handleOpenErroModal('Erro inesperado: ' + error.message);
         }
     };
 
@@ -250,9 +374,16 @@ const FormDoacao = (props) => {
                         placeholder="Selecione um doador"
                         caseSensitive={false}
                         filter="contains"
+                        isInvalid={!!erroDoador}
                     />
+                    {erroDoador && (
+                        <div className="text-danger">
+                            {erroDoador}
+                        </div>
+                    )}
                 </InputGroup>
             </Form.Group>
+
 
             <Form.Group className="mb-3">
                 <Form.Label className="mb-2">Data da Doação</Form.Label>
@@ -260,8 +391,13 @@ const FormDoacao = (props) => {
                     type="date"
                     onChange={handleDataDoacaoChange}
                     value={doacao.dataDoacao}
-                    isInvalid={!formValido && !doacao.dataDoacao}
+                    isInvalid={!!erroDataDoacao}
                 />
+                {erroDataDoacao && (
+                    <div className="text-danger">
+                        {erroDataDoacao}
+                    </div>
+                )}
             </Form.Group>
 
             <Form.Group className="mb-4" >
@@ -297,12 +433,14 @@ const FormDoacao = (props) => {
                 <Button variant="secondary" onClick={handleAddItem} style={{ marginLeft: '10px' }}>
                     Adicionar Item
                 </Button>
+                <Form.Text className="text-danger">
+                    {erroItens}
+                </Form.Text>
             </Form.Group>
 
             <div className="d-flex justify-content-end mt-3 mb-3">
                 <Stack className="mt-3 mb-3" direction="horizontal" gap={3}>
-                    <Button variant="primary" type="button" onClick={handleOpenConfirmationModal} disabled={!formValido}
->
+                    <Button variant="primary" type="button" onClick={handleOpenConfirmationModal} disabled={!formValido}>
                         {props.modoEdicao ? "Atualizar" : "Cadastrar"}
                     </Button>
                     <Button

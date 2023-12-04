@@ -29,6 +29,7 @@ export default function TableProduto(props) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedProduto, setSelectedProduto] = useState(null);
+  const produtosOrdenados = props.listaProdutos?.sort((a, b) => b.codigo - a.codigo) || [];
 
   // const handleChangePage = (event, newPage) => {
   //   setPage(newPage);
@@ -74,6 +75,10 @@ export default function TableProduto(props) {
         }
       });
   }
+
+
+
+
   return (
     <Container>
       <div className="button-container">
@@ -112,11 +117,11 @@ export default function TableProduto(props) {
               <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Unidade</TableCell>
               <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Descrição</TableCell>
               <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Categoria</TableCell>
-              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }}align="center">Ações</TableCell>
+              <TableCell style={{ fontSize: '16px', fontWeight: 'bold' }} align="center">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.listaProdutos?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((produto) => (
+          {produtosOrdenados.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((produto) => (
               <TableRow key={produto.codigo}>
                 <TableCell align="center">{produto.codigo}</TableCell>
                 <TableCell align="center">{produto.nome}</TableCell>
@@ -127,7 +132,11 @@ export default function TableProduto(props) {
                   <IconButton
                     variant="outlined"
                     style={{ color: '#1683cc' }}
-                    onClick={() => handleOpenModal(produto)}
+                    onClick={() => {
+                      if (window.confirm("Deseja atualizar os dados do produto?")) {
+                        props.editar(produto);
+                      }
+                    }}
                   >
                     <MdModeEdit />
                   </IconButton>
@@ -152,6 +161,7 @@ export default function TableProduto(props) {
             open={isModalOpen}
             onClose={handleCloseModal}
             onConfirm={handleConfirmUpdate}
+            title={'Confirmar Atualização'}
             contentText={`Deseja atualizar os dados do produto ${selectedProduto?.nome || 'produto'}?`}
           />
         </Table>

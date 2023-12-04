@@ -18,7 +18,6 @@ export default function TelaCadPessoa(props) {
     cidade: "",
     telefone: "",
     email: "",
-    tipo: "",
     profissao1: "",
   });
   const cookies = new Cookie()
