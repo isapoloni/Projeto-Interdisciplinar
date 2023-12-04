@@ -56,8 +56,8 @@ function FormPessoa(props) {
               if (dados.status) {
                 const confirmacaoCadastro = window.confirm("Pessoa cadastrada com sucesso!");
                 if (confirmacaoCadastro) {
-                  props.exibirTabela(true);
                   fetchDadosAtualizados();
+                  props.exibirTabela(true);
                 } else {
                   // Adicione a lógica para redirecionar ou fazer algo após a confirmação
                 }
@@ -81,8 +81,8 @@ function FormPessoa(props) {
               if (dados.status) {
                 const confirmacaoAtualizacao = window.confirm("Pessoa atualizada com sucesso!");
                 if (confirmacaoAtualizacao) {
-                  props.exibirTabela(true);
                   fetchDadosAtualizados();
+                  props.exibirTabela(true);
                 } else {
                   // Adicione a lógica para redirecionar ou fazer algo após a confirmação
                 }

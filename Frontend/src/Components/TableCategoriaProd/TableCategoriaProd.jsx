@@ -120,7 +120,7 @@ export default function TableCategoria(props) {
                         <MdModeEdit />
                       </IconButton>
 
-                      <IconButton
+                      {/* <IconButton
                         variant="outlined"
                         style={{ color: '#cc3116' }}
                         onClick={() => {
@@ -131,7 +131,7 @@ export default function TableCategoria(props) {
                         }}
                       >
                         <HiTrash />
-                      </IconButton>
+                      </IconButton> */}
                     </Stack>
                   </TableCell>
                 </TableRow>

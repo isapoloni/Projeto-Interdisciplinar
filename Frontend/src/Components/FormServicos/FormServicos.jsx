@@ -69,19 +69,19 @@ export default function ServicoForm(props) {
           },
           body: JSON.stringify(servico),
         })
-          .then((resposta) => {
-            return resposta.json();
-          })
+          .then((resposta) => resposta.json())
           .then((dados) => {
             if (dados.status) {
+              window.alert("Cadastro realizado com sucesso!");
               props.setModoEdicao(false);
               let novaLista = props.listaServicos;
               novaLista.push(servico);
               props.setServicos(novaLista);
               props.buscar();
               props.exibirTabela(true);
+            } else {
+              window.alert("Erro ao cadastrar serviço: " + dados.mensagem);
             }
-            window.alert(dados.mensagem);
           })
           .catch((erro) => {
             window.alert("Erro ao executar a requisição: " + erro.message);
@@ -94,10 +94,18 @@ export default function ServicoForm(props) {
             authorization: `${jwtAuth}`,
           },
           body: JSON.stringify({ ...servico }),
-        }).then((resposta) => {
-          // window.location.reload();
-          return resposta.json();
-        });
+        })
+          .then((resposta) => resposta.json())
+          .then((dados) => {
+            if (dados.status) {
+              window.alert("Atualização realizada com sucesso!");
+            } else {
+              window.alert("Erro ao atualizar serviço: " + dados.mensagem);
+            }
+          })
+          .catch((erro) => {
+            window.alert("Erro ao executar a requisição: " + erro.message);
+          });
       }
       setValidated(false);
     } else {
@@ -229,25 +237,25 @@ export default function ServicoForm(props) {
           </Col> */}
 
           <Col xs={3}>
-          <Form.Group>
-                <Form.Label>Categoria</Form.Label>
-                <Form.Control
-                  value={servico.categoria}
-                  as="select"
-                  id="categoria"
-                  onChange={manipularOnChange}
-                  required
-                >
-                  <option></option>
-                  {props.categorias.map((categoria) => (
-                    
-                    <option value={categoria.codigo}>{categoria.categoria}</option>
-                  ))}
-                </Form.Control>
-                <Form.Control.Feedback type="invalid">
-                  Por favor, informe a categoria!
-                </Form.Control.Feedback>
-              </Form.Group>
+            <Form.Group>
+              <Form.Label>Categoria</Form.Label>
+              <Form.Control
+                value={servico.categoria}
+                as="select"
+                id="categoria"
+                onChange={manipularOnChange}
+                required
+              >
+                <option></option>
+                {props.categorias.map((categoria) => (
+
+                  <option value={categoria.codigo}>{categoria.categoria}</option>
+                ))}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                Por favor, informe a categoria!
+              </Form.Control.Feedback>
+            </Form.Group>
             {/* <Form.Group>
               <Form.Label>Serviço Remoto?</Form.Label>
               <Form.Control

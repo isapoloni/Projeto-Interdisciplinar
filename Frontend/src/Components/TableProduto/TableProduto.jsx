@@ -31,14 +31,14 @@ export default function TableProduto(props) {
   const [selectedProduto, setSelectedProduto] = useState(null);
   const produtosOrdenados = props.listaProdutos?.sort((a, b) => b.codigo - a.codigo) || [];
 
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-  // const handleChangeRowsPerPage = (event) => {
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const handleOpenModal = (produto) => {
     setSelectedProduto(produto);
