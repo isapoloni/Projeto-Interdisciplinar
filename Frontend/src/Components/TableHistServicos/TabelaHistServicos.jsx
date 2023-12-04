@@ -16,7 +16,7 @@ import {
 import { Container, Button, InputGroup, FormControl ,Modal} from 'react-bootstrap';
 import { MdModeEdit } from "react-icons/md";
 import { HiDocumentDownload, HiTrash } from "react-icons/hi";
-import { AiFillPlusCircle, AiOutlineClear } from 'react-icons/ai'
+import { AiFillPlusCircle, AiFillQuestionCircle, AiOutlineClear } from 'react-icons/ai'
 import { RiSearchLine } from "react-icons/ri";
 import { urlBackend } from "../../assets/funcoes";
 import Cookies from "universal-cookie";
@@ -24,8 +24,8 @@ import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { BsCalendarDateFill } from 'react-icons/bs';
 import DatePicker from 'react-datepicker';
-
 import { useEffect, useState } from 'react';
+import {PainelAjudaServico} from '../PainelAjuda';
 export default function TableHistServico(props) {
   // console.log(props)
   const cookies = new Cookies();
@@ -35,9 +35,18 @@ export default function TableHistServico(props) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [histServ, setHistServ] = useState([]);
+  const [helpPanelVisible, setHelpPanelVisible] = useState(false);
+  const openHelpPanel = () => {
+    setHelpPanelVisible(true);
+  };
+
+  const closeHelpPanel = () => {
+    setHelpPanelVisible(false);
+  };
 
   function filtrarServicos(e) {
     const termoBusca = e.currentTarget.value;
+    console.log(termoBusca)
     fetch(urlBackend + "/histServ", {
       method: "GET",
       headers: {
@@ -49,12 +58,12 @@ export default function TableHistServico(props) {
         return resposta.json();
       })
       .then((listaServicos) => {
-        if (Array.isArray(listaServicos)) {
+        if (listaServicos) {
           const resultadoBusca = listaServicos.filter((histServico) =>
             histServico.prestador.toLowerCase().includes(termoBusca.toLowerCase())
             // histServico.histServico.toLowerCase().includes(termoBusca.toLowerCase())
           );
-          props.setHistServicos(resultadoBusca);
+          setHistServ(resultadoBusca);
         }
       });
   }
@@ -76,7 +85,8 @@ export default function TableHistServico(props) {
     ];
     // console.log('coluns',columns)
     const dataToDownload = [];
-    const servicoToUse = filtersApplied ? histServ: props.listaHistoricoDeServicos;
+    // const servicoToUse = filtersApplied ? histServ: props.listaHistoricoDeServicos;
+    const servicoToUse =  histServ;
     // console.log('servicoToUse',servicoToUse)
     if(servicoToUse && servicoToUse.length > 0){
       servicoToUse.map((servico)=>{
@@ -169,6 +179,10 @@ export default function TableHistServico(props) {
         <Button className='button-filtrar' onClick={() => setModalVisible(true)}>
           <BsCalendarDateFill style={{ marginRight: '8px' }} /> Filtrar por Data
         </Button>
+         <Button className="button-help" onClick={openHelpPanel}>
+          <AiFillQuestionCircle style={{ marginRight: '8px' }} /> Ajuda
+        </Button>
+        {helpPanelVisible && <PainelAjudaServico onClose={closeHelpPanel} />}
         {filtersApplied && (
           <Button className='button-limpar-filtro' onClick={clearFilters}>
             <AiOutlineClear id='icon-limpar' style={{ marginRight: '8px', color: 'gray' }} /> Limpar Filtro
