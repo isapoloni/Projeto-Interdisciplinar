@@ -149,7 +149,7 @@ export default function TableServico(props) {
                   >
                     <MdModeEdit />
                   </IconButton>{" "}
-                  <IconButton
+                  {/* <IconButton
                     variant="outlined"
                     style={{ color: '#cc3116' }}
                     onClick={() => {
@@ -159,7 +159,7 @@ export default function TableServico(props) {
                     }}
                   >
                     <HiTrash />
-                  </IconButton>
+                  </IconButton> */}
                 </TableCell>
               </TableRow>
             ))}

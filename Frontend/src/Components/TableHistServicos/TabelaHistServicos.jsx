@@ -27,9 +27,11 @@ import DatePicker from 'react-datepicker';
 import { useEffect, useState } from 'react';
 import {PainelAjudaServico} from '../PainelAjuda';
 export default function TableHistServico(props) {
-  console.log(props)
+  // console.log(props)
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
+  const role = cookies.get("role");
+  console.log(role)
   const [filtersApplied, setFiltersApplied] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [startDate, setStartDate] = useState(null);
@@ -282,19 +284,23 @@ export default function TableHistServico(props) {
                     }}
                   >
                     <MdModeEdit />
-                  </IconButton>{" "}
-                  <IconButton
-                    variant="outlined"
-                    style={{ color: '#cc3116' }}
-                    onClick={() => {
-                      if (window.confirm("Deseja excluir?")) {
-                        props.deletar(histServico);
-                        loadData()
-                      }
-                    }}
-                  >
-                    <HiTrash />
                   </IconButton>
+                  {role !== "user" ?  (
+                     <IconButton
+                       style={{ color: '#cc3116' }}
+                       onClick={() => {
+                         if (window.confirm("Deseja excluir?")) {
+                           props.deletar(histServico);
+                           loadData()
+                         }
+                       }}
+                     >
+                       <HiTrash />
+                     </IconButton>
+                  ) : (
+                    <></>
+                  )}
+                 
                 </TableCell>
               </TableRow>
             ))}
