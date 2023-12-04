@@ -1,11 +1,11 @@
 
-import conectar from "./Conexao.js";
+import Conect from "./Conexao.js";
 import Produto from "../Modelo/Produto.js";
 
 export default class ProdutoBDPid {
   async incluir(produto) {
     if (produto instanceof Produto) {
-      const conexao = await Conectar();
+      const conexao = await Conect();
 
       const sql =
         "INSERT INTO produto(nome, metrica, descricao, categoria) VALUES ( ?, ?, ?, ?)";
@@ -22,7 +22,7 @@ export default class ProdutoBDPid {
 
   async alterar(produto) {
     if (produto instanceof Produto) {
-      const conexao = await Conectar();
+      const conexao = await Conect();
 
       const sql =
         "UPDATE produto SET nome = ?, metrica = ?, descricao = ?, categoria = ? WHERE codigo = ?";
@@ -41,7 +41,7 @@ export default class ProdutoBDPid {
 
   async excluir(produto) {
     if (produto instanceof Produto) {
-      const conexao = await Conectar();
+      const conexao = await Conect();
 
       const sql = "DELETE FROM produto WHERE codigo = ? ";
 
@@ -54,7 +54,7 @@ export default class ProdutoBDPid {
 
   async consultar(termo) {
     // if (produto instanceof Produto) {
-    const conexao = await conectar();
+    const conexao = await Conect();
 
     const sql = "SELECT p.*, cp.codigo AS codigoCategoria, cp.categoria FROM produto p INNER JOIN categoriaProduto cp on cp.codigo = p.categoria WHERE p.nome LIKE ?";
 
@@ -79,7 +79,7 @@ export default class ProdutoBDPid {
   }
 
   //   async consultarID(codigo) {
-  //       const conexao = await Conectar();
+  //       const conexao = await Conect();
 
   //       const sql = "SELECT * FROM PRODUTO WHERE codigo = ?";
 

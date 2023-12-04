@@ -78,7 +78,7 @@ const FormDoacao = (props) => {
                 console.error('Erro ao cadastrar/atualizar doação:', response.statusText);
             }
         } catch (error) {
-            console.error('Erro inesperado:', error);
+            // console.error('Erro inesperado:', error);
         }
     };
 
@@ -151,7 +151,7 @@ const FormDoacao = (props) => {
                 }
 
             } catch (error) {
-                console.error('Erro inesperado:', error);
+                // console.error('Erro inesperado:', error);
             }
         };
 
@@ -224,7 +224,7 @@ const FormDoacao = (props) => {
                 handleOpenErroModal(`Erro ao cadastrar/atualizar doação: ${response.statusText}`);
             }
         } catch (error) {
-            handleOpenErroModal('Erro inesperado: ' + error.message);
+            // handleOpenErroModal('Erro inesperado: ' + error.message);
         }
     };
 
