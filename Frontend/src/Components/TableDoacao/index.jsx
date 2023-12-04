@@ -35,6 +35,7 @@ import { PainelAjudaDoacao } from '../PainelAjuda/index'
 export default function TableDoacao(props) {
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
+  const role = cookies.get("role");
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -406,13 +407,17 @@ export default function TableDoacao(props) {
                         <MdModeEdit />
                       </IconButton>
 
-                      <IconButton
-                        variant="outlined"
-                        style={{ color: '#cc3116' }}
-                        onClick={() => openDeleteModal(doacao)}
-                      >
-                        <HiTrash />
-                      </IconButton>
+                      {role === 'admin' ? (
+                        <IconButton
+                        disabled={role !== "admin"}
+                          style={{ color: '#cc3116' }}
+                          onClick={() => openDeleteModal(doacao)}
+                        >
+                          <HiTrash />
+                        </IconButton>
+                      ):(
+                      <></>
+                      )}
                     </TableCell>
                   </TableRow>
                   {expandedRow === doacao.codigo && (

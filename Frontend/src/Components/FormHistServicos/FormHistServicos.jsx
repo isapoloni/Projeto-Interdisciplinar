@@ -39,7 +39,6 @@ export default function HistServicoForm(props) {
     const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2);
     event.target.value = maskCurrency(digitsFloat);
   }
-console.log(servico)
   function maskCurrency(valor, locale = "pt-BR", currency = "BRL") {
     return new Intl.NumberFormat(locale, {
       style: "currency",
@@ -100,32 +99,33 @@ console.log(servico)
             window.alert("Erro ao executar a requisição: " + erro.message);
           });
       } else {
-        console.log('aqui',)
-        fetch(urlBackend + "/histServ", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `${jwtAuth}`,
-          },
-          body: JSON.stringify({
-            id: servico.id,
-            prestador: servico.prestador.cpf ? servico.prestador.cpf: props.cpfPessoas.filter(pessoaSelecionada => pessoaSelecionada.nome === servico.prestador)[0].cpf,
-            servico: servico.servico.id ? servico.servico.id : props.servicos.filter(servicoSelecionado => servicoSelecionado.servico === servico.servico)[0].id,
-            // prestador: servico.prestador.cpf,
-            // servico: servico.servico.id,
-            serviceData: servico.serviceData,
-            valor: servico.valor
-
-          }),
-        }).then((resposta) => {
-          // window.location.reload();
-          
-          return resposta.json();
-        }).then((dados) => {
-          window.alert(dados.mensagem);
-          props.setModoEdicao(false);
-          props.exibirTabela(true);
-        })
+        if(window.confirm('Deseja confirmar a ação')){
+          fetch(urlBackend + "/histServ", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `${jwtAuth}`,
+            },
+            body: JSON.stringify({
+              id: servico.id,
+              prestador: servico.prestador.cpf ? servico.prestador.cpf: props.cpfPessoas.filter(pessoaSelecionada => pessoaSelecionada.nome === servico.prestador)[0].cpf,
+              servico: servico.servico.id ? servico.servico.id : props.servicos.filter(servicoSelecionado => servicoSelecionado.servico === servico.servico)[0].id,
+              // prestador: servico.prestador.cpf,
+              // servico: servico.servico.id,
+              serviceData: servico.serviceData,
+              valor: servico.valor
+  
+            }),
+          }).then((resposta) => {
+            // window.location.reload();
+            
+            return resposta.json();
+          }).then((dados) => {
+            window.alert(dados.mensagem);
+            props.setModoEdicao(false);
+            props.exibirTabela(true);
+          })
+        }
       }
       setValidated(false);
     } else {
@@ -149,9 +149,7 @@ console.log(servico)
 //     updatedItens[index].servico = servicoSelecionado;
 //     setServicoSelecionado({ ...servico, servico: updatedItens });
 // };
-console.log(validation)
-console.log(servico)
-console.log(props)
+
   return (
     <>
       <Form
