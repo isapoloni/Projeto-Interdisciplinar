@@ -13,7 +13,7 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material';
-import { Container, Button, InputGroup, FormControl ,Modal} from 'react-bootstrap';
+import { Container, Button, InputGroup, FormControl, Modal } from 'react-bootstrap';
 import { MdModeEdit } from "react-icons/md";
 import { HiDocumentDownload, HiTrash } from "react-icons/hi";
 import { AiFillPlusCircle, AiFillQuestionCircle, AiOutlineClear } from 'react-icons/ai'
@@ -25,7 +25,8 @@ import * as XLSX from 'xlsx';
 import { BsCalendarDateFill } from 'react-icons/bs';
 import DatePicker from 'react-datepicker';
 import { useEffect, useState } from 'react';
-import {PainelAjudaServico} from '../PainelAjuda';
+import { PainelAjudaServico } from '../PainelAjuda';
+
 export default function TableHistServico(props) {
   // console.log(props)
   const cookies = new Cookies();
@@ -38,6 +39,18 @@ export default function TableHistServico(props) {
   const [endDate, setEndDate] = useState(null);
   const [histServ, setHistServ] = useState([]);
   const [helpPanelVisible, setHelpPanelVisible] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const openHelpPanel = () => {
     setHelpPanelVisible(true);
   };
@@ -88,10 +101,10 @@ export default function TableHistServico(props) {
     // console.log('coluns',columns)
     const dataToDownload = [];
     // const servicoToUse = filtersApplied ? histServ: props.listaHistoricoDeServicos;
-    const servicoToUse =  histServ;
+    const servicoToUse = histServ;
     // console.log('servicoToUse',servicoToUse)
-    if(servicoToUse && servicoToUse.length > 0){
-      servicoToUse.map((servico)=>{
+    if (servicoToUse && servicoToUse.length > 0) {
+      servicoToUse.map((servico) => {
         const rowData = {
           'Código do serviço': servico.id,
           'Nome do Prestador': servico.prestador,
@@ -108,9 +121,9 @@ export default function TableHistServico(props) {
     const maxColLengths = columns.map(col => ({
       width: dataToDownload.reduce((acc, row) => Math.max(acc, String(row[col.key] || '').length), col.label.length)
     }));
-    
+
     worksheet['!cols'] = maxColLengths;
-    
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorioServiços');
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
@@ -167,7 +180,7 @@ export default function TableHistServico(props) {
   return (
     <Container>
       <div className="button-container">
-      <Button
+        <Button
           className="button-cadastro"
           onClick={() => {
             props.exibirTabela(false);
@@ -178,13 +191,13 @@ export default function TableHistServico(props) {
         >
           <AiFillPlusCircle style={{ marginRight: '8px' }} /> Resgistrar Serviço
         </Button>
-        <Button className="button-download" onClick={handleDownload}>
-          <HiDocumentDownload style={{ marginRight: '8px' }} /> Download
-        </Button>
         <Button className='button-filtrar' onClick={() => setModalVisible(true)}>
           <BsCalendarDateFill style={{ marginRight: '8px' }} /> Filtrar por Data
         </Button>
-         <Button className="button-help" onClick={openHelpPanel}>
+        <Button className="button-download" onClick={handleDownload}>
+          <HiDocumentDownload style={{ marginRight: '8px' }} /> Download
+        </Button>
+        <Button className="button-help" onClick={openHelpPanel}>
           <AiFillQuestionCircle style={{ marginRight: '8px' }} /> Ajuda
         </Button>
         {helpPanelVisible && <PainelAjudaServico onClose={closeHelpPanel} />}
@@ -225,7 +238,7 @@ export default function TableHistServico(props) {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button  className='button-limpar-filtro' onClick={clearFilters} disabled={!filtersApplied}>
+            <Button className='button-limpar-filtro' onClick={clearFilters} disabled={!filtersApplied}>
               Limpar Filtro
             </Button>
 
@@ -266,46 +279,60 @@ export default function TableHistServico(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {histServ.map((histServico) => (
-              <TableRow key={histServico.id}>
-                <TableCell>{histServico.id}</TableCell>
-                <TableCell>{histServico.prestador}</TableCell>
-                <TableCell>{histServico.servico}</TableCell>
-                <TableCell>{formatarDataBrasileira(histServico.serviceData)}</TableCell>
-                <TableCell>{histServico.valor}</TableCell>
-                <TableCell>
-                  <IconButton
-                    variant="outlined"
-                    style={{ color: '#1683cc' }}
-                    onClick={() => {
-                      if (window.confirm("Deseja atualizar os dados do serviço?")) {
-                        props.editar(histServico);
-                      }
-                    }}
-                  >
-                    <MdModeEdit />
-                  </IconButton>
-                  {role !== "user" ?  (
-                     <IconButton
-                       style={{ color: '#cc3116' }}
-                       onClick={() => {
-                         if (window.confirm("Deseja excluir?")) {
-                           props.deletar(histServico);
-                           loadData()
-                         }
-                       }}
-                     >
-                       <HiTrash />
-                     </IconButton>
-                  ) : (
-                    <></>
-                  )}
-                 
-                </TableCell>
-              </TableRow>
-            ))}
+            {histServ
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((histServico) => (
+                <TableRow key={histServico.id}>
+                  <TableCell>{histServico.id}</TableCell>
+                  <TableCell>{histServico.prestador}</TableCell>
+                  <TableCell>{histServico.servico}</TableCell>
+                  <TableCell>{formatarDataBrasileira(histServico.serviceData)}</TableCell>
+                  <TableCell>{histServico.valor}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      variant="outlined"
+                      style={{ color: '#1683cc' }}
+                      onClick={() => {
+                        if (window.confirm("Deseja atualizar os dados do serviço?")) {
+                          props.editar(histServico);
+                        }
+                      }}
+                    >
+                      <MdModeEdit />
+                    </IconButton>
+                    {role !== "user" ? (
+                      <IconButton
+                        style={{ color: '#cc3116' }}
+                        onClick={() => {
+                          if (window.confirm("Deseja excluir?")) {
+                            props.deletar(histServico);
+                            loadData()
+                          }
+                        }}
+                      >
+                        <HiTrash />
+                      </IconButton>
+                    ) : (
+                      <></>
+                    )}
+
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={histServ.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={(_, newPage) => setPage(newPage)}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+          }}
+        />
       </TableContainer>
     </Container>
   );
