@@ -409,14 +409,14 @@ export default function TableDoacao(props) {
 
                       {role === 'admin' ? (
                         <IconButton
-                        disabled={role !== "admin"}
+                          disabled={role !== "admin"}
                           style={{ color: '#cc3116' }}
                           onClick={() => openDeleteModal(doacao)}
                         >
                           <HiTrash />
                         </IconButton>
-                      ):(
-                      <></>
+                      ) : (
+                        <></>
                       )}
                     </TableCell>
                   </TableRow>

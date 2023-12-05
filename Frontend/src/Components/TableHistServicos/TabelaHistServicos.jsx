@@ -191,11 +191,11 @@ export default function TableHistServico(props) {
         >
           <AiFillPlusCircle style={{ marginRight: '8px' }} /> Resgistrar Serviço
         </Button>
-        <Button className="button-download" onClick={handleDownload}>
-          <HiDocumentDownload style={{ marginRight: '8px' }} /> Download
-        </Button>
         <Button className='button-filtrar' onClick={() => setModalVisible(true)}>
           <BsCalendarDateFill style={{ marginRight: '8px' }} /> Filtrar por Data
+        </Button>
+        <Button className="button-download" onClick={handleDownload}>
+          <HiDocumentDownload style={{ marginRight: '8px' }} /> Download
         </Button>
         <Button className="button-help" onClick={openHelpPanel}>
           <AiFillQuestionCircle style={{ marginRight: '8px' }} /> Ajuda
