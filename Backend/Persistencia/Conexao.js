@@ -8,7 +8,7 @@ export default async function Conectar() {
     host: "localhost",
     user: "root",
     password: "",
-    database: "new",
+    database: "backend",
   });
   global.conexao = conexao;
   return conexao;
