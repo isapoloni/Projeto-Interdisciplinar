@@ -73,6 +73,7 @@ export default function TelaCadPessoa(props) {
             listaPessoas={pessoas}
             setPessoas={setPessoas}
             exibirTabela={setExibirTabela}
+            setModoEdicao={setModoEdicao}
             editar={preparaTela}
             excluir={excluirPessoa}
           />

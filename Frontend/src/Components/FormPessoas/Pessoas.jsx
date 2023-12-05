@@ -7,7 +7,17 @@ import Cookie from "universal-cookie";
 
 function FormPessoa(props) {
   const [validated, setValidated] = useState(false);
-  const [pessoa, setPessoa] = useState(props.pessoa);
+  const [pessoa, setPessoa] = useState(props.modoEdicao ? props.pessoa : {
+    cpf:'',
+    nome:'',
+    nascimento:'',
+    endereco:'',
+    cidade:'',
+    telefone:'',
+    email:'',
+    profissao1:'',
+
+  });
 
   console.log(pessoa)
 
@@ -58,6 +68,7 @@ function FormPessoa(props) {
                 if (confirmacaoCadastro) {
                   fetchDadosAtualizados();
                   props.exibirTabela(true);
+                  props.setModoEdicao(false)
                 } else {
                   // Adicione a lógica para redirecionar ou fazer algo após a confirmação
                 }
@@ -83,6 +94,7 @@ function FormPessoa(props) {
                 if (confirmacaoAtualizacao) {
                   fetchDadosAtualizados();
                   props.exibirTabela(true);
+                  props.setModoEdicao(false)
                 } else {
                   // Adicione a lógica para redirecionar ou fazer algo após a confirmação
                 }
@@ -315,6 +327,7 @@ function FormPessoa(props) {
             className="mb-3"
             onClick={() => {
               props.exibirTabela(true);
+              props.setModoEdicao(false)
             }}
           >
             Voltar

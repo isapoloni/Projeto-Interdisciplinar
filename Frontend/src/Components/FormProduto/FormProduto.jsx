@@ -8,7 +8,14 @@ import Cookie from "universal-cookie";
 
 export default function ProdutoForm(props) {
   const [validated, setValidated] = useState(false);
-  const [produto, setProduto] = useState(props.produto);
+  const [produto, setProduto] = useState(props.modoEdicao ? props.produto : {
+    codigo:'',
+    nome: '',
+    metrica: '',
+    descricao: '',
+    codigoCategoria: '',
+    categoria: '',
+  });
   const [categoriaValidated, setCategoriaValidated] = useState(false);
 
   const cookies = new Cookie()
@@ -60,7 +67,7 @@ export default function ProdutoForm(props) {
                 const confirmacaoCadastro = window.confirm("Produto cadastrado com sucesso!");
                 if (confirmacaoCadastro) {
                   props.exibirTabela(true);
-
+                  
                   // Atualiza os produtos no componente pai
                   fetch(urlBackend + "/produto", {
                     method: "GET",
@@ -106,7 +113,7 @@ export default function ProdutoForm(props) {
               const confirmacaoAtualizacao = window.confirm("Produto atualizado com sucesso!");
               if (confirmacaoAtualizacao) {
                 props.exibirTabela(true);
-
+                props.setModoEdicao(false)
                 // Atualiza os produtos no componente pai
                 fetch(urlBackend + "/produto", {
                   method: "GET",

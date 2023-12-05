@@ -72,6 +72,9 @@ export default function CadProdutos(props) {
     setExibirTabela(true);
     buscarProduto();
   }
+  function atualizarProdutos(){
+    buscarProduto();
+  }
 
   function buscarCategoria() {
     fetch(urlBackend + '/categoriaProduto', {
@@ -105,6 +108,8 @@ export default function CadProdutos(props) {
               exibirTabela={setExibirTabela}
               editar={prepararTela}
               deletar={deletarProduto}
+              modoEdicao={modoEdicao}
+              atualizarProdutos={atualizarProdutos}
             />
             :
             <ProdutoForm
@@ -116,6 +121,7 @@ export default function CadProdutos(props) {
               setModoEdicao={setModoEdicao}
               produto={produtoEdicao}
               buscarProduto={buscarProduto}
+              atualizarProdutos={atualizarProdutos}
               categorias={categoria}
               dadosAtualizados={exibirTabelaEAtualizarDados}
             />
