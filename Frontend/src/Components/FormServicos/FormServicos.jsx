@@ -4,15 +4,13 @@ import { urlBackend } from "../../assets/funcoes";
 import { IMaskInput } from "react-imask";
 import Cookies from "universal-cookie";
 export default function ServicoForm(props) {
-  console.log(props)
+  // console.log(props)
 
   const [validated, setValidated] = useState(false);
   const [servico, setServico] = useState(props.servico);
-  console.log(servico)
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
   // const [cpfSelecionado, setCpfSelecionado] = useState('');
-  // console.log('cpf' , cpfSelecionado)
   function mascaraMoeda(event) {
     const onlyDigits = event.target.value
       .split("")
@@ -57,10 +55,13 @@ export default function ServicoForm(props) {
   //     })
   //   }
   // })
+  // console.log(props.modoEdicao)
+  console.log(servico)
   function manipulaSubmissao(evento) {
     const form = evento.currentTarget;
     if (form.checkValidity()) {
       if (!props.modoEdicao) {
+        // console.log('aqui')
         fetch(urlBackend + "/servicos", {
           method: "POST",
           headers: {
@@ -97,8 +98,12 @@ export default function ServicoForm(props) {
         })
           .then((resposta) => resposta.json())
           .then((dados) => {
+            // console.log(dados)
             if (dados.status) {
               window.alert("Atualização realizada com sucesso!");
+              props.buscar()
+              props.setModoEdicao(false);
+              props.exibirTabela(true);
             } else {
               window.alert("Erro ao atualizar serviço: " + dados.mensagem);
             }

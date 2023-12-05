@@ -112,7 +112,10 @@ export default function CadServicos(props) {
             exibirTabela={setExibirTabela}
             setModoEdicao={setModoEdicao}
             editar={prepararTela}
+            buscar={buscar}
             deletar={deletarServico}
+            categorias={categoria}
+
           />
         ) : (
           <ServicoForm

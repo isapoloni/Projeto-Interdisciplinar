@@ -27,9 +27,6 @@ import * as XLSX from 'xlsx';
 export default function TableServico(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  console.log(props)
-
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
 
@@ -55,7 +52,22 @@ export default function TableServico(props) {
         }
       });
   }
-
+  // const loadData = () => {
+  //   fetch(urlBackend + '/serv', {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "authorization": `${jwtAuth}`
+  //     }
+  //   })
+  //     .then((resposta) => resposta.json())
+  //     .then((listaHistServ) => {
+  //       if (Array.isArray(listaHistServ)) {
+  //         setHistServ(listaHistServ);
+  //         setFiltersApplied(false);
+  //       }
+  //     });
+  // }
   const handleDownload = () => {
     const columns = [
       { label: 'Código do serviço', key: 'codigo' },
@@ -63,10 +75,10 @@ export default function TableServico(props) {
       { label: 'Categoria do serviço', key: 'categoria' },
       { label: 'Descrição do serviço', key: 'descricao' },
     ];
-    console.log('coluns', columns)
+    // console.log('coluns', columns)
     const dataToDownload = [];
     const servicoToUse = props.listaServicos;
-    console.log('servicoToUse', servicoToUse)
+    // console.log('servicoToUse', servicoToUse)
     if (servicoToUse.length > 0) {
       servicoToUse.map((servico) => {
         const rowData = {
@@ -75,7 +87,7 @@ export default function TableServico(props) {
           'Categoria do serviço': servico.categoria,
           'Descrição do serviço': servico.descricao,
         };
-        console.log('rowData', rowData)
+        // console.log('rowData', rowData)
         dataToDownload.push(rowData);
       })
     }
@@ -115,9 +127,9 @@ export default function TableServico(props) {
         >
           <AiFillPlusCircle style={{ marginRight: '8px' }} /> Cadastrar serviço
         </Button>
-        <Button className="button-download" onClick={handleDownload}>
+        {/* <Button className="button-download" onClick={handleDownload}>
           <HiDocumentDownload style={{ marginRight: '8px' }} /> Download
-        </Button>
+        </Button> */}
       </div>
       <InputGroup className="mt-2">
         <TextField
@@ -163,7 +175,15 @@ export default function TableServico(props) {
                       style={{ color: '#1683cc' }}
                       onClick={() => {
                         if (window.confirm('Deseja atualizar os dados do serviço?')) {
-                          props.editar(servico);
+                          console.log(props.categorias)
+                          const servicoSelecionado = {
+                            id: servico.id,
+                            servico: servico.servico,
+                            categoria: props.categorias.filter(categoria => categoria.categoria === servico.categoria)[0].codigo,
+                            descricao: servico.descricao
+                          }
+                          console.log(servicoSelecionado)
+                          props.editar(servicoSelecionado);
                         }
                       }}
                     >
