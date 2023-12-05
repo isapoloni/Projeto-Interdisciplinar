@@ -159,7 +159,7 @@ export default function HistServicoForm(props) {
         variant="light"
       >
         <Form.Group className="mb-5 mt-4">
-          <h3>Registro de prestação de serviço</h3>
+          <h3>Registro de Prestação de Serviço</h3>
         </Form.Group>
 
         <Row>

@@ -106,7 +106,7 @@ export default function CategoriaServicoForm(props) {
             >
 
                 <Form.Group className="mb-3 mt-4">
-                    <h3>Cadastro de Categorias</h3>
+                    <h3>Cadastro de Categorias de Serviços</h3>
                 </Form.Group>
 
                 <Row>
