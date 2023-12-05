@@ -66,6 +66,7 @@ export default function TelaDoacao(props) {
                             setDoacoes={setDoacoes}
                             exibirTabela={setExibirTabela}
                             editar={prepararTela}
+                            setModoEdicao={setModoEdicao}
                         // deletar={deletarProduto}
                         />
                         :

@@ -3,11 +3,17 @@ import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 import { urlBackend } from "../../assets/funcoes";
 import { IMaskInput } from "react-imask";
 import Cookies from "universal-cookie";
+import { DropdownList } from "react-widgets/cjs";
 export default function ServicoForm(props) {
   // console.log(props)
 
   const [validated, setValidated] = useState(false);
-  const [servico, setServico] = useState(props.servico);
+  const [servico, setServico] = useState(props.modoEdicao ? props.servico : {
+    id:'',
+    servico:'',
+    descricao:'',
+    categoria:'',
+  });
   const cookies = new Cookies();
   const jwtAuth = cookies.get("authorization");
   // const [cpfSelecionado, setCpfSelecionado] = useState('');
@@ -56,7 +62,10 @@ export default function ServicoForm(props) {
   //   }
   // })
   // console.log(props.modoEdicao)
-  console.log(servico)
+  // console.log( servico.id,
+  //    servico.servico,
+  //    servico.descricao,
+  //    servico.categoria.codigo)
   function manipulaSubmissao(evento) {
     const form = evento.currentTarget;
     if (form.checkValidity()) {
@@ -68,7 +77,10 @@ export default function ServicoForm(props) {
             "Content-Type": "application/json",
             authorization: `${jwtAuth}`,
           },
-          body: JSON.stringify(servico),
+          body: JSON.stringify({ 
+            servico:servico.servico,
+            descricao:servico.descricao,
+            categoria:servico.categoria.codigo}),
         })
           .then((resposta) => resposta.json())
           .then((dados) => {
@@ -94,16 +106,20 @@ export default function ServicoForm(props) {
             "Content-Type": "application/json",
             authorization: `${jwtAuth}`,
           },
-          body: JSON.stringify({ ...servico }),
+          body: JSON.stringify({ 
+            id:servico.id,
+            servico:servico.servico,
+            descricao:servico.descricao,
+            categoria:typeof servico.categoria === 'string' ? props.categorias.filter((cat) => cat.categoria === servico.categoria)[0].codigo : servico.categoria.codigo})
         })
           .then((resposta) => resposta.json())
           .then((dados) => {
-            // console.log(dados)
             if (dados.status) {
               window.alert("Atualização realizada com sucesso!");
               props.buscar()
               props.setModoEdicao(false);
               props.exibirTabela(true);
+              props.setModoEdicao(false);
             } else {
               window.alert("Erro ao atualizar serviço: " + dados.mensagem);
             }
@@ -119,7 +135,6 @@ export default function ServicoForm(props) {
     evento.preventDefault();
     evento.stopPropagation();
   }
-
   return (
     <>
       <Form
@@ -244,7 +259,20 @@ export default function ServicoForm(props) {
           <Col xs={3}>
             <Form.Group>
               <Form.Label>Categoria</Form.Label>
-              <Form.Control
+              <DropdownList
+                data={props.categorias}
+                value={servico.categoria ? servico.categoria : null}
+                onChange={(value) => {
+                setServico({ ...servico, 
+                categoria: value })}}
+                textField="categoria"
+                id="categoria"
+                placeholder="Selecione uma categoria"
+                caseSensitive={false}
+                filter="contains"
+                required
+                    />
+              {/* <Form.Control
                 value={servico.categoria}
                 as="select"
                 id="categoria"
@@ -256,7 +284,7 @@ export default function ServicoForm(props) {
 
                   <option value={categoria.codigo}>{categoria.categoria}</option>
                 ))}
-              </Form.Control>
+              </Form.Control> */}
               <Form.Control.Feedback type="invalid">
                 Por favor, informe a categoria!
               </Form.Control.Feedback>

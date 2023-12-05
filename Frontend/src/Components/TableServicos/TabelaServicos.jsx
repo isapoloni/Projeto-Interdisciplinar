@@ -123,6 +123,7 @@ export default function TableServico(props) {
           className="button-cadastro"
           onClick={() => {
             props.exibirTabela(false);
+            props.setModoEdicao(false)
           }}
         >
           <AiFillPlusCircle style={{ marginRight: '8px' }} /> Cadastrar serviço
@@ -175,14 +176,15 @@ export default function TableServico(props) {
                       style={{ color: '#1683cc' }}
                       onClick={() => {
                         if (window.confirm('Deseja atualizar os dados do serviço?')) {
-                          console.log(props.categorias)
                           const servicoSelecionado = {
                             id: servico.id,
                             servico: servico.servico,
-                            categoria: props.categorias.filter(categoria => categoria.categoria === servico.categoria)[0].codigo,
+                            categoria: props.categorias.filter(categoria => categoria.categoria === servico.categoria)[0].categoria,
                             descricao: servico.descricao
                           }
-                          console.log(servicoSelecionado)
+                          // console.log(props.categorias)
+                          // console.log(servicoSelecionado)
+                          // console.log(servico)
                           props.editar(servicoSelecionado);
                         }
                       }}

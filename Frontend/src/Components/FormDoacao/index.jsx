@@ -16,18 +16,18 @@ const FormDoacao = (props) => {
     const [produtoOptions, setProdutoOptions] = useState([]);
     const [pessoasData, setPessoasData] = useState([]);
     const [produtosData, setProdutosData] = useState([]);
-    const [doacao, setDoacao] = useState({
+    const [doacao, setDoacao] = useState(props.modoEdicao ? props.doacao : {
         doador: null,
         dataDoacao: '',
         listaItens: [],
     });
+    console.log(doacao)
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [showSucessoModal, setShowSucessoModal] = useState(false);
     const [showErroModal, setShowErroModal] = useState(false);
     const [mensagemErro, setMensagemErro] = useState('');
     const [formValido, setFormValido] = useState(true);
     const [validated, setValidated] = useState(false);
-
     const [erroDoador, setErroDoador] = useState('');
     const [erroDataDoacao, setErroDataDoacao] = useState('');
     const [erroItens, setErroItens] = useState('');
@@ -167,6 +167,7 @@ const FormDoacao = (props) => {
                     const mensagemSucesso = props.modoEdicao ? 'Doação atualizada com sucesso!' : 'Doação registrada com sucesso!';
                     window.alert(mensagemSucesso);
                     props.exibirTabela(true);
+                    props.setModoEdicao(false)
                 } else {
                     console.error('Erro ao cadastrar/atualizar doação:', response.statusText);
                 }
@@ -345,6 +346,7 @@ const FormDoacao = (props) => {
                 });
                 props.dadosAtualizados();
                 props.exibirTabela(true);
+                props.setModoEdicao(false)
             } else {
                 handleOpenErroModal(`Erro ao cadastrar/atualizar doação: ${response.statusText}`);
             }
@@ -448,6 +450,7 @@ const FormDoacao = (props) => {
                         type="button"
                         onClick={() => {
                             props.exibirTabela(true);
+                            props.setModoEdicao(false)
                         }}
                     >
                         Voltar
